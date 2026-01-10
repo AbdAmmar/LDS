@@ -30,13 +30,46 @@
 \setminted{linenos, breaklines, fontsize=\footnotesize}
 
 % Informations du cours
-\title{Cours : Langages de Script}
-\subtitle{Introduction aux scripts Bash, Python, etc.}
+\title{Langages de Script}
+%\subtitle{Introduction aux scripts Bash, Python, etc.}
 \author{Abdallah AMMAR}
-\institute{Université/Organisation}
+\institute{CNRS - Université de Lorraine}
 \date{\today}
 
+
+
+
+\titlegraphic{%
+  \vspace*{1cm} % Espace vertical avant les logos
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[width=0.65\linewidth]{images/UL-logo.png}
+    \centering
+  \end{minipage}
+  \hfill % Espace horizontal entre les logos
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.65\linewidth]{images/IDMC-logo.png}
+  \end{minipage}
+}
+
 \begin{document}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\insertshortauthor
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertframenumber/\inserttotalframenumber\hspace*{2ex}
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
 
 % Page de titre
 \begin{frame}
@@ -48,19 +81,14 @@
   \tableofcontents
 \end{frame}
 
-% Sections (incluses depuis des fichiers externes)
-%\include{sections/intro}
 \input{sections/intro}
-%\include{sections/bash}
-% Ajoute d'autres sections ici...
 
 % Page de fin
-\begin{frame}{Fin du cours}
-  \centering
-  \Huge Merci pour votre attention ! \\
-  \vspace{1cm}
-  \normalsize Questions ?
-\end{frame}
+%\begin{frame}{Fin du cours}
+%  \centering
+%  \Huge Merci pour votre attention ! \\
+%  \vspace{1cm}
+%  \normalsize Questions ?
+%\end{frame}
 
 \end{document}
-
