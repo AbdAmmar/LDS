@@ -1,0 +1,66 @@
+\documentclass{beamer}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}       % Pour afficher du code
+\usepackage{graphicx}       % Pour les images
+\usepackage{hyperref}       % Pour les liens
+
+% Pour la coloration syntaxique avancée
+\usepackage[outputdir=build]{minted}
+\setminted{
+  linenos=true,       % Numérotation des lignes
+  breaklines=true,    % Retour à la ligne automatique
+  fontsize=\footnotesize,
+  bgcolor=lightgray!10 % Fond gris clair
+}
+
+% Thème et couleurs
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+
+% Configuration pour les blocs de code
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{lightgray!10},
+}
+\setminted{linenos, breaklines, fontsize=\footnotesize}
+
+% Informations du cours
+\title{Cours : Langages de Script}
+\subtitle{Introduction aux scripts Bash, Python, etc.}
+\author{Abdallah AMMAR}
+\institute{Université/Organisation}
+\date{\today}
+
+\begin{document}
+
+% Page de titre
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Sommaire
+\begin{frame}{Sommaire}
+  \tableofcontents
+\end{frame}
+
+% Sections (incluses depuis des fichiers externes)
+%\include{sections/intro}
+\input{sections/intro}
+%\include{sections/bash}
+% Ajoute d'autres sections ici...
+
+% Page de fin
+\begin{frame}{Fin du cours}
+  \centering
+  \Huge Merci pour votre attention ! \\
+  \vspace{1cm}
+  \normalsize Questions ?
+\end{frame}
+
+\end{document}
+
