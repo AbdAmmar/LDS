@@ -1,0 +1,54 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tdstyle}[2026/01/11 v1.0 TD style for scripting courses]
+
+% -------------------------------------------------
+% Packages
+% -------------------------------------------------
+\RequirePackage{xcolor}
+\RequirePackage[outputdir=build]{minted}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% -------------------------------------------------
+% Palette (sobre, académique)
+% -------------------------------------------------
+\definecolor{term_bg}{RGB}{245,247,250}
+\definecolor{term_frame}{RGB}{200,205,210}
+\definecolor{term_prompt}{RGB}{120,120,120}
+\definecolor{cmdcolor}{RGB}{55,95,145}
+\definecolor{term_text}{RGB}{25,25,25}
+
+% -------------------------------------------------
+% Terminal interactif
+% -------------------------------------------------
+\newtcolorbox{terminal}{
+    colback=term_bg,
+    colframe=term_frame,
+    boxrule=0.4pt,
+    arc=2pt,
+    left=6pt,
+    right=6pt,
+    top=6pt,
+    bottom=6pt,
+    breakable,
+    enhanced,
+    fontupper=\ttfamily\small\color{term_text},
+}
+
+% -------------------------------------------------
+% Prompt et commande
+% -------------------------------------------------
+\newcommand{\prompt}{\textcolor{term_prompt}{\footnotesize\$}}
+\newcommand{\shcmd}[1]{\textcolor{cmdcolor}{\textbf{#1}}}
+
+% -------------------------------------------------
+% Scripts bash (minted)
+% -------------------------------------------------
+\setminted[bash]{
+    bgcolor=term_bg,
+    frame=single,
+    rulecolor=\color{term_frame},
+    framesep=3mm,
+    fontsize=\small,
+    breaklines=true
+}

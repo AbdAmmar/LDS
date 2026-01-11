@@ -1,0 +1,140 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD0 -- Installation de Linux avec WSL}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+\section*{Objectifs du TD}
+
+Ce premier TD a pour objectif de préparer l'environnement de travail pour le module
+\textbf{Langages de script}.
+
+Les outils et scripts utilisés dans ce cours s'exécuteront dans un environnement
+\textbf{Linux / Unix}.
+
+\begin{itemize}
+    \item \textbf{Étudiants sous Windows} : ce TD vous guide pas à pas dans
+    l'installation d'un environnement Linux grâce à \textbf{WSL (Windows Subsystem for Linux)}.
+    
+    \item \textbf{Étudiants disposant déjà de Linux} : aucune installation n'est requise.
+    Vous pouvez passer directement aux prochains TD.
+    
+    \item \textbf{Étudiants sous macOS} : aucun système supplémentaire n'est nécessaire.
+    Le terminal est disponible par défaut et le shell \texttt{bash} est déjà installé.
+    Depuis les versions récentes de macOS, le shell utilisé par défaut est \texttt{zsh}.
+    Pour connaître le shell actuellement utilisé, tapez la commande :
+\begin{terminal}
+\prompt\ \shcmd{echo} \$SHELL
+\end{terminal}
+
+\begin{minted}{bash}
+#!/bin/bash
+echo "Bonjour"
+ls -l
+\end{minted}
+    Si nécessaire, il est possible de lancer \texttt{bash} simplement en tapant :
+    \begin{minted}{bash}
+        bash
+    \end{minted}
+    dans le terminal.
+\end{itemize}
+
+
+\section*{Qu'est-ce que WSL ?}
+
+WSL est une fonctionnalité de Windows qui permet d'exécuter un système Linux
+directement sous Windows, sans machine virtuelle lourde ni redémarrage.
+
+Avantages :
+\begin{itemize}
+    \item Pas besoin de dual-boot
+    \item Intégration avec Windows
+    \item Accès aux commandes Linux standards
+\end{itemize}
+
+\section*{Prérequis}
+
+\begin{itemize}
+    \item Windows 10 (version 2004 ou plus récente) ou Windows 11
+    \item Connexion Internet
+    \item Droits administrateur sur la machine
+\end{itemize}
+
+\section*{Étape 1 : Ouvrir un terminal Windows}
+
+\begin{enumerate}
+    \item Appuyez sur \texttt{Win + R}
+    \item Tapez \texttt{cmd}
+    \item Appuyez sur \texttt{Ctrl + Shift + Entrée} pour ouvrir en mode administrateur
+\end{enumerate}
+
+\section*{Étape 2 : Installer WSL}
+
+Dans le terminal, tapez la commande suivante :
+
+%\begin{lstlisting}
+%wsl --install
+%\end{lstlisting}
+
+Cette commande :
+\begin{itemize}
+    \item Active WSL
+    \item Installe le noyau Linux
+    \item Installe par défaut Ubuntu
+\end{itemize}
+
+\textbf{Redémarrez votre ordinateur} lorsque cela vous est demandé.
+
+\section*{Étape 3 : Premier lancement d'Ubuntu}
+
+Après le redémarrage :
+\begin{itemize}
+    \item Lancez \textbf{Ubuntu} depuis le menu Démarrer
+    \item Patientez pendant l'installation
+    \item Choisissez un nom d'utilisateur et un mot de passe Linux
+\end{itemize}
+
+\section*{Étape 4 : Vérification de l'installation}
+
+Dans le terminal Ubuntu, tapez :
+
+\begin{minted}{bash}
+lsb_release -a
+\end{minted}
+
+Puis :
+
+\begin{minted}{bash}
+uname -a
+\end{minted}
+
+Si ces commandes s'exécutent sans erreur, l'installation est réussie.
+
+\section*{Problèmes fréquents}
+
+\begin{itemize}
+    \item \textbf{La commande \texttt{wsl} n'est pas reconnue} : Windows trop ancien
+    \item \textbf{Erreur de virtualisation} : activer la virtualisation dans le BIOS
+\end{itemize}
+
+\section*{Ressources}
+
+Documentation officielle :
+\begin{itemize}
+    \item \url{https://learn.microsoft.com/fr-fr/windows/wsl/}
+\end{itemize}
+
+\end{document}
