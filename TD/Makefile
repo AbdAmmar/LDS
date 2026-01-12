@@ -2,12 +2,12 @@
 # Configuration
 # ========================
 LATEX = pdflatex -shell-escape
-TD_DIRS = TD0 TD1 TD2 TD3 TD4 TD5
+TD_DIRS = TD0 TD1 TD2 TD3 TD4 TD5 TD6
 
 # ========================
 # Cible par défaut
 # ========================
-all: $(TD_DIRS)
+all: $(TD_DIRS) nocopy
 
 # ========================
 # Règle générique pour chaque TD
@@ -39,7 +39,10 @@ nocopy:
 # ========================
 clean:
 	@for d in $(TD_DIRS); do \
-		rm -rf $$d/build nocopy; \
+		echo "==> Nettoyage $$d/build"; \
+		rm -rf $$d/build; \
 	done
+	@echo "==> Nettoyage nocopy"
+	@rm -rf nocopy
 
-.PHONY: all clean $(TD_DIRS)
+.PHONY: all clean $(TD_DIRS) nocopy
