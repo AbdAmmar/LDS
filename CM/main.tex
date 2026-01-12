@@ -6,6 +6,10 @@
 \usepackage{graphicx}       % Pour les images
 \usepackage{hyperref}       % Pour les liens
 
+\usepackage{emoji}
+
+
+
 % Pour la coloration syntaxique avancée
 \usepackage[outputdir=build]{minted}
 \setminted{
@@ -54,6 +58,10 @@
 
 \begin{document}
 
+%\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\centering\insertcaption\par}
+
+
 \setbeamertemplate{footline}{%
   \leavevmode%
   \hbox{%
@@ -81,10 +89,21 @@
   \tableofcontents
 \end{frame}
 
+% ---
+
+\section{Ref}
+\input{sections/ref}
+
+% ---
+
+\section{Introduction}
+\input{sections/intro_hardware}
 \input{sections/intro}
+
+% ---
+
 \input{sections/shell}
 \input{sections/bash}
-\input{sections/ref}
 
 % Page de fin
 %\begin{frame}{Fin du cours}
