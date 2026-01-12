@@ -1,0 +1,130 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD8 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% --------------------------------------------------
+\section*{Objectifs du TD}
+
+Ce TD a pour objectif de découvrir l'accès distant à une machine Linux
+à l'aide du protocole SSH.
+À l'issue de la séance, vous devrez être capables de :
+\begin{itemize}
+    \item installer et démarrer un service SSH ;
+    \item créer un utilisateur local ;
+    \item se connecter à une machine distante ;
+    \item comprendre la notion client / serveur ;
+    \item travailler en binôme sur un réseau local.
+\end{itemize}
+
+\bigskip
+
+\begin{warningbox}
+Ce TD se fait en binôme.  
+Suivez attentivement les consignes afin d'éviter tout problème de sécurité.
+\end{warningbox}
+
+% --------------------------------------------------
+\section{Organisation du travail}
+
+Travaillez par groupes de deux :
+\begin{itemize}
+    \item un étudiant joue le rôle du \textbf{serveur} ;
+    \item l'autre joue le rôle du \textbf{client}.
+\end{itemize}
+
+Les rôles pourront être échangés en fin de séance.
+
+% --------------------------------------------------
+\section{Mise en place du réseau}
+
+Pour éviter les problèmes liés au réseau de l'établissement,
+utilisez le \textbf{partage de connexion d'un téléphone} afin de placer
+les deux machines sur le même réseau.
+
+Vérifiez que les deux machines sont bien connectées au même réseau.
+
+% --------------------------------------------------
+\section{Installation du service SSH}
+
+Sur la machine \textbf{serveur} :
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} apt update
+\prompt\ \shcmd{sudo} apt install openssh-server
+\end{terminal}
+
+Vérifiez que le service est actif :
+
+\begin{terminal}
+\prompt\ \shcmd{systemctl} status ssh
+\end{terminal}
+
+% --------------------------------------------------
+\section{Création d'un utilisateur}
+
+Sur la machine serveur, créez un compte temporaire pour votre binôme :
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} useradd \texttt{-m} invite
+\prompt\ \shcmd{sudo} passwd invite
+\end{terminal}
+
+Notez le mot de passe choisi.
+
+% --------------------------------------------------
+\section{Connexion à distance}
+
+Sur la machine \textbf{client} :
+
+\begin{enumerate}
+    \item Identifiez l'adresse IP du serveur.
+    \item Connectez-vous à l'aide de SSH.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{ssh} invite@IP\_DU\_SERVEUR
+\end{terminal}
+
+Une fois connecté :
+\begin{itemize}
+    \item affichez le répertoire courant ;
+    \item créez un fichier ;
+    \item déconnectez-vous.
+\end{itemize}
+
+\begin{terminal}
+\prompt\ \shcmd{exit}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Nettoyage}
+
+À la fin du TD, supprimez le compte temporaire créé :
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} userdel \texttt{-r} invite
+\end{terminal}
+
+% --------------------------------------------------
+\section*{Remarques}
+
+\begin{itemize}
+    \item SSH est un outil fondamental sous Linux.
+    \item Ce TD ne vise pas la configuration avancée ou la sécurité fine.
+    \item Les clés SSH seront vues ultérieurement ou dans un autre module.
+\end{itemize}
+
+\end{document}
