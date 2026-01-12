@@ -2,12 +2,12 @@
 # Configuration
 # ========================
 LATEX = pdflatex -shell-escape
-TD_DIRS = TD0 TD1 TD2 TD3 TD4 TD5 TD6 TD7 TD8 TD9 TD10 TD11
+TD_DIRS = TD0 TD1 TD3 TD4 TD5 TD6 TD7 TD8 TD9 TD10 TD11
 
 # ========================
 # Cible par défaut
 # ========================
-all: $(TD_DIRS) nocopy
+all: $(TD_DIRS) arche
 
 # ========================
 # Règle générique pour chaque TD
@@ -21,8 +21,9 @@ $(TD_DIRS):
 # ========================
 # PDF sans copier/coller
 # ========================
-nocopy:
-	@mkdir -p nocopy
+arche:
+	@mkdir -p arche
+	cp TD0/build/td0.pdf arche/.
 	@for d in $(TD_DIRS); do \
 		if [ "$$d" = "TD0" ]; then \
 			continue; \
@@ -31,7 +32,7 @@ nocopy:
 		pdftoppm -png -r 300 $$d/build/$$(basename $$d | tr 'A-Z' 'a-z').pdf $$d/build/page; \
 		img2pdf $$d/build/page-*.png -o $$d/build/$$(basename $$d | tr 'A-Z' 'a-z')_nocopy.pdf; \
 		rm $$d/build/page-*.png; \
-		mv $$d/build/$$(basename $$d | tr 'A-Z' 'a-z')_nocopy.pdf nocopy/$$(basename $$d | tr 'A-Z' 'a-z').pdf; \
+		mv $$d/build/$$(basename $$d | tr 'A-Z' 'a-z')_nocopy.pdf arche/$$(basename $$d | tr 'A-Z' 'a-z').pdf; \
 	done
 
 # ========================
@@ -42,7 +43,7 @@ clean:
 		echo "==> Nettoyage $$d/build"; \
 		rm -rf $$d/build; \
 	done
-	@echo "==> Nettoyage nocopy"
-	@rm -rf nocopy
+	@echo "==> Nettoyage arche"
+	@rm -rf arche
 
-.PHONY: all clean $(TD_DIRS) nocopy
+.PHONY: all clean $(TD_DIRS) arche

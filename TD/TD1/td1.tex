@@ -18,42 +18,234 @@
 
 
 \begin{warningbox}
+Le symbole \texttt{\$} affiché au début des commandes correspond à l'invite du terminal.
+Il sert uniquement à indiquer que la commande doit être tapée, mais ne fait pas partie
+de la commande elle-même.
+\end{warningbox}
+
+
+\begin{warningbox}
 Il est fortement recommandé de taper les commandes à la main afin de se familiariser
 avec le terminal.
 \end{warningbox}
 
 
-
-\section*{Utilisation du terminal}
-
 Dans le terminal, il est possible de réutiliser et de modifier des commandes déjà tapées.
 Les flèches du clavier permettent de naviguer dans l'historique des commandes :
 \begin{itemize}
-    \item flèche vers le haut : commande précédente,
+    \item flèche vers le haut : commande précédente ;
     \item flèche vers le bas : commande suivante.
 \end{itemize}
-Il est fortement recommandé d'utiliser cette fonctionnalité afin d'éviter de retaper
-entièrement des commandes longues et de corriger plus facilement des erreurs.
-L'historique des commandes peut être affiché avec la commande :
+
+Il est également possible d'utiliser la touche \texttt{TAB} pour compléter automatiquement
+les noms de commandes, de fichiers ou de répertoires.
+Cette fonctionnalité permet d'éviter les fautes de frappe et d'accélérer la saisie.
+
+L'historique des commandes peut être affiché avec la commande suivante :
 \begin{terminal}
 \prompt\ \shcmd{history}
 \end{terminal}
 
+Les lignes commençant par le symbole \texttt{\#} sont des commentaires.
+Elles servent à expliquer ou documenter des commandes, mais ne sont pas exécutées
+par le shell.
 
 \bigskip
 
-\section{Carte d'identité de votre machine}
 
-Linux permet d'obtenir rapidement des informations sur la machine et le système.
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-\subsection*{Travail à faire}
+\section{Premiers pas}
 
+\rsubsection{}
+Certaines commandes sont intégrées directement dans le shell
+(commandes internes ou \textit{built-in}),
+tandis que d'autres sont des programmes externes.
+
+La commande \texttt{type} permet de savoir de quel type est une commande.
+Par exemple :
+
+\begin{terminal}
+\prompt\ \shcmd{type} \shcmd{cd}
+\end{terminal}
+
+À l'aide de cette commande, déterminez si les commandes suivantes sont
+des commandes internes ou des commandes externes :
+
+\begin{itemize}
+    \item \texttt{cd}
+    \item \texttt{echo}
+    \item \texttt{ls}
+    \item \texttt{pwd}
+    \item \texttt{type}
+    \item \texttt{mkdir}
+    \item \texttt{useradd}
+    \item \texttt{date}
+    \item \texttt{time}
+    \item \texttt{sleep}
+    \item \texttt{touch}
+    \item \texttt{cat}
+    \item \texttt{grep}
+\end{itemize}
+
+% ---
+
+\rsubsection{}
+Savoir se documenter est une compétence essentielle sous Linux.
+La documentation permet de comprendre le fonctionnement d'une commande
+et de découvrir ses options.
+
+La commande \texttt{man} fournit une page de manuel concise et standard pour les
+commandes externes, tandis que la commande \texttt{info} propose une documentation
+plus détaillée, organisée comme un ensemble de chapitres.
+La commande \texttt{help} affiche une aide intégrée au shell et s'applique
+principalement aux commandes internes.
+
+\begin{enumerate}
+    \item Consultez la documentation de la commande \texttt{ls}.
+    \item Trouvez l'option permettant d'afficher les fichiers cachés, puis utilisez-la
+          pour identifier les fichiers cachés présents dans votre répertoire personnel.
+    \item Expliquez pourquoi la commande \texttt{man cd} ne fonctionne pas. Consultez 
+          l'aide de la commande \texttt{cd}.
+    \item Consultez la documentation de \texttt{ls} avec \texttt{info}.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{man} \shcmd{ls}
+
+\prompt\ \shcmd{ls} -a \$HOME
+
+\prompt\ \shcmd{help} \shcmd{cd}
+
+\prompt\ \shcmd{info} \shcmd{ls}
+\end{terminal}
+
+% ---
+
+\rsubsection{}
+Pour installer un nouveau programme sous Linux, il est recommandé de commencer
+par mettre à jour la liste des paquets disponibles avec \texttt{apt update}.
+Cela permet au système de connaître les versions les plus récentes des logiciels.
+\begin{terminal}
+\prompt\ \shcmd{sudo apt update}
+\end{terminal}
+
+La commande \texttt{sudo} permet d'exécuter une commande avec les droits
+d'administrateur.
+Elle est nécessaire pour installer des programmes ou modifier le système.
+Lors de son utilisation, un mot de passe peut être demandé.
+
+\begin{warningbox}
+Utilisez \texttt{sudo} uniquement lorsque cela est nécessaire et
+vérifiez toujours la commande avant de l'exécuter.
+\end{warningbox}
+
+Ensuite, on installe le programme souhaité à l'aide de la commande
+\texttt{apt install}.
+
+Par exemple, installez puis lancez le programme \texttt{sl} :
+\begin{terminal}
+\prompt\ \shcmd{sudo apt install sl}
+
+\prompt\ \shcmd{sl}
+\end{terminal}
+
+Installez maintenant le programme \texttt{cowsay},
+qui affiche un message sous forme de dessin ASCII :
+\begin{terminal}
+\prompt\ \shcmd{sudo apt install cowsay}
+\end{terminal}
+
+Puis lancez-le avec un message de votre choix :
+\begin{terminal}
+\prompt\ \shcmd{cowsay} "Bonjour Linux"
+\end{terminal}
+
+% ---
+
+\rsubsection{}
+Dans cet exercice, vous allez créer une petite arborescence afin de comprendre
+l'effet des chemins relatifs et absolus.
+
+Après chaque changement de répertoire avec la commande \texttt{cd},
+affichez systématiquement le répertoire courant à l'aide de la commande \texttt{pwd}.
+
+\begin{enumerate}
+    \item Allez dans votre répertoire personnel.
+    \item Créez un répertoire nommé \texttt{TD2}.
+    \item Entrez dans \texttt{TD2}.
+    \item Créez un répertoire \texttt{TD2-bis}.
+    \item Entrez dans \texttt{TD2-bis}.
+    \item Créez les répertoires suivants :
+    \begin{itemize}
+        \item \texttt{TD2-bis-1}
+        \item \texttt{TD2-bis-2}
+        \item \texttt{TD2-bis-3}
+    \end{itemize}
+    \item Entrez dans \texttt{TD2-bis-3}.
+    \item Depuis \texttt{TD2-bis-3}, créez un répertoire nommé \texttt{test}
+    à l'intérieur de \texttt{TD2-bis-2}, sans vous déplacer dans ce dernier.
+    \item Revenez au répertoire \texttt{TD2} avec une seule commande.
+    \item Revenez ensuite dans votre répertoire personnel.
+\end{enumerate}
+
+\subsection*{Affichage de l'arborescence}
+
+Affichez l'arborescence complète du répertoire \texttt{TD2}.
+
+\begin{terminal}
+\prompt\ \shcmd{tree} TD2
+\end{terminal}
+
+Si la commande \texttt{tree} n'est pas disponible, installez-la :
+\begin{terminal}
+\prompt\ \shcmd{sudo apt update}
+
+\prompt\ \shcmd{sudo apt install tree}
+\end{terminal}
+
+% ---
+
+\rsubsection{}
+Dans cet exercice, vous allez créer un fichier texte et y écrire plusieurs lignes.
+
+\begin{enumerate}
+    \item Placez-vous dans le répertoire \texttt{TD2}.
+    \item Créez un fichier nommé \texttt{notes.txt}.
+    \item Écrivez une première ligne dans le fichier.
+    \item Ajoutez deux lignes supplémentaires sans effacer les précédentes.
+    \item Affichez le contenu du fichier.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{touch} notes.txt
+
+\prompt\ \shcmd{echo} "Première ligne" \texttt{>} notes.txt
+
+\prompt\ \shcmd{echo} "Deuxième ligne" \texttt{>>} notes.txt
+
+\prompt\ \shcmd{echo} "Troisième ligne" \texttt{>>} notes.txt
+
+\prompt\ \shcmd{cat} notes.txt
+\end{terminal}
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+\section{Informations système}
+
+Linux permet d'obtenir rapidement des informations sur la machine
+(processeur, mémoire, etc.) ainsi que sur le système.
+
+\rsubsection{} 
 Complétez la fiche suivante à l'aide de commandes Linux :
-
 \begin{itemize}
     \item Nom de la machine :
     \item Nom de l'utilisateur courant :
-    \item Système d'exploitation :
+    \item Système d'exploitation (distribution) :
     \item Version du noyau Linux :
     \item Architecture du processeur (ex. \texttt{x86\_64}, \texttt{aarch64}) :
 \end{itemize}
@@ -72,12 +264,10 @@ Complétez la fiche suivante à l'aide de commandes Linux :
 \prompt\ \shcmd{lsb\_release} \texttt{-a}
 \end{terminal}
 
-\section{Le processeur}
+% ---
 
+\rsubsection{}
 Le processeur (CPU) est l'un des éléments centraux d'une machine.
-
-\subsection*{Travail à faire}
-
 \begin{enumerate}
     \item Combien de processeurs logiques possède votre machine ?
     \item Quel est le modèle du processeur ?
@@ -92,11 +282,10 @@ Le processeur (CPU) est l'un des éléments centraux d'une machine.
 \prompt\ \shcmd{nproc}
 \end{terminal}
 
-\section{La mémoire vive (RAM)}
+% ---
 
+\rsubsection{}
 La mémoire vive est utilisée pour exécuter les programmes en cours.
-
-\subsection*{Travail à faire}
 
 \begin{enumerate}
     \item Quelle est la quantité totale de mémoire vive ?
@@ -109,13 +298,28 @@ La mémoire vive est utilisée pour exécuter les programmes en cours.
 \prompt\ \shcmd{free} \texttt{-h}
 \end{terminal}
 
+% ---
 
+\rsubsection{} 
+Le programme \texttt{neofetch} permet d'afficher un résumé visuel de informations système.
+Installez-le à l'aide des commandes suivantes :
+\begin{terminal}
+\prompt\ \shcmd{sudo apt update}
 
-\section{Le disque et l'espace de stockage}
+\prompt\ \shcmd{sudo apt install} neofetch
+\end{terminal}
 
-Linux organise les disques à l'aide de points de montage.
+Puis lancez-le :
+\begin{terminal}
+\prompt\ \shcmd{neofetch}
+\end{terminal}
+et comparez les informations affichées avec celles que vous avez obtenues
+à l'aide des commandes précédentes.
 
-\subsection*{Travail à faire}
+% ---
+
+\rsubsection{}
+Linux organise les disques de stockage à l'aide de points de montage.
 
 \begin{enumerate}
     \item Quelle est la taille de l'espace disque contenant votre répertoire personnel ?
@@ -131,21 +335,10 @@ Linux organise les disques à l'aide de points de montage.
 \prompt\ \shcmd{du} \texttt{-h} {-}{-}max-depth=1 \texttt{\textasciitilde}
 \end{terminal}
 
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
 
-\section*{Pour aller plus loin -- Exercice ludique (optionnel)}
 
-Installez et lancez le programme \texttt{neofetch}.
-Observez les informations affichées et identifiez celles que vous reconnaissez
-(processseur, mémoire, système).
-
-\begin{terminal}
-\prompt\ \shcmd{sudo} apt update
-
-\prompt\ \shcmd{sudo} apt install neofetch
-
-\prompt\ \shcmd{neofetch}
-\end{terminal}
 
 \end{document}

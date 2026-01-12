@@ -73,3 +73,8 @@
     fontupper=\normalsize,
 }
 
+\newcommand{\rsubsection}[1]{%
+  \subsection*{}%
+  \refstepcounter{subsection}%
+  \noindent\textbf{\thesubsection}\quad #1%
+}
