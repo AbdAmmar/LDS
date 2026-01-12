@@ -1,0 +1,119 @@
+
+% ---
+
+\begin{frame}{l'OS}
+\begin{itemize}
+  \item 1+1 = ?
+  \begin{itemize}
+    \item inputs du clavier
+    \item ecrire les instruction en lagages machines (assembly)
+    \item envoyer le code et les donnes en format binaire via le bus a la memoire
+    \item envoyer les instructions vers le CPU
+    \item recuperer le resultat et l'afficher
+  \end{itemize}
+
+  {
+  \centering
+  \begin{minipage}{0.37\textwidth}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/cns_zoom.png}
+    %{\footnotesize\centering }
+  \end{minipage}
+  %\hfill
+  \begin{minipage}{0.52\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/Fig1.6_Tanenbaum_Bos.png}
+    %{\footnotesize\centering }
+  \end{minipage}
+  }
+\end{itemize}
+\end{frame}
+
+% ---
+
+\begin{frame}{l'OS}
+\begin{itemize}
+  \item SATA (Serial ATA) hard disks used on most computers
+  \begin{itemize}
+    {\footnotesize
+    \item premier couche d'abstraction: disk driver
+    \item deuxiem couche d'abstraction: files
+    }
+  \end{itemize}
+
+  {
+  \centering
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/ST3400820AS.jpg}
+    %{\footnotesize\centering }
+  \end{minipage}
+  %\hfill
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/SATA_Anderson.jpg}
+    {\footnotesize\centering Anderson 2007 (environ 450 pages)}
+  \end{minipage}
+  }
+\end{itemize}
+\end{frame}
+
+% ---
+
+\begin{frame}{l'OS}
+\begin{itemize}
+  \item Le rôle d'OS est de
+  \begin{itemize}
+    {\footnotesize
+      \item créer de bonnes abstractions (par exemple, fichier)
+      \item puis d'implémenter et de gérer les objets abstraits ainsi créés (pour parler avec les pilotes et le materiel)
+    }
+  \end{itemize}
+
+  {
+  \centering
+  \begin{minipage}{0.99\textwidth}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Fig1.1_Tanenbaum_Bos.png}
+    %{\footnotesize\centering }
+  \end{minipage}
+  }
+\end{itemize}
+\end{frame}
+
+% ---
+
+\begin{frame}{Histoire d'UNIX (1970-1980)}
+\begin{itemize}
+  \item inspire par le projet MULTICS
+  \item Fait en 1970 par Kenneth Thompson et Dennis Ritchie (Bell Labs)
+  \item 2 Fork majeurs: System V (AT\&T) (eg, SOLARIS), BSD (Berkeley) (eg MAC OS)
+  \item POSIX standard par IEEE
+\end{itemize}
+\end{frame}
+
+% ---
+
+\begin{frame}{Histoire de Linux (1980-aujourd'hui)}
+\begin{itemize}
+  \item Entre 1980-1991, c'etait devenu raisonnable d'avoir un ordi a la maison
+  \item UNIX, DOS: payant
+  \item Système libre et open-source
+  \item GNU par Richard Stallman
+  \item 1991: Linus Torvalds a develope le noyau (LINUX)
+  \item Linux est ajd omnipresent.. quelques distributions
+\end{itemize}
+\end{frame}
+
+% ---
+
+\begin{frame}{Pq Linux}
+\begin{itemize}
+  \item Gratuit
+  \item plusieurs utilisateurs
+  \item l'importance d'open source
+\end{itemize}
+\end{frame}
+
+% ---
+
