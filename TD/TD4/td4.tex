@@ -1,0 +1,176 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD4 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% --------------------------------------------------
+\section*{Objectifs du TD}
+
+Ce TD a pour objectif de vous initier à l'écriture de scripts bash.
+À l'issue de la séance, vous devrez être capables de :
+\begin{itemize}
+    \item créer et exécuter un script bash ;
+    \item utiliser des variables ;
+    \item passer des paramètres à un script ;
+    \item tester des conditions simples ;
+    \item automatiser des commandes déjà connues.
+\end{itemize}
+
+\bigskip
+
+\begin{warningbox}
+Il est fortement recommandé de taper les commandes et le code à la main
+afin de bien comprendre le fonctionnement des scripts.
+\end{warningbox}
+
+% --------------------------------------------------
+\section{Qu'est-ce qu'un script bash ?}
+
+Un script bash est un fichier texte contenant une suite de commandes
+qui seront exécutées automatiquement par le shell.
+
+La première ligne d'un script bash est appelée \textit{shebang} :
+\texttt{\#!/bin/bash}
+
+% --------------------------------------------------
+\section{Créer et exécuter un premier script}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Créez un fichier nommé \texttt{script.sh}.
+    \item Ajoutez la ligne \texttt{\#!/bin/bash}.
+    \item Affichez un message à l'écran.
+    \item Rendez le script exécutable.
+    \item Exécutez le script.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{chmod} \texttt{+x} script.sh
+\prompt\ ./script.sh
+\end{terminal}
+
+% --------------------------------------------------
+\section{Variables}
+
+Les variables permettent de stocker des informations dans un script.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Créez une variable contenant votre prénom.
+    \item Affichez la valeur de cette variable.
+    \item Modifiez la variable.
+    \item Réaffichez-la.
+\end{enumerate}
+
+\subsection*{Exemple}
+
+\begin{terminal}
+prenom="Alice"
+\shcmd{echo} \$prenom
+\end{terminal}
+
+% --------------------------------------------------
+\section{Paramètres d'un script}
+
+Un script peut recevoir des paramètres lors de son exécution.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Modifiez votre script pour afficher le premier paramètre.
+    \item Testez le script avec différents paramètres.
+    \item Que contient la variable \texttt{\$0} ?
+\end{enumerate}
+
+\subsection*{Exemple}
+
+\begin{terminal}
+\shcmd{echo} \$1
+\end{terminal}
+
+% --------------------------------------------------
+\section{Tests et conditions simples}
+
+Les structures conditionnelles permettent d'exécuter du code
+en fonction d'une condition.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Si aucun paramètre n'est fourni, affichez un message d'erreur.
+    \item Sinon, affichez le paramètre fourni.
+\end{enumerate}
+
+\subsection*{Structure générale}
+
+\begin{terminal}
+\shcmd{if} [ condition ]; \shcmd{then}
+  commandes
+\shcmd{fi}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Tester l'existence d'un fichier}
+
+\subsection*{Travail à faire}
+
+Écrivez un script qui :
+\begin{itemize}
+    \item prend un nom de fichier en paramètre ;
+    \item affiche \texttt{"Fichier trouvé"} s'il existe ;
+    \item affiche \texttt{"Fichier inexistant"} sinon.
+\end{itemize}
+
+\subsection*{Tests utiles}
+
+\begin{terminal}
+\texttt{-f} fichier \quad (teste si c'est un fichier)
+\texttt{-d} dossier \quad (teste si c'est un répertoire)
+\end{terminal}
+
+% --------------------------------------------------
+\section{Mini-script d'automatisation}
+
+\subsection*{Travail à faire}
+
+Écrivez un script qui :
+\begin{itemize}
+    \item prend un répertoire en paramètre ;
+    \item vérifie qu'il existe ;
+    \item affiche le nombre de fichiers qu'il contient.
+\end{itemize}
+
+\subsection*{Indications}
+
+Vous pouvez utiliser les commandes suivantes :
+\begin{itemize}
+    \item \texttt{ls}
+    \item \texttt{wc -l}
+\end{itemize}
+
+% --------------------------------------------------
+\section*{Remarques}
+
+\begin{itemize}
+    \item Un script est simplement une suite de commandes déjà connues.
+    \item Les erreurs sont normales lors de l'écriture d'un script.
+    \item Lisez attentivement les messages d'erreur.
+\end{itemize}
+
+\end{document}
