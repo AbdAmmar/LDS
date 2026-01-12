@@ -1,0 +1,5 @@
+alice:/bin/bash
+bob:/bin/zsh
+carol:/bin/bash
+dave:/usr/sbin/nologin
+eve:/bin/bash
