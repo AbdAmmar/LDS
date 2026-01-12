@@ -1,0 +1,160 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD11 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% --------------------------------------------------
+\section*{Objectifs du TD}
+
+Ce TD a pour objectif d'apprendre à écrire des scripts bash plus lisibles,
+plus structurés et plus faciles à maintenir.
+À l'issue de la séance, vous devrez être capables de :
+\begin{itemize}
+    \item découper un script en plusieurs fonctions ;
+    \item comprendre le rôle des variables dans un script ;
+    \item organiser un script en parties claires ;
+    \item ajouter une aide pour l'utilisateur.
+\end{itemize}
+
+\bigskip
+
+\begin{warningbox}
+Dans ce TD, l'objectif n'est pas d'écrire plus de code,
+mais d'écrire du code plus clair et mieux organisé.
+\end{warningbox}
+
+% --------------------------------------------------
+\section{Pourquoi structurer un script ?}
+
+Jusqu'à présent, vous avez écrit des scripts contenant une suite de commandes.
+Lorsque les scripts deviennent plus longs, il devient difficile :
+\begin{itemize}
+    \item de comprendre ce qu'ils font ;
+    \item de les modifier ;
+    \item de corriger des erreurs.
+\end{itemize}
+
+Structurer un script permet de le rendre plus lisible et plus robuste.
+
+% --------------------------------------------------
+\section{Découper un script en fonctions}
+
+Une fonction permet de regrouper des commandes ayant un rôle précis.
+
+\subsection*{Travail à faire}
+
+Reprenez un script écrit lors d'un TD précédent (TD6 ou TD7 par exemple)
+et identifiez les différentes parties du script.
+
+Par exemple :
+\begin{itemize}
+    \item vérification des paramètres ;
+    \item analyse d'un fichier ;
+    \item affichage des résultats.
+\end{itemize}
+
+Créez une fonction pour chacune de ces parties.
+
+% --------------------------------------------------
+\section{Définir et utiliser des fonctions}
+
+\subsection*{Structure générale}
+
+\begin{terminal}
+nom\_fonction() \{
+  commandes
+\}
+\end{terminal}
+
+Une fonction peut ensuite être appelée simplement par son nom.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Créez une fonction \texttt{check\_args} qui vérifie les paramètres.
+    \item Créez une fonction \texttt{analyze} qui effectue le traitement principal.
+    \item Créez une fonction \texttt{print\_result} qui affiche les résultats.
+    \item Appelez ces fonctions dans la partie principale du script.
+\end{enumerate}
+
+% --------------------------------------------------
+\section{Variables et portée}
+
+Les variables définies dans un script sont accessibles dans les fonctions.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Définissez une variable au début du script.
+    \item Modifiez cette variable dans une fonction.
+    \item Affichez la variable après l'appel de la fonction.
+\end{enumerate}
+
+\subsection*{Question}
+
+Que constatez-vous ?
+Expliquez pourquoi la valeur de la variable a changé.
+
+% --------------------------------------------------
+\section{Ajouter une aide au script}
+
+Un script bien écrit doit expliquer comment il s'utilise.
+
+\subsection*{Travail à faire}
+
+Ajoutez une option \texttt{-h} ou \texttt{--help} à votre script.
+Lorsque cette option est fournie, le script doit afficher :
+\begin{itemize}
+    \item une description du script ;
+    \item les paramètres attendus ;
+    \item un exemple d'utilisation.
+\end{itemize}
+
+\subsection*{Indication}
+
+Vous pouvez utiliser une structure conditionnelle du type :
+
+\begin{terminal}
+\shcmd{if} [ "\$1" = "\texttt{-h}" ]; \shcmd{then}
+  \shcmd{echo} "Aide du script"
+  \shcmd{exit} 0
+\shcmd{fi}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Organisation finale du script}
+
+Votre script final doit être organisé de la manière suivante :
+\begin{itemize}
+    \item commentaires en début de fichier ;
+    \item définition des variables ;
+    \item définition des fonctions ;
+    \item partie principale (appels des fonctions).
+\end{itemize}
+
+\subsection*{Travail à faire}
+
+Réorganisez votre script pour qu'il respecte cette structure.
+
+% --------------------------------------------------
+\section*{Remarques}
+
+\begin{itemize}
+    \item Un script lisible est plus important qu'un script court.
+    \item Les fonctions permettent d'éviter les répétitions.
+    \item Ce TD prépare l'écriture de scripts plus complexes.
+\end{itemize}
+
+\end{document}
