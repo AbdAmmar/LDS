@@ -1,0 +1,141 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+%\usepackage{hyperref}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD1 - Découverte du système Linux}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+
+
+\section*{Objectifs du TD}
+
+Ce TD a pour objectif de découvrir le système Linux à travers les commandes de base
+permettant d'explorer :
+\begin{itemize}
+    \item la machine (processeur, mémoire, disque),
+    \item le système (noyau, distribution),
+\end{itemize}
+
+
+\section*{Utilisation du terminal}
+
+Dans le terminal, il est possible de réutiliser et de modifier des commandes déjà tapées.
+Les flèches du clavier permettent de naviguer dans l'historique des commandes :
+\begin{itemize}
+    \item flèche vers le haut : commande précédente,
+    \item flèche vers le bas : commande suivante.
+\end{itemize}
+
+Il est fortement recommandé d'utiliser cette fonctionnalité afin d'éviter de retaper
+entièrement des commandes longues et de corriger plus facilement des erreurs.
+L'historique des commandes peut être affiché avec la commande :
+\begin{terminal}
+\prompt\ \shcmd{history}
+\end{terminal}
+
+\bigskip
+
+\section{Carte d'identité de votre machine}
+
+Linux permet d'obtenir rapidement des informations sur la machine et le système.
+
+\subsection*{Travail à faire}
+
+Complétez la fiche suivante à l'aide de commandes Linux :
+
+\begin{itemize}
+    \item Nom de la machine :
+    \item Nom de l'utilisateur courant :
+    \item Système d'exploitation :
+    \item Version du noyau Linux :
+    \item Architecture du processeur (ex. \texttt{x86\_64}, \texttt{aarch64}) :
+\end{itemize}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{hostname}
+
+\prompt\ \shcmd{whoami}
+
+\prompt\ \shcmd{uname} \texttt{-a}
+
+\prompt\ \shcmd{uname} \texttt{-m}
+
+\prompt\ \shcmd{lsb\_release} \texttt{-a}
+\end{terminal}
+
+\section{Le processeur}
+
+Le processeur (CPU) est l'un des éléments centraux d'une machine.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Combien de processeurs logiques possède votre machine ?
+    \item Quel est le modèle du processeur ?
+    \item Comparez vos résultats avec un autre étudiant.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{lscpu}
+
+\prompt\ \shcmd{nproc}
+\end{terminal}
+
+\section{La mémoire vive (RAM)}
+
+La mémoire vive est utilisée pour exécuter les programmes en cours.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Quelle est la quantité totale de mémoire vive ?
+    \item Quelle quantité est actuellement utilisée ?
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{free} \texttt{-h}
+\end{terminal}
+
+
+
+\section{Le disque et l'espace de stockage}
+
+Linux organise les disques à l'aide de points de montage.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Quelle est la taille de l'espace disque contenant votre répertoire personnel ?
+    \item Combien d'espace est actuellement disponible ?
+    \item Quelle est la taille de votre répertoire personnel ?
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{df} \texttt{-h} \texttt{\textasciitilde}
+
+\prompt\ \shcmd{du} \texttt{-h} {-}{-}max-depth=1 \texttt{\textasciitilde}
+\end{terminal}
+
+
+
+\end{document}

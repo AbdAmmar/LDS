@@ -3,7 +3,6 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{geometry}
-\usepackage{hyperref}
 
 \usepackage{../tdstyle}
 
@@ -40,22 +39,18 @@ Les outils et scripts utilisés dans ce cours s'exécuteront dans un environneme
 \prompt\ \shcmd{echo} \$SHELL
 \end{terminal}
 
-\begin{minted}{bash}
-#!/bin/bash
-echo "Bonjour"
-ls -l
-\end{minted}
     Si nécessaire, il est possible de lancer \texttt{bash} simplement en tapant :
-    \begin{minted}{bash}
-        bash
-    \end{minted}
+\begin{terminal}
+\prompt\ \shcmd{bash}
+\end{terminal}
     dans le terminal.
 \end{itemize}
 
 
 \section*{Qu'est-ce que WSL ?}
 
-WSL est une fonctionnalité de Windows qui permet d'exécuter un système Linux
+\href{https://learn.microsoft.com/fr-fr/windows/wsl/}{WSL}
+est une fonctionnalité de Windows qui permet d'exécuter un système Linux
 directement sous Windows, sans machine virtuelle lourde ni redémarrage.
 
 Avantages :
@@ -85,9 +80,9 @@ Avantages :
 
 Dans le terminal, tapez la commande suivante :
 
-%\begin{lstlisting}
-%wsl --install
-%\end{lstlisting}
+\begin{terminal}
+\prompt\ \shcmd{wsl} {-}{-}install
+\end{terminal}
 
 Cette commande :
 \begin{itemize}
@@ -111,30 +106,59 @@ Après le redémarrage :
 
 Dans le terminal Ubuntu, tapez :
 
-\begin{minted}{bash}
-lsb_release -a
-\end{minted}
+\begin{terminal}
+\prompt\ \shcmd{lsb\_release} -a
+\end{terminal}
 
 Puis :
 
-\begin{minted}{bash}
-uname -a
-\end{minted}
+\begin{terminal}
+\prompt\ \shcmd{uname} -a
+\end{terminal}
 
 Si ces commandes s'exécutent sans erreur, l'installation est réussie.
 
 \section*{Problèmes fréquents}
 
 \begin{itemize}
-    \item \textbf{La commande \texttt{wsl} n'est pas reconnue} : Windows trop ancien
-    \item \textbf{Erreur de virtualisation} : activer la virtualisation dans le BIOS
-\end{itemize}
+    \item \textbf{Erreur 0x80370102} : la virtualisation du CPU n'est pas activée.
+    Il faut activer la virtualisation dans le BIOS/UEFI.
+    Depuis Windows, allez dans \textit{Paramètres} $\rightarrow$ \textit{Système} $\rightarrow$
+    \textit{Récupération} $\rightarrow$ \textit{Démarrage avancé}.
+    Dans le menu de démarrage, accédez aux options UEFI et activez la virtualisation du CPU
+    (les menus peuvent varier selon les machines).
+    Voir \href{https://askubuntu.com/questions/1264102/wsl-2-wont-run-ubuntu-error-0x80370102}{cette} discussion par exemple.
 
-\section*{Ressources}
+    \item \textbf{Erreur 0x800701bc} : WSL est en version 1.
+    Mettez à jour votre système Windows et assurez-vous d'utiliser WSL~2.
+    Voir \href{https://learn.microsoft.com/windows/wsl/install}{ici}.
 
-Documentation officielle :
-\begin{itemize}
-    \item \url{https://learn.microsoft.com/fr-fr/windows/wsl/}
+    \item \textbf{Erreur 0xc03a001a} : la distribution Ubuntu est installée dans un dossier compressé.
+    Il faut désactiver la compression du dossier
+    \texttt{C:\textbackslash Users\textbackslash <nom>\textbackslash AppData\textbackslash Local\textbackslash Packages\textbackslash CanonicalGroupLimited.Ubuntu}
+    et de tous ses sous-dossiers.
+    Si le dossier \texttt{AppData} n'est pas visible, activez l'affichage des dossiers cachés.
+    Voir \href{https://github.com/microsoft/WSL/issues/4299}{ici}.
+
+    \item \textbf{Ubuntu ne se configure pas au premier lancement} :
+    la distribution n'est peut-être pas installée.
+    Installez manuellement Ubuntu~22.04 LTS depuis le Microsoft Store.
+
+    \item \textbf{Erreur 0x80070050} :
+    essayez de mettre à jour Windows ou de réinstaller Ubuntu~22.04.
+    Si le problème persiste, un diagnostic de Windows Update peut être nécessaire.
+
+    \item \textbf{Erreur 0x80004002} :
+    vérifiez que les fonctionnalités de virtualisation (Hyper-V ou
+    \textit{Virtual Machine Platform}) sont activées dans
+    \textit{Fonctionnalités Windows}.
+
+    \item \textbf{Erreur \emph{Le chemin d'accès est introuvable}} :
+    lors du lancement d'Ubuntu, essayez de mettre à jour WSL en lançant la commande suivante
+    dans le terminal Windows (PowerShell) :
+\begin{terminal}
+\prompt\ \shcmd{wsl} {-}{-}update
+\end{terminal}
 \end{itemize}
 
 \end{document}
