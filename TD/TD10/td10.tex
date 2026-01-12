@@ -1,0 +1,166 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD10 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% --------------------------------------------------
+\section*{Objectifs du TD}
+
+Ce TD a pour objectif d'introduire la gestion des sorties et des erreurs
+sous Linux.
+À l'issue de la séance, vous devrez être capables de :
+\begin{itemize}
+    \item comprendre la différence entre sortie standard et erreur standard ;
+    \item rediriger les sorties vers des fichiers ;
+    \item analyser des messages d'erreur ;
+    \item améliorer la robustesse de scripts bash simples.
+\end{itemize}
+
+\bigskip
+
+\begin{warningbox}
+Ce TD introduit de nouveaux concepts.
+Il n'est pas attendu que tout soit parfaitement maîtrisé :
+l'objectif est de comprendre les idées générales.
+\end{warningbox}
+
+% --------------------------------------------------
+\section{Les flux standards}
+
+Sous Linux, un programme communique avec l'extérieur à l'aide de flux :
+\begin{itemize}
+    \item l'entrée standard (stdin) ;
+    \item la sortie standard (stdout) ;
+    \item la sortie d'erreur (stderr).
+\end{itemize}
+
+Par défaut, la sortie standard et la sortie d'erreur sont affichées à l'écran.
+
+% --------------------------------------------------
+\section{Rediriger la sortie standard}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Listez le contenu de votre répertoire personnel.
+    \item Redirigez cette sortie dans un fichier \texttt{liste.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\subsection*{Commandes}
+
+\begin{terminal}
+\prompt\ \shcmd{ls}
+\prompt\ \shcmd{ls} \texttt{>} liste.txt
+\prompt\ \shcmd{cat} liste.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Générer et observer une erreur}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Essayez d'afficher un fichier qui n'existe pas.
+    \item Observez le message affiché.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt
+\end{terminal}
+
+Expliquez pourquoi le message n'est pas redirigé avec \texttt{>}.
+
+% --------------------------------------------------
+\section{Rediriger la sortie d'erreur}
+
+La sortie d'erreur peut être redirigée séparément.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Redirigez l'erreur précédente dans un fichier \texttt{erreur.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt \texttt{2>} erreur.txt
+\prompt\ \shcmd{cat} erreur.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Rediriger sortie et erreur}
+
+Il est possible de rediriger à la fois la sortie standard et la sortie d'erreur.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Lancez une commande produisant à la fois une sortie et une erreur.
+    \item Redirigez les deux flux dans un même fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} sortie.txt \texttt{2>} erreur.txt
+\end{terminal}
+
+Ou en une seule commande :
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} tout.txt \texttt{2>\&1}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Utilisation dans un script}
+
+Les redirections sont très utiles dans les scripts pour éviter d'afficher
+des messages inutiles à l'utilisateur.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Reprenez un script écrit dans les TD précédents.
+    \item Redirigez les messages d'erreur vers un fichier \texttt{error.log}.
+    \item Vérifiez que le script continue de fonctionner.
+\end{enumerate}
+
+% --------------------------------------------------
+\section{Rendre un script plus robuste}
+
+\subsection*{Travail à faire}
+
+Écrivez un script qui :
+\begin{itemize}
+    \item prend un fichier en paramètre ;
+    \item vérifie qu'il existe ;
+    \item affiche son contenu s'il existe ;
+    \item affiche un message d'erreur clair sinon.
+\end{itemize}
+
+Comparez le comportement du script avec et sans redirections.
+
+% --------------------------------------------------
+\section*{Ouverture}
+
+La gestion des erreurs est essentielle dans les scripts réels.
+Dans des modules plus avancés, vous verrez :
+\begin{itemize}
+    \item les codes de retour ;
+    \item la gestion des signaux ;
+    \item les logs système ;
+    \item les scripts robustes à grande échelle.
+\end{itemize}
+
+\end{document}

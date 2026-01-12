@@ -1,0 +1,183 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD9 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% --------------------------------------------------
+\section*{Objectifs du TD}
+
+Ce TD a pour objectif de comprendre comment créer une commande personnalisée
+sous Linux, à la manière de la commande \texttt{fortune}.
+À l'issue de la séance, vous devrez être capables de :
+\begin{itemize}
+    \item écrire un script bash simple ;
+    \item rendre un script exécutable ;
+    \item placer un script dans le \texttt{PATH} ;
+    \item créer une commande réutilisable ;
+    \item combiner votre commande avec \texttt{cowsay}.
+\end{itemize}
+
+\bigskip
+
+\begin{warningbox}
+Ce TD est ludique et créatif.
+Aucune évaluation ne portera sur le contenu des citations,
+mais sur le bon fonctionnement de la commande.
+\end{warningbox}
+
+% --------------------------------------------------
+\section{Installation des outils}
+
+Installez les programmes nécessaires :
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} apt update
+\prompt\ \shcmd{sudo} apt install cowsay
+\end{terminal}
+
+% --------------------------------------------------
+\section{Création des citations}
+
+Créez un fichier contenant des citations, blagues ou proverbes en français.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Créez un fichier nommé \texttt{citations.txt}.
+    \item Ajoutez au moins 5 phrases en français (une par ligne).
+\end{enumerate}
+
+\subsection*{Exemple}
+
+\begin{terminal}
+\prompt\ \shcmd{nano} citations.txt
+\end{terminal}
+
+Contenu possible :
+\begin{verbatim}
+Linux est puissant.
+Tout est fichier.
+Ça marche chez moi.
+Il n'y a pas de bug, seulement des fonctionnalités.
+RTFM.
+\end{verbatim}
+
+% --------------------------------------------------
+\section{Afficher une citation aléatoire}
+
+Linux fournit la commande \texttt{shuf} permettant de choisir une ligne aléatoire.
+
+\subsection*{Travail à faire}
+
+Affichez une citation aléatoire depuis le fichier \texttt{citations.txt}.
+
+\begin{terminal}
+\prompt\ \shcmd{shuf} \texttt{-n 1} citations.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Création d'une commande personnalisée}
+
+Nous allons maintenant créer une commande appelée \texttt{fortune-fr}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Créez un fichier nommé \texttt{fortune-fr}.
+    \item Ajoutez la ligne \texttt{\#!/bin/bash}.
+    \item Écrivez un script qui affiche une citation aléatoire.
+\end{enumerate}
+
+\subsection*{Exemple de script}
+
+\begin{terminal}
+\#!/bin/bash
+\shcmd{shuf} \texttt{-n 1} \$HOME/citations.txt
+\end{terminal}
+
+Rendez le script exécutable :
+
+\begin{terminal}
+\prompt\ \shcmd{chmod} \texttt{+x} fortune-fr
+\end{terminal}
+
+Testez-le :
+
+\begin{terminal}
+\prompt\ ./fortune-fr
+\end{terminal}
+
+% --------------------------------------------------
+\section{Ajouter la commande au PATH}
+
+Pour pouvoir utiliser votre commande depuis n'importe quel répertoire,
+elle doit se trouver dans un répertoire du \texttt{PATH}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Créez le répertoire \texttt{\$HOME/bin} s'il n'existe pas.
+    \item Déplacez votre script dans ce répertoire.
+    \item Vérifiez que \texttt{\$HOME/bin} est bien dans le \texttt{PATH}.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{mkdir} \texttt{-p} \$HOME/bin
+\prompt\ \shcmd{mv} fortune-fr \$HOME/bin
+\prompt\ \shcmd{echo} \$PATH
+\end{terminal}
+
+Si nécessaire, ajoutez cette ligne à votre fichier \texttt{\textasciitilde/.bashrc} :
+
+\begin{terminal}
+\shcmd{export} PATH=\$PATH:\$HOME/bin
+\end{terminal}
+
+Rechargez la configuration :
+
+\begin{terminal}
+\prompt\ \shcmd{source} \texttt{\textasciitilde/.bashrc}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Combiner avec cowsay}
+
+Utilisez maintenant votre commande personnalisée avec \texttt{cowsay}.
+
+\begin{terminal}
+\prompt\ \shcmd{fortune-fr} \texttt{|} \shcmd{cowsay}
+\end{terminal}
+
+Essayez différentes exécutions.
+
+% --------------------------------------------------
+\section{Extensions (optionnelles)}
+
+Pour aller plus loin :
+\begin{itemize}
+    \item ajouter une option \texttt{-h} affichant une aide ;
+    \item gérer plusieurs fichiers de citations ;
+    \item afficher le nombre total de citations ;
+    \item utiliser une vache différente avec \texttt{cowsay -l}.
+\end{itemize}
+
+% --------------------------------------------------
+\section*{Conclusion}
+
+Vous avez créé votre propre commande Linux.
+Ce principe est utilisé quotidiennement pour automatiser et personnaliser
+les environnements de travail sous Unix.
+
+\end{document}
