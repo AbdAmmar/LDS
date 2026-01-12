@@ -209,25 +209,25 @@ pour séparer les mots.
 
 \prompt\ \shcmd{cd} \textasciitilde/.
 \end{terminal}
-    \item Créez un répertoire nommé \texttt{TD2}.
+    \item Créez un répertoire nommé \texttt{TD1}.
 \begin{terminal}
-\prompt\ \shcmd{mkdir} TD2
+\prompt\ \shcmd{mkdir} TD1
 \end{terminal}
-    \item Entrez dans \texttt{TD2} et vérifiez votre position.
+    \item Entrez dans \texttt{TD1} et vérifiez votre position.
 \begin{terminal}
-\prompt\ \shcmd{cd} TD2
+\prompt\ \shcmd{cd} TD1
 
 \prompt\ \shcmd{pwd}
 \end{terminal}
-    \item Créez un répertoire \texttt{TD2-bis} et placez-vous dedans.
+    \item Créez un répertoire \texttt{TD1-bis} et placez-vous dedans.
     \item Créez les répertoires suivants :
     \begin{itemize}
-        \item \texttt{TD2-bis-1}
-        \item \texttt{TD2-bis-2}
-        \item \texttt{TD2-bis-3}
+        \item \texttt{TD1-bis-1}
+        \item \texttt{TD1-bis-2}
+        \item \texttt{TD1-bis-3}
     \end{itemize}
-    \item Entrez dans \texttt{TD2-bis-1} et créez un répertoire nommé \texttt{test}.
-    \item Revenez en arrière puis entrez dans \texttt{TD2-bis-3}.
+    \item Entrez dans \texttt{TD1-bis-1} et créez un répertoire nommé \texttt{test}.
+    \item Revenez en arrière puis entrez dans \texttt{TD1-bis-3}.
 \begin{terminal}
 \prompt\ \tcomment{revenir en arrière}
 
@@ -239,19 +239,19 @@ pour séparer les mots.
 
 \prompt\ \shcmd{ls}
 
-\prompt\ \shcmd{cd} TD2-bis-3
+\prompt\ \shcmd{cd} TD1-bis-3
 \end{terminal}
-    \item Depuis \texttt{TD2-bis-3}, créez un répertoire nommé \texttt{test}
-    à l'intérieur de \texttt{TD2-bis-2}, sans vous déplacer dans ce dernier.
+    \item Depuis \texttt{TD1-bis-3}, créez un répertoire nommé \texttt{test}
+    à l'intérieur de \texttt{TD1-bis-2}, sans vous déplacer dans ce dernier.
 \begin{terminal}
-\prompt\ \shcmd{mkdir} ../TD2-bis-2/test
+\prompt\ \shcmd{mkdir} ../TD1-bis-2/test
 \end{terminal}
     \item Revenez dans votre répertoire personnel et affichez l'arborescence 
-    complète du répertoire \texttt{TD2}.
+    complète du répertoire \texttt{TD1}.
 \begin{terminal}
 \prompt\ \shcmd{cd}
 
-\prompt\ \shcmd{tree} TD2
+\prompt\ \shcmd{tree} TD1
 \end{terminal}
 Si la commande \texttt{tree} n'est pas disponible, installez-la :
 \begin{terminal}
@@ -260,17 +260,17 @@ Si la commande \texttt{tree} n'est pas disponible, installez-la :
 \prompt\ \shcmd{sudo apt install tree}
 \end{terminal}
     \item Supprimez ensuite tous les répertoires dont le nom commence par
-    \texttt{TD2-bis-} en une ou plusieurs commandes.
+    \texttt{TD1-bis-} en une ou plusieurs commandes.
 \begin{terminal}
-\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-1
+\prompt\ \shcmd{rm} -r TD1/TD1-bis/TD1-bis-1
 
-\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-2
+\prompt\ \shcmd{rm} -r TD1/TD1-bis/TD1-bis-2
 
-\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-3
+\prompt\ \shcmd{rm} -r TD1/TD1-bis/TD1-bis-3
 
 \prompt\ \tcomment{ou bien}
 
-\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-*
+\prompt\ \shcmd{rm} -r TD1/TD1-bis/TD1-bis-*
 \end{terminal}
 \end{enumerate}
 
@@ -285,10 +285,10 @@ Utilisez-la avec précaution et vérifiez toujours le chemin avant de l'exécute
 Dans cet exercice, vous allez créer un fichier texte et y écrire plusieurs lignes.
 
 \begin{enumerate}
-    \item Placez-vous dans le répertoire \texttt{TD2} et créez un fichier 
+    \item Placez-vous dans le répertoire \texttt{TD1} et créez un fichier 
           nommé \texttt{notes.txt}.
 \begin{terminal}
-\prompt\ \shcmd{cd} \$HOME/TD2
+\prompt\ \shcmd{cd} \$HOME/TD1
 
 \prompt\ \shcmd{touch} notes.txt
 \end{terminal}
@@ -320,6 +320,10 @@ Enregistrez le fichier puis fermez l'éditeur.
     \item Affichez le contenu du fichier pour vérifier que toutes les lignes ont bien été ajoutées.
 \begin{terminal}
 \prompt\ \shcmd{cat} notes.txt
+\end{terminal}
+    \item Affichez le nombre de lignes du fichier \texttt{notes.txt}.
+\begin{terminal}
+\prompt\ \shcmd{wc} -l notes.txt
 \end{terminal}
 \end{enumerate}
 

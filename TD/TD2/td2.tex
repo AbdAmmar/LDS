@@ -1,0 +1,294 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD2 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+
+% --------------------------------------------------
+\section*{Récupération des fichiers de données}
+
+Dans ce TD, vous allez travailler sur des fichiers texte fournis par l'enseignant.
+Ces fichiers contiennent des données fictives destinées à l'apprentissage
+des commandes de filtrage et d'analyse de texte.
+
+Commencez par créer un répertoire \texttt{data}, puis téléchargez les fichiers
+à l'aide des commandes suivantes :
+
+\begin{terminal}
+\prompt\ \shcmd{mkdir} data
+
+\prompt\ \shcmd{cd} data
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD2/data/users.txt
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD2/data/logs.txt
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD2/data/notes.txt
+\end{terminal}
+
+Vérifiez que les fichiers ont bien été téléchargés.
+Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} apt update
+
+\prompt\ \shcmd{sudo} apt install wget
+\end{terminal}
+
+\bigskip
+
+% --------------------------------------------------
+\section{Lire et compter}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez le contenu du fichier \texttt{users.txt}.
+    \item Comptez le nombre de lignes du fichier.
+    \item Affichez le contenu du fichier \texttt{logs.txt}.
+    \item Comptez le nombre de lignes du fichier \texttt{notes.txt}.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} users.txt
+
+\prompt\ \shcmd{wc} \texttt{-l} users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Introduction aux pipes}
+
+Un \textit{pipe} permet d'envoyer la sortie d'une commande en entrée d'une autre.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Comptez le nombre de lignes de \texttt{users.txt} sans afficher le contenu du fichier.
+    \item Expliquez le rôle du symbole \texttt{|}.
+\end{enumerate}
+
+\subsection*{Commande clé}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} users.txt \texttt{|} \shcmd{wc} \texttt{-l}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Rechercher des informations avec \texttt{grep}}
+
+\subsection*{Travail à faire}
+
+À partir du fichier \texttt{users.txt} :
+
+\begin{enumerate}
+    \item Affichez les lignes contenant \texttt{bash}.
+    \item Comptez le nombre d'utilisateurs utilisant \texttt{bash}.
+    \item Affichez les lignes ne contenant pas \texttt{bash}.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{grep} bash users.txt
+
+\prompt\ \shcmd{grep} \texttt{-c} bash users.txt
+
+\prompt\ \shcmd{grep} \texttt{-v} bash users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Extraire des informations}
+
+Le fichier \texttt{users.txt} est structuré : les champs sont séparés par le caractère \texttt{:}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez uniquement la colonne des noms d'utilisateurs.
+    \item Affichez uniquement la colonne des shells.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{cut} \texttt{-d: -f1} users.txt
+
+\prompt\ \shcmd{cut} \texttt{-d: -f2} users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Trier et compter}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez la liste des shells utilisés.
+    \item Triez cette liste.
+    \item Comptez combien de fois chaque shell apparaît.
+\end{enumerate}
+
+\subsection*{Pipeline attendu}
+
+\begin{terminal}
+\prompt\ \shcmd{cut} \texttt{-d: -f2} users.txt \texttt{|} \shcmd{sort} \texttt{|} \shcmd{uniq} \texttt{-c}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Analyse de fichiers de logs}
+
+\subsection*{Travail à faire}
+
+À partir du fichier \texttt{logs.txt} :
+
+\begin{enumerate}
+    \item Affichez uniquement les lignes contenant \texttt{ERROR}.
+    \item Comptez le nombre d'erreurs.
+    \item Affichez les noms des utilisateurs ayant généré une erreur.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{grep} ERROR logs.txt
+
+\prompt\ \shcmd{grep} \texttt{-c} ERROR logs.txt
+
+\prompt\ \shcmd{grep} ERROR logs.txt \texttt{|} \shcmd{cut} \texttt{-d= -f2}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Mini-analyse}
+
+\subsection*{Travail à faire}
+
+Sans utiliser d'éditeur de texte :
+
+\begin{itemize}
+    \item Quel est le shell le plus utilisé ?
+    \item Quel utilisateur apparaît le plus souvent dans les logs ?
+\end{itemize}
+
+Justifiez vos réponses à l'aide de commandes Linux.
+
+
+\section*{Pour aller plus loin -- Exercice ludique (optionnel)}
+
+Installez les programmes \texttt{cowsay} et \texttt{fortune}.
+Testez ensuite l'utilisation d'un pipe entre les deux commandes.
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} apt install cowsay fortune
+
+\prompt\ \shcmd{fortune}
+
+\prompt\ \shcmd{fortune} \texttt{|} \shcmd{cowsay}
+\end{terminal}
+
+
+% --------------------------------------------------
+\section{Les flux standards}
+
+Ce TD a pour objectif d'introduire la gestion des sorties et des erreurs
+sous Linux.
+Sous Linux, un programme communique avec l'extérieur à l'aide de flux :
+\begin{itemize}
+    \item l'entrée standard (stdin) ;
+    \item la sortie standard (stdout) ;
+    \item la sortie d'erreur (stderr).
+\end{itemize}
+
+Par défaut, la sortie standard et la sortie d'erreur sont affichées à l'écran.
+
+% --------------------------------------------------
+\section{Rediriger la sortie standard}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Listez le contenu de votre répertoire personnel.
+    \item Redirigez cette sortie dans un fichier \texttt{liste.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\subsection*{Commandes}
+
+\begin{terminal}
+\prompt\ \shcmd{ls}
+
+\prompt\ \shcmd{ls} \texttt{>} liste.txt
+
+\prompt\ \shcmd{cat} liste.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Générer et observer une erreur}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Essayez d'afficher un fichier qui n'existe pas.
+    \item Observez le message affiché.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt
+\end{terminal}
+
+Expliquez pourquoi le message n'est pas redirigé avec \texttt{>}.
+
+% --------------------------------------------------
+\section{Rediriger la sortie d'erreur}
+
+La sortie d'erreur peut être redirigée séparément.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Redirigez l'erreur précédente dans un fichier \texttt{erreur.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt \texttt{2>} erreur.txt
+
+\prompt\ \shcmd{cat} erreur.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Rediriger sortie et erreur}
+
+Il est possible de rediriger à la fois la sortie standard et la sortie d'erreur.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Lancez une commande produisant à la fois une sortie et une erreur.
+    \item Redirigez les deux flux dans un même fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} sortie.txt \texttt{2>} erreur.txt
+\end{terminal}
+
+Ou en une seule commande :
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} tout.txt \texttt{2>\&1}
+\end{terminal}
+
+\end{document}
