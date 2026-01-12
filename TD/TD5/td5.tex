@@ -1,0 +1,162 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../tdstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD5 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% --------------------------------------------------
+\section*{Objectifs du TD}
+
+Ce TD a pour objectif d'introduire les boucles en bash afin d'automatiser
+des traitements répétitifs.
+À l'issue de la séance, vous devrez être capables de :
+\begin{itemize}
+    \item comprendre l'intérêt des boucles ;
+    \item utiliser une boucle \texttt{for} simple ;
+    \item parcourir des fichiers à l'aide d'une boucle ;
+    \item lire un fichier ligne par ligne ;
+    \item écrire des scripts d'automatisation simples.
+\end{itemize}
+
+\bigskip
+
+\begin{warningbox}
+Il est fortement recommandé de taper le code des scripts à la main afin
+de bien comprendre le fonctionnement des boucles.
+\end{warningbox}
+
+% --------------------------------------------------
+\section{Pourquoi utiliser une boucle ?}
+
+Lorsque l'on souhaite appliquer le même traitement à plusieurs éléments
+(fichiers, lignes, nombres, etc.), écrire une commande par élément n'est
+ni pratique ni robuste.
+
+\subsection*{Question}
+
+Expliquez pourquoi il n'est pas raisonnable d'écrire une commande différente
+pour chaque fichier lorsque le nombre de fichiers peut varier.
+
+% --------------------------------------------------
+\section{Boucle \texttt{for} simple}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Écrivez un script affichant les nombres de 1 à 5.
+    \item Modifiez le script pour afficher les nombres de 1 à 10.
+\end{enumerate}
+
+\subsection*{Structure générale}
+
+\begin{terminal}
+\shcmd{for} i in 1 2 3 4 5; \shcmd{do}
+  \shcmd{echo} \$i
+\shcmd{done}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Boucle sur des fichiers}
+
+\subsection*{Travail à faire}
+
+Dans un répertoire contenant plusieurs fichiers texte :
+
+\begin{enumerate}
+    \item Affichez le nom de chaque fichier \texttt{.txt}.
+    \item Affichez le nombre de lignes de chaque fichier.
+\end{enumerate}
+
+\subsection*{Indication}
+
+\begin{terminal}
+\shcmd{for} f in *.txt; \shcmd{do}
+  \shcmd{echo} \$f
+  \shcmd{wc} \texttt{-l} \$f
+\shcmd{done}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Automatisation sur les fichiers du TD3}
+
+Dans le TD3, vous avez manipulé plusieurs fichiers texte dans un répertoire \texttt{data}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Placez-vous dans le répertoire \texttt{data}.
+    \item Parcourez tous les fichiers texte.
+    \item Pour chaque fichier, affichez :
+    \begin{itemize}
+        \item son nom ;
+        \item son nombre de lignes.
+    \end{itemize}
+\end{enumerate}
+
+% --------------------------------------------------
+\section{Lire un fichier ligne par ligne}
+
+Il est possible de lire un fichier texte ligne par ligne à l'aide d'une boucle \texttt{while}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Écrivez un script qui lit le fichier \texttt{users.txt} ligne par ligne.
+    \item Affichez chaque ligne précédée du texte \texttt{"Utilisateur :"}.
+\end{enumerate}
+
+\subsection*{Structure générale}
+
+\begin{terminal}
+\shcmd{while} \shcmd{read} line; \shcmd{do}
+  \shcmd{echo} "Utilisateur : \$line"
+\shcmd{done} \texttt{<} users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Mini-script d'automatisation}
+
+\subsection*{Travail à faire}
+
+Écrivez un script qui :
+\begin{itemize}
+    \item prend un répertoire en paramètre ;
+    \item vérifie que ce répertoire existe ;
+    \item parcourt tous les fichiers \texttt{.txt} qu'il contient ;
+    \item affiche pour chacun :
+    \begin{itemize}
+        \item le nom du fichier ;
+        \item le nombre de lignes.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Indications}
+
+Vous pouvez utiliser :
+\begin{itemize}
+    \item les paramètres du script (\texttt{\$1}) ;
+    \item le test \texttt{-d} pour vérifier l'existence d'un répertoire ;
+    \item les commandes \texttt{ls} et \texttt{wc -l}.
+\end{itemize}
+
+% --------------------------------------------------
+\section*{Remarques}
+
+\begin{itemize}
+    \item Une boucle permet d'éviter la répétition de code.
+    \item Un script doit rester simple et lisible.
+    \item En cas d'erreur, lisez attentivement les messages affichés.
+\end{itemize}
+
+\end{document}
