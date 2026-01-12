@@ -102,12 +102,13 @@ La commande \texttt{help} affiche une aide intégrée au shell et s'applique
 principalement aux commandes internes.
 
 \begin{enumerate}
-    \item Consultez la documentation de la commande \texttt{ls}.
+    \item Consultez la documentation de la commande \texttt{ls} avec \texttt{man}, puis
+          avec \texttt{info}.
+          Pour quitter ces interfaces, appuyez sur \texttt{q}.
     \item Trouvez l'option permettant d'afficher les fichiers cachés, puis utilisez-la
           pour identifier les fichiers cachés présents dans votre répertoire personnel.
     \item Expliquez pourquoi la commande \texttt{man cd} ne fonctionne pas. Consultez 
           l'aide de la commande \texttt{cd}.
-    \item Consultez la documentation de \texttt{ls} avec \texttt{info}.
 \end{enumerate}
 
 \subsection*{Commandes utiles}
@@ -115,11 +116,14 @@ principalement aux commandes internes.
 \begin{terminal}
 \prompt\ \shcmd{man} \shcmd{ls}
 
-\prompt\ \shcmd{ls} -a \$HOME
+\prompt\ \shcmd{info} \shcmd{ls}
+
+\prompt\ \shcmd{ls} -a \$HOME 
+
+\prompt\ \shcmd{ls} -a \textasciitilde \,\,
+\tcomment{commande équivalente à la commande précédente}
 
 \prompt\ \shcmd{help} \shcmd{cd}
-
-\prompt\ \shcmd{info} \shcmd{ls}
 \end{terminal}
 
 % ---
@@ -168,43 +172,112 @@ Puis lancez-le avec un message de votre choix :
 \rsubsection{}
 Dans cet exercice, vous allez créer une petite arborescence afin de comprendre
 l'effet des chemins relatifs et absolus.
-
 Après chaque changement de répertoire avec la commande \texttt{cd},
 affichez systématiquement le répertoire courant à l'aide de la commande \texttt{pwd}.
 
+\begin{warningbox}
+Il est fortement recommandé d'éviter les espaces dans les noms de fichiers
+et de répertoires sous Linux.
+Les espaces compliquent l'utilisation des commandes dans le terminal.
+
+Préférez l'utilisation du caractère \texttt{-} (tiret) ou \texttt{\_} (underscore)
+pour séparer les mots.
+\end{warningbox}
+
+\textit{Rappel :}
+\begin{itemize}
+    \item \texttt{.} désigne le répertoire courant ;
+    \item \texttt{..} désigne le répertoire parent.
+\end{itemize}
+
 \begin{enumerate}
     \item Allez dans votre répertoire personnel.
+\begin{terminal}
+\prompt\ \tcomment{ces commandes sont équivalentes}
+
+\prompt\ \shcmd{cd}
+
+\prompt\ \shcmd{cd} \$HOME
+
+\prompt\ \shcmd{cd} \$HOME/
+
+\prompt\ \shcmd{cd} \$HOME/.
+
+\prompt\ \shcmd{cd} \textasciitilde
+
+\prompt\ \shcmd{cd} \textasciitilde/
+
+\prompt\ \shcmd{cd} \textasciitilde/.
+\end{terminal}
     \item Créez un répertoire nommé \texttt{TD2}.
-    \item Entrez dans \texttt{TD2}.
-    \item Créez un répertoire \texttt{TD2-bis}.
-    \item Entrez dans \texttt{TD2-bis}.
+\begin{terminal}
+\prompt\ \shcmd{mkdir} TD2
+\end{terminal}
+    \item Entrez dans \texttt{TD2} et vérifiez votre position.
+\begin{terminal}
+\prompt\ \shcmd{cd} TD2
+
+\prompt\ \shcmd{pwd}
+\end{terminal}
+    \item Créez un répertoire \texttt{TD2-bis} et placez-vous dedans.
     \item Créez les répertoires suivants :
     \begin{itemize}
         \item \texttt{TD2-bis-1}
         \item \texttt{TD2-bis-2}
         \item \texttt{TD2-bis-3}
     \end{itemize}
-    \item Entrez dans \texttt{TD2-bis-3}.
+    \item Entrez dans \texttt{TD2-bis-1} et créez un répertoire nommé \texttt{test}.
+    \item Revenez en arrière puis entrez dans \texttt{TD2-bis-3}.
+\begin{terminal}
+\prompt\ \tcomment{revenir en arrière}
+
+\prompt\ \shcmd{cd} ..
+
+\prompt\ \tcomment{ces deux commandes sont optionnelles}
+
+\prompt\ \shcmd{pwd}
+
+\prompt\ \shcmd{ls}
+
+\prompt\ \shcmd{cd} TD2-bis-3
+\end{terminal}
     \item Depuis \texttt{TD2-bis-3}, créez un répertoire nommé \texttt{test}
     à l'intérieur de \texttt{TD2-bis-2}, sans vous déplacer dans ce dernier.
-    \item Revenez au répertoire \texttt{TD2} avec une seule commande.
-    \item Revenez ensuite dans votre répertoire personnel.
-\end{enumerate}
-
-\subsection*{Affichage de l'arborescence}
-
-Affichez l'arborescence complète du répertoire \texttt{TD2}.
-
 \begin{terminal}
+\prompt\ \shcmd{mkdir} ../TD2-bis-2/test
+\end{terminal}
+    \item Revenez dans votre répertoire personnel et affichez l'arborescence 
+    complète du répertoire \texttt{TD2}.
+\begin{terminal}
+\prompt\ \shcmd{cd}
+
 \prompt\ \shcmd{tree} TD2
 \end{terminal}
-
 Si la commande \texttt{tree} n'est pas disponible, installez-la :
 \begin{terminal}
 \prompt\ \shcmd{sudo apt update}
 
 \prompt\ \shcmd{sudo apt install tree}
 \end{terminal}
+    \item Supprimez ensuite tous les répertoires dont le nom commence par
+    \texttt{TD2-bis-} en une ou plusieurs commandes.
+\begin{terminal}
+\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-1
+
+\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-2
+
+\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-3
+
+\prompt\ \tcomment{ou bien}
+
+\prompt\ \shcmd{rm} -r TD2/TD2-bis/TD2-bis-*
+\end{terminal}
+\end{enumerate}
+
+\begin{warningbox}
+La commande \texttt{rm} supprime définitivement des fichiers et des répertoires.
+Utilisez-la avec précaution et vérifiez toujours le chemin avant de l'exécuter.
+\end{warningbox}
 
 % ---
 
@@ -212,26 +285,43 @@ Si la commande \texttt{tree} n'est pas disponible, installez-la :
 Dans cet exercice, vous allez créer un fichier texte et y écrire plusieurs lignes.
 
 \begin{enumerate}
-    \item Placez-vous dans le répertoire \texttt{TD2}.
-    \item Créez un fichier nommé \texttt{notes.txt}.
-    \item Écrivez une première ligne dans le fichier.
-    \item Ajoutez deux lignes supplémentaires sans effacer les précédentes.
-    \item Affichez le contenu du fichier.
-\end{enumerate}
-
-\subsection*{Commandes utiles}
-
+    \item Placez-vous dans le répertoire \texttt{TD2} et créez un fichier 
+          nommé \texttt{notes.txt}.
 \begin{terminal}
+\prompt\ \shcmd{cd} \$HOME/TD2
+
 \prompt\ \shcmd{touch} notes.txt
+\end{terminal}
+    \item Écrivez une première ligne dans le fichier.
+\begin{terminal}
+\prompt\ \shcmd{echo} "Le bonheur est parfois caché dans l'invisible." > notes.txt
+\end{terminal}
+    \item Ajoutez deux lignes supplémentaires sans effacer les précédentes.
+\begin{terminal}
+\prompt\ \shcmd{echo} "Rire, c'est vivre deux fois." >> notes.txt
 
-\prompt\ \shcmd{echo} "Première ligne" \texttt{>} notes.txt
-
-\prompt\ \shcmd{echo} "Deuxième ligne" \texttt{>>} notes.txt
-
-\prompt\ \shcmd{echo} "Troisième ligne" \texttt{>>} notes.txt
-
+\prompt\ \shcmd{echo} "Après la pluie, le beau temps." >> notes.txt
+\end{terminal}
+    \item Affichez le contenu du fichier.
+\begin{terminal}
 \prompt\ \shcmd{cat} notes.txt
 \end{terminal}
+    \item Ouvrez maintenant le fichier \texttt{notes.txt} avec l'éditeur de texte
+          \texttt{gedit}.
+\begin{terminal}
+\prompt\ \shcmd{gedit} notes.txt
+\end{terminal}
+    \item Dans la fenêtre de l'éditeur, ajoutez les lignes suivantes à la fin du fichier :
+\begin{quote}
+La nuit porte conseil. \\
+Petit à petit, l'oiseau fait son nid.
+\end{quote}
+Enregistrez le fichier puis fermez l'éditeur.
+    \item Affichez le contenu du fichier pour vérifier que toutes les lignes ont bien été ajoutées.
+\begin{terminal}
+\prompt\ \shcmd{cat} notes.txt
+\end{terminal}
+\end{enumerate}
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -241,13 +331,13 @@ Linux permet d'obtenir rapidement des informations sur la machine
 (processeur, mémoire, etc.) ainsi que sur le système.
 
 \rsubsection{} 
-Complétez la fiche suivante à l'aide de commandes Linux :
+Déterminez les informations suivante à l'aide de commandes Linux :
 \begin{itemize}
-    \item Nom de la machine :
-    \item Nom de l'utilisateur courant :
-    \item Système d'exploitation (distribution) :
-    \item Version du noyau Linux :
-    \item Architecture du processeur (ex. \texttt{x86\_64}, \texttt{aarch64}) :
+    \item Nom de la machine
+    \item Nom de l'utilisateur courant
+    \item Système d'exploitation (distribution)
+    \item Version du noyau Linux
+    \item Architecture du processeur (ex. \texttt{x86\_64}, \texttt{aarch64})
 \end{itemize}
 
 \subsection*{Commandes utiles}
@@ -257,11 +347,11 @@ Complétez la fiche suivante à l'aide de commandes Linux :
 
 \prompt\ \shcmd{whoami}
 
-\prompt\ \shcmd{uname} \texttt{-a}
+\prompt\ \shcmd{uname} -a
 
-\prompt\ \shcmd{uname} \texttt{-m}
+\prompt\ \shcmd{uname} -m
 
-\prompt\ \shcmd{lsb\_release} \texttt{-a}
+\prompt\ \shcmd{lsb\_release} -a
 \end{terminal}
 
 % ---
@@ -295,7 +385,7 @@ La mémoire vive est utilisée pour exécuter les programmes en cours.
 \subsection*{Commandes utiles}
 
 \begin{terminal}
-\prompt\ \shcmd{free} \texttt{-h}
+\prompt\ \shcmd{free} -h
 \end{terminal}
 
 % ---
@@ -330,9 +420,9 @@ Linux organise les disques de stockage à l'aide de points de montage.
 \subsection*{Commandes utiles}
 
 \begin{terminal}
-\prompt\ \shcmd{df} \texttt{-h} \texttt{\textasciitilde}
+\prompt\ \shcmd{df} -h \textasciitilde
 
-\prompt\ \shcmd{du} \texttt{-h} {-}{-}max-depth=1 \texttt{\textasciitilde}
+\prompt\ \shcmd{du} -h {-}{-}max-depth=1 \textasciitilde
 \end{terminal}
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
