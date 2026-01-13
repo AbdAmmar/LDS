@@ -9,6 +9,11 @@
 \usepackage{emoji}
 
 
+%\usepackage{enumitem}
+%\setlist[itemize]{label=$\bullet$} % Premier niveau
+%\setlist[itemize,2]{label=--}      % Deuxième niveau
+%\setlist[itemize,3]{label=$\ast$}  % Troisième niveau
+
 
 % Pour la coloration syntaxique avancée
 \usepackage[outputdir=build]{minted}
@@ -61,6 +66,9 @@
 %\setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \setbeamertemplate{caption}{\centering\insertcaption\par}
 
+%\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{$\ast$}
+\setbeamertemplate{itemize subsubitem}{--}
 
 \setbeamertemplate{footline}{%
   \leavevmode%
@@ -91,19 +99,47 @@
 
 % ---
 
-\section{Ref}
+\section{Références}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
 \input{sections/ref}
 
 % ---
 
-\section{Introduction}
+\section{Evaluation d'ordinateurs}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
 \input{sections/intro_hardware}
+
+% ---
+
+\section{Système Opérationnel}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
 \input{sections/intro_os}
 
 % ---
 
+\section{Le Shell}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
 \input{sections/shell}
-\input{sections/bash}
+
+% ---
+
+%TODO
+%\section{Bash}
+%\input{sections/bash}
+
+% ---
 
 % Page de fin
 %\begin{frame}{Fin du cours}
