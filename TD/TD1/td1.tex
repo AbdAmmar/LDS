@@ -30,6 +30,14 @@ avec le terminal.
 \end{warningbox}
 
 
+\begin{warningbox}
+La commande \texttt{apt} est spécifique aux distributions Linux basées sur Debian
+(Ubuntu, WSL Ubuntu).
+Sur macOS, l'installation de logiciels se fait généralement avec \texttt{brew}.
+Dans ce TD, les commandes \texttt{apt} sont à exécuter uniquement sous Linux ou WSL.
+\end{warningbox}
+
+
 Dans le terminal, il est possible de réutiliser et de modifier des commandes déjà tapées.
 Les flèches du clavier permettent de naviguer dans l'historique des commandes :
 \begin{itemize}
@@ -64,14 +72,18 @@ tandis que d'autres sont des programmes externes.
 
 La commande \texttt{type} permet de savoir de quel type est une commande.
 Par exemple :
-
 \begin{terminal}
 \prompt\ \shcmd{type} \shcmd{cd}
 \end{terminal}
 
+\begin{warningbox}
+Selon le système et la version du shell, certaines commandes peuvent exister
+à la fois comme commande interne et comme programme externe.
+Le résultat de \texttt{type} peut donc varier.
+\end{warningbox}
+
 À l'aide de cette commande, déterminez si les commandes suivantes sont
 des commandes internes ou des commandes externes :
-
 \begin{itemize}
     \item \texttt{cd}
     \item \texttt{echo}
@@ -79,9 +91,7 @@ des commandes internes ou des commandes externes :
     \item \texttt{pwd}
     \item \texttt{type}
     \item \texttt{mkdir}
-    \item \texttt{useradd}
     \item \texttt{date}
-    \item \texttt{time}
     \item \texttt{sleep}
     \item \texttt{touch}
     \item \texttt{cat}
@@ -151,6 +161,12 @@ Ensuite, on installe le programme souhaité à l'aide de la commande
 
 Par exemple, installez puis lancez le programme \texttt{sl} :
 \begin{terminal}
+\prompt\ \tcomment{pour macOS :}
+
+\prompt\ \shcmd{brew install sl}
+
+\prompt\ \tcomment{pour Linux :}
+
 \prompt\ \shcmd{sudo apt install sl}
 
 \prompt\ \shcmd{sl}
@@ -159,6 +175,12 @@ Par exemple, installez puis lancez le programme \texttt{sl} :
 Installez maintenant le programme \texttt{cowsay},
 qui affiche un message sous forme de dessin ASCII :
 \begin{terminal}
+\prompt\ \tcomment{pour macOS :}
+
+\prompt\ \shcmd{brew install cowsay}
+
+\prompt\ \tcomment{pour Linux :}
+
 \prompt\ \shcmd{sudo apt install cowsay}
 \end{terminal}
 
@@ -168,15 +190,11 @@ Puis lancez-le avec un message de votre choix :
 
 \prompt\ \shcmd{cowsay} -f dragon "Je suis un dragon!"
 
-\prompt\ \shcmd{cowsay} -f sheep "Bêêê! Bienvenue sur macOS!"
-
 \prompt\ \shcmd{cowsay} -f tux "Je suis Linux!"
 
 \prompt\ \shcmd{cowsay} -f moose "Je suis un élan!"
 
 \prompt\ \shcmd{cowsay} -f koala "Je suis un koala!"
-
-\prompt\ \shcmd{cowsay} "Regarde mes yeux!"
 
 \prompt\ \shcmd{cowthink} "Je pense donc je suis"
 \end{terminal}
@@ -269,6 +287,12 @@ pour séparer les mots.
 \end{terminal}
 Si la commande \texttt{tree} n'est pas disponible, installez-la :
 \begin{terminal}
+\prompt\ \tcomment{pour macOS :}
+
+\prompt\ \shcmd{brew install tree}
+
+\prompt\ \tcomment{pour Linux :}
+
 \prompt\ \shcmd{sudo apt update}
 
 \prompt\ \shcmd{sudo apt install tree}
@@ -320,8 +344,8 @@ Dans cet exercice, vous allez créer un fichier texte et y écrire plusieurs lig
 \begin{terminal}
 \prompt\ \shcmd{cat} notes.txt
 \end{terminal}
-    \item Ouvrez maintenant le fichier \texttt{notes.txt} avec l'éditeur de texte
-          \texttt{gedit}.
+    \item Ouvrez maintenant le fichier \texttt{notes.txt} avec un éditeur de texte
+    (par exemple \texttt{gedit}, \texttt{nano}, \texttt{code}, etc.).
 \begin{terminal}
 \prompt\ \shcmd{gedit} notes.txt
 \end{terminal}
@@ -349,11 +373,11 @@ Linux permet d'obtenir rapidement des informations sur la machine
 (processeur, mémoire, etc.) ainsi que sur le système.
 
 \rsubsection{} 
-Déterminez les informations suivante à l'aide de commandes Linux :
+Déterminez les informations suivantes à l'aide de commandes Linux :
 \begin{itemize}
     \item Nom de la machine
     \item Nom de l'utilisateur courant
-    \item Système d'exploitation (distribution)
+    \item Système d'exploitation (distribution Linux le cas échéant)
     \item Version du noyau Linux
     \item Architecture du processeur (ex. \texttt{x86\_64}, \texttt{aarch64})
 \end{itemize}
@@ -369,7 +393,9 @@ Déterminez les informations suivante à l'aide de commandes Linux :
 
 \prompt\ \shcmd{uname} -m
 
-\prompt\ \shcmd{lsb\_release} -a
+\prompt\ \shcmd{uname} -s
+
+\prompt\ \shcmd{lsb\_release} -a \tcomment{Linux uniquement}
 \end{terminal}
 
 % ---
@@ -385,7 +411,7 @@ Le processeur (CPU) est l'un des éléments centraux d'une machine.
 \subsection*{Commandes utiles}
 
 \begin{terminal}
-\prompt\ \shcmd{lscpu}
+\prompt\ \shcmd{lscpu} \tcomment{pour macOS :} \shcmd{sysctl} -a \shcmd{|} \shcmd{grep} machdep.cpu
 
 \prompt\ \shcmd{nproc}
 \end{terminal}
@@ -403,18 +429,24 @@ La mémoire vive est utilisée pour exécuter les programmes en cours.
 \subsection*{Commandes utiles}
 
 \begin{terminal}
-\prompt\ \shcmd{free} -h
+\prompt\ \shcmd{free} -h \tcomment{pour macOS :} \shcmd{vm\_stat}
 \end{terminal}
 
 % ---
 
 \rsubsection{} 
-Le programme \texttt{neofetch} permet d'afficher un résumé visuel de informations système.
+Le programme \texttt{neofetch} permet d'afficher un résumé visuel des informations système.
 Installez-le à l'aide des commandes suivantes :
 \begin{terminal}
+\prompt\ \tcomment{pour macOS :}
+
+\prompt\ \shcmd{brew install neofetch}
+
+\prompt\ \tcomment{pour Linux :}
+
 \prompt\ \shcmd{sudo apt update}
 
-\prompt\ \shcmd{sudo apt install} neofetch
+\prompt\ \shcmd{sudo apt install neofetch}
 \end{terminal}
 
 Puis lancez-le :
@@ -441,12 +473,126 @@ Linux organise les disques de stockage à l'aide de points de montage.
 \prompt\ \shcmd{df} -h \textasciitilde
 
 \prompt\ \shcmd{du} -h {-}{-}max-depth=1 \textasciitilde
+
+\prompt\ \tcomment{ou bien :}
+
+\prompt\ \shcmd{du} -h -d 1 \textasciitilde
 \end{terminal}
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
+\section{Variables en Bash}
 
+Dans cette section, nous allons introduire la notion de variable en Bash et apprendre
+à manipuler des données simples à l'aide du terminal.
 
+\begin{warningbox}
+En Bash, les espaces peuvent être significatifs selon le contexte.
+Par exemple, il ne doit pas y avoir d'espace autour du symbole \texttt{=}
+lors de la définition d'une variable.
+\end{warningbox}
 
+\begin{warningbox}
+Le shell Bash est sensible aux espaces et à la casse
+(majuscules/minuscules).
+Les variables \texttt{prenom}, \texttt{Prenom} et \texttt{PRENOM}
+sont considérées comme différentes.
+\end{warningbox}
+
+\begin{warningbox}
+En Bash, une variable ne possède pas de type.
+C'est le contexte (arithmétique ou textuel) qui détermine la façon
+dont sa valeur est interprétée.
+\end{warningbox}
+
+\rsubsection{Manipulation de chaînes de caractères}
+
+\begin{itemize}
+    \item Définissez une variable \texttt{prenom} contenant votre prénom.
+
+    \item Comparez les deux commandes suivantes et expliquez la différence :
+    \begin{terminal}
+    \prompt\ \shcmd{echo} prenom
+    
+    \prompt\ \shcmd{echo} \$prenom
+
+    \prompt\ \shcmd{echo} \$Prenom
+    \end{terminal}
+
+    \item Définissez une variable \texttt{nom} contenant votre nom de famille.
+
+    \item Affichez une phrase contenant votre prénom et votre nom
+          sur une seule ligne.
+    \begin{terminal}
+    \prompt\ \shcmd{echo} "Je m'appelle \$prenom \$nom"
+    \end{terminal}
+
+    \item Comparez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{echo} "Je suis \$prenom"
+    
+    \prompt\ \shcmd{echo} 'Je suis \$prenom'
+    \end{terminal}
+\end{itemize}
+
+% ---
+
+\rsubsection{Manipulation de variables entières}
+
+\begin{warningbox}
+En Bash, les opérateurs \texttt{-gt}, \texttt{-lt}, \texttt{-eq} permettent de comparer
+des entiers.
+Les symboles \texttt{>}, \texttt{<} et \texttt{=} ont une signification différente
+et ne doivent pas être utilisés pour les comparaisons numériques.
+\end{warningbox}
+
+\begin{itemize}
+    \item Définissez une variable \texttt{a} contenant la valeur 5
+          et une variable \texttt{b} contenant la valeur 3.
+
+    \item Affichez le contenu des variables \texttt{a} et \texttt{b}.
+
+    \item Essayez d'afficher la somme de \texttt{a} et \texttt{b} avec la commande suivante :
+    \begin{terminal}
+    \prompt\ \shcmd{echo} \$a + \$b
+    \end{terminal}
+
+    \item Calculez la somme de \texttt{a} et \texttt{b} à l'aide de la syntaxe arithmétique
+          de Bash et stockez le résultat dans une variable \texttt{somme}.
+    \begin{terminal}
+    \prompt\ somme=\$((a + b))
+    \end{terminal}
+
+    \item Affichez la valeur de la variable \texttt{somme}.
+    \begin{terminal}
+    \prompt\ \shcmd{echo} "somme = \$somme"
+    \end{terminal}
+
+    \item Modifiez la valeur de la variable \texttt{a} en lui ajoutant 1.
+    \begin{terminal}
+    \prompt\ \shcmd{a=}\$((a + 1))
+    \end{terminal}
+
+    \item Calculez le produit de \texttt{a} et \texttt{b} et stockez le résultat
+          dans une variable \texttt{produit}.
+
+    \item Les commandes de test \texttt{[ ... ]} ne produisent pas de sortie.
+          Elles indiquent le résultat d'un test uniquement à l'aide de leur code de retour,
+          accessible via la variable \texttt{\$?}.
+          Comparez les comportements obtenus et expliquez la différence.
+    \begin{terminal}
+    \prompt\ \shcmd{[} \$a < \$b \shcmd{]}
+
+    \prompt\ \shcmd{echo} \$?
+    \end{terminal}
+
+    \begin{terminal}
+    \prompt\ \shcmd{[} \$a -lt \$b \shcmd{]}
+
+    \prompt\ \shcmd{echo} \$?
+    \end{terminal}
+\end{itemize}
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 \end{document}

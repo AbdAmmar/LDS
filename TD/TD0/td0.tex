@@ -22,7 +22,7 @@ Les outils et scripts utilisés dans ce cours s'exécuteront dans un environneme
 \textbf{Linux / Unix}.
 
 \begin{warningbox}
-Le symbole \texttt{\$} affiché au début des commandes correspond à l’invite du terminal.
+Le symbole \texttt{\$} affiché au début des commandes correspond à l'invite du terminal.
 Il sert uniquement à indiquer que la commande doit être tapée, mais ne fait pas partie
 de la commande elle-même.
 \end{warningbox}
@@ -45,10 +45,36 @@ de la commande elle-même.
     Si nécessaire, il est possible de lancer \texttt{bash} simplement en tapant :
 \begin{terminal}
 \prompt\ \shcmd{bash}
+
+\prompt\ \tcomment{ou}
+
+\prompt\ \shcmd{/bin/bash}
 \end{terminal}
     dans le terminal.
 \end{itemize}
 
+    Pour installer des programmes supplémentaires en ligne de commande,
+    il est recommandé d'utiliser le gestionnaire de paquets \texttt{Homebrew}.
+    L'installation de Homebrew se fait une seule fois avec la commande suivante :
+    \begin{terminal}
+    \prompt\ brew\_link="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+
+    \prompt\ \shcmd{curl} -fsSL \$brew\_link -o install\_brew.sh
+    
+    \prompt\ \shcmd{bash} install\_brew.sh
+    \end{terminal}
+
+    Après l'installation, si la commande \texttt{brew} n'est pas reconnue,
+    \begin{terminal}
+    \prompt\ \shcmd{brew} --version
+    \end{terminal}
+    il est nécessaire d'ajouter Homebrew au \texttt{PATH}.
+    \begin{terminal}
+    \prompt\ \shcmd{echo} 'eval "\$(/opt/homebrew/bin/brew shellenv)"' >> \textasciitilde/.bashrc
+    
+    \prompt\ \shcmd{eval} "\$(/opt/homebrew/bin/brew shellenv)"
+    \end{terminal}
+    
 
 \section*{Qu'est-ce que WSL ?}
 
