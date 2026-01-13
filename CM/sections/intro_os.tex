@@ -1,121 +1,302 @@
 
 % ---
 
-\begin{frame}{l'OS}
-\begin{itemize}
-  \item 1+1 = ?
+\begin{frame}{Pourquoi a-t-on besoin d'un système d'exploitation ?}
   \begin{itemize}
-    \item inputs du clavier
-    \item ecrire les instruction en lagages machines (assembly)
-    \item envoyer le code et les donnes en format binaire via le bus a la memoire
-    \item envoyer les instructions vers le CPU
-    \item recuperer le resultat et l'afficher
+    \item Exemple : calculer $x + y$
+    \begin{enumerate}
+      {\footnotesize
+      \item les données et le programme sont saisis via le clavier
+      \item le programme et les données sont chargés en mémoire
+      \item le processeur (CPU) exécute les instructions
+      \item le résultat est affiché à l'écran
+      }
+    \end{enumerate}
+
+    \vspace{0.1cm}
+    
+    \item Rôle du système d'exploitation :
+    \begin{itemize}
+      {\footnotesize
+      \item gérer le clavier, l'écran et les autres périphériques
+      \item gérer la mémoire et le processeur
+      \item servir d'intermédiaire entre le matériel et les programmes
+      }
+    \end{itemize}
   \end{itemize}
 
-  {
+  \vspace{0.1cm}
   \centering
   \begin{minipage}{0.37\textwidth}
     \centering
     \includegraphics[width=0.5\linewidth]{images/cns_zoom.png}
+
     %{\footnotesize\centering }
   \end{minipage}
-  %\hfill
+  \hfill
   \begin{minipage}{0.52\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/Fig1.6_Tanenbaum_Bos.png}
+
     %{\footnotesize\centering }
   \end{minipage}
-  }
-\end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{l'OS}
-\begin{itemize}
-  \item SATA (Serial ATA) hard disks used on most computers
+\begin{frame}{Exemple : abstraction d'un disque dur}
   \begin{itemize}
-    {\footnotesize
-    \item premier couche d'abstraction: disk driver
-    \item deuxiem couche d'abstraction: files
-    }
+    \item Les disques durs SATA (Serial ATA) sont utilisés sur la plupart des ordinateurs
+    \begin{itemize}
+      {\footnotesize
+      \item première couche d'abstraction : premier couche d'abstraction: disk driver
+      \item deuxième couche d'abstraction : fichiers
+      }
+    \end{itemize}
   \end{itemize}
-
-  {
+  
+  \vspace{0.1cm}
   \centering
   \begin{minipage}{0.45\textwidth}
     \centering
     \includegraphics[width=0.8\linewidth]{images/ST3400820AS.jpg}
+
     %{\footnotesize\centering }
   \end{minipage}
-  %\hfill
+  \hfill
   \begin{minipage}{0.45\textwidth}
     \centering
     \includegraphics[width=0.9\linewidth]{images/SATA_Anderson.jpg}
-    {\footnotesize\centering Anderson 2007 (environ 450 pages)}
+
+    {\footnotesize\centering Anderson, 2007 (environ 450 pages)}
   \end{minipage}
-  }
-\end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{l'OS}
-\begin{itemize}
-  \item Le rôle d'OS est de
+\begin{frame}{Le système d'exploitation}
   \begin{itemize}
-    {\footnotesize
-      \item créer de bonnes abstractions (par exemple, fichier)
-      \item puis d'implémenter et de gérer les objets abstraits ainsi créés (pour parler avec les pilotes et le materiel)
-    }
+    \item Le rôle du système d'exploitation est de :
+    \begin{itemize}
+      {\footnotesize
+        \item fournir des abstractions simples (par exemple : fichiers, processus)
+        %\item implémenter et gérer ces abstractions
+        \item assurer la communication entre les applications et le matériel
+        %\item s'appuyer sur des pilotes pour contrôler les périphériques
+      }
+    \end{itemize}
   \end{itemize}
-
-  {
+  
+  \vspace{0.1cm}
   \centering
   \begin{minipage}{0.99\textwidth}
     \centering
     \includegraphics[width=0.5\linewidth]{images/Fig1.1_Tanenbaum_Bos.png}
+
     %{\footnotesize\centering }
   \end{minipage}
-  }
-\end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{Histoire d'UNIX (1970-1980)}
-\begin{itemize}
-  \item inspire par le projet MULTICS
-  \item Fait en 1970 par Kenneth Thompson et Dennis Ritchie (Bell Labs)
-  \item 2 Fork majeurs: System V (AT\&T) (eg, SOLARIS), BSD (Berkeley) (eg MAC OS)
-  \item POSIX standard par IEEE
-\end{itemize}
+\begin{frame}{Histoire d'\texttt{UNIX} (1970--1980)}
+  \begin{itemize}
+    \item Inspiré par le projet \texttt{MULTICS}
+    \item Développé à partir de 1969 par Kenneth Thompson et Dennis Ritchie (Bell Labs)
+    \item Initialement diffusé avec le code source dans les universités, puis commercialisé par AT\&T
+  \end{itemize}
+
+  \vspace{0.1cm}
+  \centering
+  \begin{minipage}{0.99\textwidth}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Fig1.30_Fox.png}
+
+    %{\footnotesize\centering }
+  \end{minipage}
 \end{frame}
 
 % ---
 
-\begin{frame}{Histoire de Linux (1980-aujourd'hui)}
-\begin{itemize}
-  \item Entre 1980-1991, c'etait devenu raisonnable d'avoir un ordi a la maison
-  \item UNIX, DOS: payant
-  \item Système libre et open-source
-  \item GNU par Richard Stallman
-  \item 1991: Linus Torvalds a develope le noyau (LINUX)
-  \item Linux est ajd omnipresent.. quelques distributions
-\end{itemize}
+\begin{frame}{Histoire d'\texttt{UNIX} (1970--1980)}
+  \begin{itemize}
+    \item Deux grandes familles (forks) de systèmes de type \texttt{UNIX} :
+    \begin{itemize}
+      {\footnotesize
+      \item \texttt{System V} (AT\&T) - ex. : \texttt{Solaris}
+      \item \texttt{BSD} (Université de Berkeley) - à l'origine de \texttt{FreeBSD}, \texttt{macOS}, etc.
+      }
+    \end{itemize}
+
+    \item POSIX : ensemble de standards définis par l'IEEE pour assurer la portabilité des programmes
+
+    \item Exemple POSIX : tout processus possède les descripteurs :
+    \begin{itemize}
+      {\footnotesize
+      \item \texttt{stdin} (0) : entrée standard (clavier)
+      \item \texttt{stdout} (1) : sortie standard (écran)
+      \item \texttt{stderr} (2) : sortie d'erreur
+      }
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{Avantages d'un OS open source}
-\begin{itemize}
-  \item Transparence et contrôle
-  \item Sécurité renforcée
-  \item Coût réduit
-  \item Flexibilité et personnalisation
-  \item Indépendance technologique (pas de dépendance géopolitique)
-  \item Résistance aux monopoles
-\end{itemize}
+\begin{frame}{Histoire de Linux (années 1980--aujourd'hui)}
+  \begin{itemize}
+    \item Années 1980--1990 : les ordinateurs personnels deviennent accessibles au grand public
+
+    \item Les systèmes d'exploitation existants sont majoritairement propriétaires :
+    \begin{itemize}
+      {\footnotesize
+      \item \texttt{UNIX} : cher, réservé aux entreprises et universités
+      \item \texttt{DOS} : propriétaire (Microsoft)
+      }
+    \end{itemize}
+
+    \item Avantages d'un système d'exploitation open source (libre, et pas juste gratuit)
+    \begin{itemize}
+      {\footnotesize
+      \item transparence et contrôle du code
+      \item sécurité renforcée (audit public)
+      \item coût réduit (logiciel libre)
+      \item flexibilité et personnalisation
+      \item indépendance technologique
+      \item résistance aux monopoles
+      }
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ---
+
+\begin{frame}{Histoire de Linux (années 1980--aujourd'hui)}
+  \begin{itemize}
+    \item Années 1980 : \texttt{GNU} (GNU's Not Unix) lancé par Richard Stallman
+    \begin{itemize}
+      {\footnotesize
+      \item compilateur : gcc et bibliothèque standard : glibc
+      \item shell : bash et les outils : ls, cp, grep, make, etc.
+      \item Éditeur : emacs
+      \item MAIS, pas de noyau !
+      }
+    \end{itemize}
+  \end{itemize}
+
+  \vspace{0.1cm}
+  \centering
+  \begin{minipage}{\textwidth}
+    \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.6\linewidth]{images/700px-The_GNU_logo.png}
+
+      {\footnotesize\centering symbole de \texttt{GNU} (gnous, espèces de bovidés)}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.6\linewidth]{images/Richard_Stallman_at_LibrePlanet_2019.jpg}
+
+      {\footnotesize\centering Richard Stallman (1985--2019)}
+    \end{minipage}
+  \end{minipage}
+\end{frame}
+
+% ---
+
+\begin{frame}{Histoire de Linux (années 1980--aujourd'hui)}
+  \begin{itemize}
+    \item 1991 : Linus Torvalds développe le noyau \texttt{Linux}
+    \begin{itemize}
+      {\footnotesize
+      \item des dizaines de millions de lignes de code
+      \item principalement écrit en langage \texttt{C}
+      }
+    \end{itemize}
+
+    \item L'association de \texttt{GNU} et \texttt{Linux} donne naissance à un OS libre complet
+  \end{itemize}
+
+  \vspace{0.1cm}
+  \centering
+  \begin{minipage}{\textwidth}
+    \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.6\linewidth]{images/Tux.png}
+
+      {\footnotesize\centering symbole de \texttt{Linux}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.6\linewidth]{images/LinuxCon_Europe_Linus_Torvalds.jpg}
+
+      {\footnotesize\centering Linus Torvalds}
+    \end{minipage}
+  \end{minipage}
+\end{frame}
+
+% ---
+
+\begin{frame}{Histoire de Linux (années 1980--aujourd'hui)}
+  \begin{itemize}
+    \item Linux est aujourd'hui omniprésent :
+    \begin{itemize}
+      {\footnotesize
+      \item serveurs et cloud
+      \item supercalculateurs
+      \item smartphones (Android)
+      \item systèmes embarqués
+      }
+    \end{itemize}
+
+    \item Il existe de nombreuses distributions :
+    \begin{itemize}
+      \footnotesize
+      \item \texttt{Ubuntu}, \texttt{Debian}, \texttt{Fedora}, \texttt{Arch}, \texttt{Kali}, etc.
+    \end{itemize}
+  \end{itemize}
+
+  \vspace{0.1cm}
+  \centering
+  \begin{minipage}{\textwidth}
+    \begin{minipage}{0.15\textwidth}
+      \centering
+      \includegraphics[width=0.8\linewidth]{images/ubuntu_logo.png}
+
+      {\footnotesize\centering \texttt{Ubuntu}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.15\textwidth}
+      \centering
+      \includegraphics[width=0.8\linewidth]{images/debian_logo.png}
+
+      {\footnotesize\centering \texttt{Ubuntu}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.15\textwidth}
+      \centering
+      \includegraphics[width=0.8\linewidth]{images/fedora_logo.png}
+
+      {\footnotesize\centering \texttt{Ubuntu}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.15\textwidth}
+      \centering
+      \includegraphics[width=0.8\linewidth]{images/arch_logo.jpeg}
+
+      {\footnotesize\centering \texttt{Ubuntu}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.15\textwidth}
+      \centering
+      \includegraphics[width=0.8\linewidth]{images/kali_logo.png}
+
+      {\footnotesize\centering \texttt{Ubuntu}}
+    \end{minipage}
+    \hfill
+  \end{minipage}
 \end{frame}
 
 % ---
