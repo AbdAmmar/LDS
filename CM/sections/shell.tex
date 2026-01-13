@@ -32,6 +32,7 @@
   \begin{itemize}
     \item \texttt{sh} : Bourne shell, shell UNIX historique (Steve Bourne)
 
+    \pause
     \item \texttt{bash} (\textit{Bourne Again SHell}) :
     \begin{itemize}
       \footnotesize
@@ -39,6 +40,7 @@
       \item très répandu sur les systèmes Linux
     \end{itemize}
 
+    \pause
     \item Autres shells :
     \begin{itemize}
       \footnotesize
@@ -82,94 +84,94 @@
 
 % ---
 
-\begin{frame}{Arborescence et chemins}
-  \begin{itemize}
-    \item Le système de fichiers est organisé en arborescence
-    \item La racine est notée \texttt{/}
-    \item Deux types de chemins :
-    \begin{itemize}
-      \footnotesize
-      \item Chemin absolu : commence par \texttt{/}
-      \item Chemin relatif : dépend du répertoire courant
-    \end{itemize}
-    \item Raccourcis :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{.} : répertoire courant
-      \item \texttt{..} : répertoire parent
-    \end{itemize}
-  \end{itemize}
-\end{frame}
+%\begin{frame}{Arborescence et chemins}
+%  \begin{itemize}
+%    \item Le système de fichiers est organisé en arborescence
+%    \item La racine est notée \texttt{/}
+%    \item Deux types de chemins :
+%    \begin{itemize}
+%      \footnotesize
+%      \item Chemin absolu : commence par \texttt{/}
+%      \item Chemin relatif : dépend du répertoire courant
+%    \end{itemize}
+%    \item Raccourcis :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{.} : répertoire courant
+%      \item \texttt{..} : répertoire parent
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
 
 % ---
 
-\begin{frame}{Fichiers et permissions}
-  \begin{itemize}
-    \item Chaque fichier possède des permissions :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{r} : lecture
-      \item \texttt{w} : écriture
-      \item \texttt{x} : exécution
-    \end{itemize}
-    \item Trois niveaux :
-    \begin{itemize}
-      \footnotesize
-      \item utilisateur (u), groupe (g), autres (o)
-    \end{itemize}
-    \item Commandes utiles :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{ls -l}
-      \item \texttt{chmod}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
+%\begin{frame}{Fichiers et permissions}
+%  \begin{itemize}
+%    \item Chaque fichier possède des permissions :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{r} : lecture
+%      \item \texttt{w} : écriture
+%      \item \texttt{x} : exécution
+%    \end{itemize}
+%    \item Trois niveaux :
+%    \begin{itemize}
+%      \footnotesize
+%      \item utilisateur (u), groupe (g), autres (o)
+%    \end{itemize}
+%    \item Commandes utiles :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{ls -l}
+%      \item \texttt{chmod}
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
 
 % ---
 
-\begin{frame}{Redirections et pipes}
-
-\begin{itemize}
-  \item Entrée / sortie standard :
-  \begin{itemize}
-    \footnotesize
-    \item \texttt{stdin}, \texttt{stdout}, \texttt{stderr}
-  \end{itemize}
-  \item Redirections :
-  \begin{itemize}
-    \footnotesize
-    \item \texttt{>} : redirige la sortie
-    \item \texttt{<} : redirige l'entrée
-  \end{itemize}
-  \item Pipe :
-  \begin{itemize}
-    \footnotesize
-    \item \texttt{|} : relie la sortie d'un programme à l'entrée d'un autre
-  \end{itemize}
-\end{itemize}
-
-\end{frame}
+%\begin{frame}{Redirections et pipes}
+%
+%\begin{itemize}
+%  \item Entrée / sortie standard :
+%  \begin{itemize}
+%    \footnotesize
+%    \item \texttt{stdin}, \texttt{stdout}, \texttt{stderr}
+%  \end{itemize}
+%  \item Redirections :
+%  \begin{itemize}
+%    \footnotesize
+%    \item \texttt{>} : redirige la sortie
+%    \item \texttt{<} : redirige l'entrée
+%  \end{itemize}
+%  \item Pipe :
+%  \begin{itemize}
+%    \footnotesize
+%    \item \texttt{|} : relie la sortie d'un programme à l'entrée d'un autre
+%  \end{itemize}
+%\end{itemize}
+%
+%\end{frame}
 
 % ---
 
-\begin{frame}{Processus et contrôle}
-  \begin{itemize}
-    \item Une commande lancée = un processus
-    \item Commandes utiles :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{ps} : liste des processus
-      \item \texttt{top} : processus en temps réel
-      \item \texttt{kill} : termine un processus
-    \end{itemize}
-    \item Exécution en arrière-plan :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{\&}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
+%\begin{frame}{Processus et contrôle}
+%  \begin{itemize}
+%    \item Une commande lancée = un processus
+%    \item Commandes utiles :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{ps} : liste des processus
+%      \item \texttt{top} : processus en temps réel
+%      \item \texttt{kill} : termine un processus
+%    \end{itemize}
+%    \item Exécution en arrière-plan :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{\&}
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
 
 % ---
 
