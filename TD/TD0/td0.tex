@@ -43,19 +43,28 @@ de la commande elle-même.
 \end{terminal}
 
     Si nécessaire, il est possible de lancer \texttt{bash} simplement en tapant :
-\begin{terminal}
-\prompt\ \shcmd{bash}
-
-\prompt\ \tcomment{ou}
-
-\prompt\ \shcmd{/bin/bash}
-\end{terminal}
+    \begin{terminal}
+    \prompt\ \shcmd{bash}
+    
+    \prompt\ \tcomment{ou}
+    
+    \prompt\ \shcmd{/bin/bash}
+    \end{terminal}
     dans le terminal.
+    Pour confirmer que \texttt{bash} est actif, utilisez cette commande :
+    \begin{terminal}
+    \prompt\ \shcmd{echo} \$0
+    \end{terminal}
+    Optionnellement, pour définir \texttt{bash} comme environnement par défaut, utilisez 
+    la commande :
+    \begin{terminal}
+    \prompt\ \shcmd{chsh} -s /bin/bash
+    \end{terminal}
 \end{itemize}
 
     Pour installer des programmes supplémentaires en ligne de commande,
     il est recommandé d'utiliser le gestionnaire de paquets \texttt{Homebrew}.
-    L'installation de Homebrew se fait une seule fois avec la commande suivante :
+    L'installation de Homebrew se fait une seule fois avec les commandes suivantes :
     \begin{terminal}
     \prompt\ brew\_link="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 
