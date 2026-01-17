@@ -1,4 +1,0 @@
-2026-01-10 INFO user=alice action=login
-2026-01-10 ERROR user=bob action=login
-2026-01-11 INFO user=carol action=logout
-2026-01-11 WARNING user=alice action=upload

@@ -46,11 +46,55 @@ des motifs (\textit{patterns}) à des noms de fichiers.
 \begin{infobox}
 Le globbing est effectué par le shell avant l'exécution de la commande.
 Les caractères \texttt{*}, \texttt{?} et \texttt{[...]} ont une signification
-spéciale et peuvent être désactivés à l'aide de guillemets ou d'un antislash.
+particulière et peuvent être désactivés à l'aide de guillemets ou d'un antislash (\texttt{\textbackslash}).
 \end{infobox}
 
 \begin{itemize}
-    \item Créez les fichiers suivants dans un répertoire de test :
+    \item Créez un répertoire nommé \texttt{TD2} dans votre répertoire personnel (\texttt{\$HOME}).
+    \begin{terminal}
+    \prompt\ \tcomment{d'abord, placez-vous dans votre répertoire personnel}
+
+    \prompt\ \shcmd{cd} \$HOME
+
+    \prompt\
+
+    \prompt\ \tcomment{ensuite, on crée le répertoire TD2}
+
+    \prompt\ \shcmd{mkdir} TD2
+
+    \prompt\
+
+    \prompt\ \tcomment{optionnel :}
+
+    \prompt\ \shcmd{pwd}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    \item Placez-vous dans le répertoire \texttt{TD2} et créez un sous-répertoire nommé \texttt{Q1}.
+    \begin{terminal}
+    \prompt\ \tcomment{pour aller dans TD2}
+
+    \prompt\ \shcmd{cd} TD2
+
+    \prompt\ \tcomment{ou bien :}
+
+    \prompt\ \shcmd{cd} \$HOME/TD2
+
+    \prompt\
+
+    \prompt\ \shcmd{mkdir} Q1
+
+    \prompt\
+
+    \prompt\ \tcomment{optionnel :}
+
+    \prompt\ \shcmd{pwd}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    \item Placez-vous dans le répertoire \texttt{Q1} et créez les fichiers suivants :
     \begin{terminal}
     \prompt\ \shcmd{touch} a.txt b.txt c.txt aa.txt bb.txt cc.txt
 
@@ -58,37 +102,84 @@ spéciale et peuvent être désactivés à l'aide de guillemets ou d'un antislas
 
     \prompt\ \shcmd{touch} ba.txt ab.txt ca.txt ac.txt
 
-    \prompt\ \shcmd{touch} note.pdf image.png
+    \prompt\ \shcmd{touch} f1.txt f2.txt f3.txt f12.txt f21.txt f13.txt f31.txt
+
+    \prompt\ \shcmd{touch} note.pdf image.png report.doc index.html
     \end{terminal}
 
     % ---
 
-    \item Exécutez les commandes suivantes :
+    \item Analysez les commandes suivantes :
     \begin{terminal}
     \prompt\ \shcmd{ls}
+
+    \prompt\ \shcmd{ls} *
+
+    \prompt\ \shcmd{echo} *
+
+    \prompt\ \shcmd{echo} * *
+
+    \prompt\ \shcmd{echo} * * *
 
     \prompt\ \shcmd{ls} *.txt
 
     \prompt\ \shcmd{ls} *.java
 
-    \prompt\ \shcmd{ls} *.png
-
-    \prompt\ \shcmd{ls} *.pdf
+    \prompt\ \shcmd{ls} *.doc
 
     \prompt\ \shcmd{ls} *.*
 
     \prompt\ \shcmd{ls} *.TXT
     \end{terminal}
-    Que remarquez-vous ?
 
     \begin{infobox}
     Le caractère \texttt{*} correspond à n'importe quelle suite de caractères
     (dans un nom de fichier).
     \end{infobox}
 
+    \begin{dangerbox}
+    La commande \texttt{rm *} supprime tous les fichiers (non cachés) du répertoire courant.
+    Elle n'affiche pas de confirmation par défaut et il n'y a pas de "corbeille".
+    \texttt{rm -r *} supprimerait en plus les sous-répertoires de manière récursive.
+    Vérifiez toujours votre motif avant d'utiliser \texttt{rm}.
+    \end{dangerbox}
+
     % ---
 
+    \item Analysez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} *.txt
+
+    \prompt\ \shcmd{ls} "*.txt"
+
+    \prompt\ \shcmd{ls} '*.txt'
+    \end{terminal}
+    
+    \begin{infobox}
+    Lorsque le motif est entouré de guillemets, le globbing n'est pas interprété par le shell.
+    \begin{itemize}
+        \item Les guillemets simples \texttt{' '} désactivent l'interprétation de tous les caractères spéciaux.
+        \item Les guillemets doubles \texttt{" "} désactivent le globbing, mais permettent toujours
+              l'expansion des variables (avec \texttt{\$VAR}) et la substitution de commande
+              (avec guillemets inversés \verb|`...`| ou \texttt{\$(...)}).
+    \end{itemize}
+    \end{infobox}
+
     \item Exécutez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} *
+
+    \prompt\ \shcmd{ls} .*
+    \end{terminal}
+
+    \begin{infobox}
+    Par défaut, le globbing ne correspond pas aux fichiers cachés
+    (commençant par un point).
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les commandes suivantes :
     \begin{terminal}
     \prompt\ \shcmd{ls} ?.txt
 
@@ -104,12 +195,12 @@ spéciale et peuvent être désactivés à l'aide de guillemets ou d'un antislas
     \end{terminal}
     
     \begin{infobox}
-    Le caractère \texttt{?} correspond exactement à un seul caractère.
+    Le caractère \texttt{?} correspond à exactement un caractère (ni plus, ni moins).
     \end{infobox}
 
     % ---
 
-    \item Exécutez les commandes suivantes :
+    \item Analysez les commandes suivantes :
     \begin{terminal}
     \prompt\ \shcmd{ls} [ab].txt
 
@@ -117,46 +208,120 @@ spéciale et peuvent être désactivés à l'aide de guillemets ou d'un antislas
 
     \prompt\ \shcmd{ls} [bc].txt
 
-    \prompt\ \shcmd{ls} [ac].txt
+    \prompt\ \shcmd{ls} [a-z].txt
 
-    \prompt\ \shcmd{ls} a[bc].txt
+    \prompt\ \shcmd{ls} [b-e].txt
 
-    \prompt\ \shcmd{ls} [bc]a.txt
+    \prompt\ \shcmd{ls} a[a-z].txt
 
-    \prompt\ \shcmd{ls} [abc][abc].txt
+    \prompt\ \shcmd{ls} [a-z]a.txt
+
+    \prompt\ \shcmd{ls} f[0-9].txt
+
+    \prompt\ \shcmd{ls} [a-z][0-9].txt
+
+    \prompt\ \shcmd{ls} [a-z][!0-9].txt
+
+    \prompt\ \shcmd{ls} [a-z][a-z].txt
+
+    \prompt\ \shcmd{ls} *.[!t][!x][!t]
     \end{terminal}
     
     \begin{infobox}
     Les crochets \texttt{[ ]} permettent de rechercher un caractère parmi plusieurs possibilités.
-    Par exemple, \texttt{[ab]} correspond à soit 'a' soit 'b'.
+    Par exemple, \texttt{[ab]} correspond soit à \texttt{a} soit à \texttt{b}.
+    On peut aussi utiliser des intervalles, comme \texttt{[0-9]} ou \texttt{[a-z]}, et la négation,
+    par exemple \texttt{[!0-9]} (tout caractère qui n'est pas un chiffre) ou \texttt{[\^{}0-9]}.
     \end{infobox}
+\end{itemize}
+
+% ---
+
+\section{Mise en pratique : navigation dans un dépôt d'entreprise}
+
+Dans cet exercice, vous allez télécharger un petit jeu de données qui simule
+les fichiers d'une entreprise (rapports, factures, logs, sauvegardes, etc.),
+puis utiliser le globbing pour retrouver certaines informations.
+
+
+
+\begin{itemize}
+    \item Téléchargez l'archive suivante dans votre répertoire \texttt{TD2} :
+    \begin{terminal}
+    \prompt\ \shcmd{cd} \$HOME/TD2
+
+    \prompt\ \shcmd{wget} https://\textit{votre\_url}/entreprise\_data.tar.gz
+    \end{terminal}
+
+    Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
+    \begin{terminal}
+    \prompt\ \tcomment{pour Linux :}
+
+    \prompt\ \shcmd{sudo apt} update
+
+    \prompt\ \shcmd{sudo apt} install wget
+    
+    
+    \prompt\ \tcomment{pour macOS :}
+    
+    \prompt\ \shcmd{brew} install wget
+    \end{terminal}
 
     % ---
 
-    \item Comparez les commandes suivantes :
+    \item Décompressez l'archive et placez-vous dans le répertoire \texttt{entreprise\_data} :
     \begin{terminal}
-    \prompt\ \shcmd{ls} *.txt
-
-    \prompt\ \shcmd{ls} "*.txt"
+    \prompt\ \shcmd{tar} xf entreprise\_data.tar.gz
+  
+    \prompt\ \shcmd{cd} entreprise\_data
+  
+    \prompt\ \shcmd{ls}
     \end{terminal}
-    
-    \begin{infobox}
-    Lorsque le motif est entouré de guillemets, le globbing n'est pas interprété
-    par le shell.
-    \end{infobox}
-
-    \item Exécutez les commandes suivantes :
-    \begin{terminal}
-    \prompt\ \shcmd{ls} *
-
-    \prompt\ \shcmd{ls} .*
-    \end{terminal}
-
-    \begin{infobox}
-    Par défaut, le globbing ne correspond pas aux fichiers cachés
-    (commençant par un point).
-    \end{infobox}
+  
+    \item Le répertoire contient plusieurs sous-répertoires (par exemple \texttt{finances},
+          \texttt{rh}, \texttt{ventes}, \texttt{it/logs}, \texttt{backups}), chacun avec de
+          nombreux fichiers aux noms structurés.
 \end{itemize}
+
+\begin{infobox}
+Dans toutes les questions suivantes, utilisez uniquement le globbing 
+(\texttt{*}, \texttt{?}, \texttt{[...]}).
+
+Vous pouvez bien sûr combiner le globbing avec des commandes comme \texttt{ls}, 
+\texttt{echo}, voire \texttt{ls | wc -l} pour compter des fichiers.
+\end{infobox}
+
+\begin{enumerate}
+    \item Lister tous les fichiers PDF du service \texttt{finances}.
+          (Rapports trimestriels et factures.)
+    \item Lister uniquement les rapports trimestriels de 2023 dans \texttt{finances}
+          (les fichiers dont le nom contient \texttt{rapport-finances} et commence par \texttt{2023-}).
+    \item Parmi ces rapports de 2023, lister uniquement les versions \texttt{v1} 
+          (les fichiers dont le nom se termine par \texttt{-v1.pdf}).
+    \item Lister toutes les factures 2023 pour le client \texttt{CLIENTA}
+          dans le répertoire \texttt{finances}.
+    \item Lister tous les fichiers de salaires (fichiers contenant \texttt{salaires} dans leur nom)
+          dans le répertoire \texttt{rh}.
+    \item Toujours dans \texttt{rh}, lister uniquement les fichiers de salaires
+          marqués comme \texttt{confidentiel} (nom contenant \texttt{salaires-confidentiel}).
+    \item Lister tous les fichiers CSV de chiffres d'affaires (se terminant par \texttt{.csv})
+          dans le répertoire \texttt{ventes}, tous mois et toutes régions confondus.
+    \item Lister uniquement les fichiers de \texttt{ventes} correspondant au mois de mars 2023
+          (nom contenant \texttt{2023-03-}).
+    \item Dans \texttt{it/logs}, lister tous les logs de production non compressés
+          (fichiers \texttt{app-prod-...} se terminant par \texttt{.log}, mais pas \texttt{.log.gz}).
+    \item Dans \texttt{it/logs}, lister les logs de production du 15 au 19 janvier 2023
+          (jours \texttt{15}, \texttt{16}, \texttt{17}, \texttt{18}, \texttt{19} dans le nom de fichier).
+    \item Dans \texttt{backups}, lister toutes les sauvegardes complètes (\texttt{full})
+          de la base de données pour mars 2023 (fichiers contenant \texttt{backup-db-2023-03-}
+          et \texttt{-full.tar.gz}).
+    \item Lister tous les fichiers cachés à la racine du dépôt \texttt{entreprise\_data}
+          (fichiers dont le nom commence par un point).
+    \item Lister tous les fichiers qui ne sont \emph{pas} des fichiers texte PDF
+          (c'est-à-dire tous les fichiers dont l'extension n'est pas \texttt{.pdf}).
+          Vous pouvez ici utiliser un motif avec négation dans les crochets,
+          par exemple \texttt{.[!p][!d][!f]} ou similaire.
+\end{enumerate}
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -169,7 +334,7 @@ L'objectif de cette question est de découvrir la création et l'exécution d'un
 \begin{itemize}
     \item Créez un répertoire nommé \texttt{TD2} dans votre répertoire personnel (\texttt{\$HOME}).
     \begin{terminal}
-    \prompt\ \tcomment{d'abord, on se place dans le répertoire HOME}
+    \prompt\ \tcomment{d'abord, placez-vous dans votre répertoire personnel}
 
     \prompt\ \shcmd{cd} \$HOME
 
