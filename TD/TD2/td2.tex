@@ -243,14 +243,26 @@ Dans cet exercice, vous allez télécharger un petit jeu de données qui simule
 les fichiers d'une entreprise (rapports, factures, logs, sauvegardes, etc.),
 puis utiliser le globbing pour retrouver certaines informations.
 
-
-
 \begin{itemize}
     \item Téléchargez l'archive suivante dans votre répertoire \texttt{TD2} :
     \begin{terminal}
     \prompt\ \shcmd{cd} \$HOME/TD2
 
-    \prompt\ \shcmd{wget} https://\textit{votre\_url}/entreprise\_data.tar.gz
+    \prompt\
+
+    \prompt\ \tcomment{Je définis le lien sur plusieurs lignes car il est trop long}
+
+    \prompt\ UrlGit="https://github.com/AbdAmmar/LDS/blob"
+
+    \prompt\ Commit="03eff847f0b55cdf2cc8558b6654b5cd7b2cf282"
+
+    \prompt\ Rep="TD/TD2/data/globbing/entreprise\_data.tar.gz"
+
+    \prompt\
+
+    \prompt\ \tcomment{On télécharge maintenant}
+    
+    \prompt\ \shcmd{wget} "\${UrlGit}/\${Commit}/\${Rep}"
     \end{terminal}
 
     Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
@@ -260,7 +272,8 @@ puis utiliser le globbing pour retrouver certaines informations.
     \prompt\ \shcmd{sudo apt} update
 
     \prompt\ \shcmd{sudo apt} install wget
-    
+
+    \prompt\
     
     \prompt\ \tcomment{pour macOS :}
     
