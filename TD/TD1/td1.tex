@@ -115,10 +115,18 @@ principalement aux commandes internes.
     \item Consultez la documentation de la commande \texttt{ls} avec \texttt{man}, puis
           avec \texttt{info}.
           Pour quitter ces interfaces, appuyez sur \texttt{q}.
+
     \item Trouvez l'option permettant d'afficher les fichiers cachés, puis utilisez-la
           pour identifier les fichiers cachés présents dans votre répertoire personnel.
+    \begin{warningbox}
+    Les fichiers et dossiers cachés ont des noms qui commencent par \texttt{.}. Ils sont
+    invisibles, par exemple, avec la commande \texttt{ls}.
+    \end{warningbox}
+
     \item Expliquez pourquoi la commande \texttt{man cd} ne fonctionne pas. Consultez 
           l'aide de la commande \texttt{cd}.
+
+    % TODO: application avec ls -l
 \end{enumerate}
 
 \subsection*{Commandes utiles}
@@ -243,6 +251,7 @@ pour séparer les mots.
 
 \prompt\ \shcmd{cd} \textasciitilde/.
 \end{terminal}
+
     \item Créez un répertoire nommé \texttt{TD1}.
 \begin{terminal}
 \prompt\ \shcmd{mkdir} TD1
@@ -253,14 +262,18 @@ pour séparer les mots.
 
 \prompt\ \shcmd{pwd}
 \end{terminal}
+
     \item Créez un répertoire \texttt{TD1-bis} et placez-vous dedans.
+
     \item Créez les répertoires suivants :
     \begin{itemize}
         \item \texttt{TD1-bis-1}
         \item \texttt{TD1-bis-2}
         \item \texttt{TD1-bis-3}
     \end{itemize}
+
     \item Entrez dans \texttt{TD1-bis-1} et créez un répertoire nommé \texttt{test}.
+
     \item Revenez en arrière puis entrez dans \texttt{TD1-bis-3}.
 \begin{terminal}
 \prompt\ \tcomment{revenir en arrière}
@@ -275,11 +288,13 @@ pour séparer les mots.
 
 \prompt\ \shcmd{cd} TD1-bis-3
 \end{terminal}
+
     \item Depuis \texttt{TD1-bis-3}, créez un répertoire nommé \texttt{test}
     à l'intérieur de \texttt{TD1-bis-2}, sans vous déplacer dans ce dernier.
 \begin{terminal}
 \prompt\ \shcmd{mkdir} ../TD1-bis-2/test
 \end{terminal}
+
     \item Revenez dans votre répertoire personnel et affichez l'arborescence 
     complète du répertoire \texttt{TD1}.
 \begin{terminal}
@@ -299,6 +314,7 @@ Si la commande \texttt{tree} n'est pas disponible, installez-la :
 
 \prompt\ \shcmd{sudo apt install tree}
 \end{terminal}
+
     \item Supprimez ensuite tous les répertoires dont le nom commence par
     \texttt{TD1-bis-} en une ou plusieurs commandes.
 \begin{terminal}
@@ -312,6 +328,8 @@ Si la commande \texttt{tree} n'est pas disponible, installez-la :
 
 \prompt\ \shcmd{rm} -r TD1/TD1-bis/TD1-bis-*
 \end{terminal}
+
+    % TODO: un item pour utiliser \texttt{mv}
 \end{enumerate}
 
 \begin{warningbox}
@@ -569,29 +587,32 @@ et ne doivent pas être utilisés pour les comparaisons numériques.
     \prompt\ \shcmd{echo} "somme = \$somme"
     \end{terminal}
 
-    \item Modifiez la valeur de la variable \texttt{a} en lui ajoutant 1.
+    \item Modifiez la valeur de la variable \texttt{b} en lui ajoutant 10.
     \begin{terminal}
-    \prompt\ \shcmd{a=}\$((a + 1))
+    \prompt\ \shcmd{b=}\$((b + 10))
     \end{terminal}
 
     \item Calculez le produit de \texttt{a} et \texttt{b} et stockez le résultat
           dans une variable \texttt{produit}.
 
-    \item Les commandes de test \texttt{[ ... ]} ne produisent pas de sortie.
+    \item Les commandes de test \texttt{[[ ... ]]} ne produisent pas de sortie.
           Elles indiquent le résultat d'un test uniquement à l'aide de leur code de retour,
           accessible via la variable \texttt{\$?}.
           Comparez les comportements obtenus et expliquez la différence.
     \begin{terminal}
-    \prompt\ \shcmd{[} \$a < \$b \shcmd{]}
+    \prompt\ \shcmd{[[} \$a < \$b \shcmd{]]}
 
     \prompt\ \shcmd{echo} \$?
     \end{terminal}
 
     \begin{terminal}
-    \prompt\ \shcmd{[} \$a -lt \$b \shcmd{]}
+    \prompt\ \shcmd{[[} \$a -lt \$b \shcmd{]]}
 
     \prompt\ \shcmd{echo} \$?
     \end{terminal}
+    \begin{warningbox}
+    En Bash, le code de sortie (\texttt{\$?}) suit la convention Unix : 0 indique un succès (\texttt{true}) et toute valeur non-nulle indique un échec (\texttt{false}). Cette convention est opposée à celle des langages de programmation où 0 évalue à \texttt{false} et 1 à \texttt{true} dans un contexte booléen.
+    \end{warningbox}
 \end{itemize}
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---

@@ -22,12 +22,141 @@ Il est fortement recommandé de taper les commandes à la main afin de se famili
 avec le terminal.
 \end{warningbox}
 
+
+\begin{warningbox}
+Avant de regarder les solutions proposées dans ce TD, prenez le temps de réfléchir
+et de tenter de résoudre les questions par vous-même.
+L'erreur fait partie du processus d'apprentissage.
+\end{warningbox}
+
+
+
 \bigskip
 
 
 
 
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
+\section{Globbing}
+
+Le \textit{globbing} est un mécanisme du shell permettant de faire correspondre
+des motifs (\textit{patterns}) à des noms de fichiers.
+
+\begin{infobox}
+Le globbing est effectué par le shell avant l'exécution de la commande.
+Les caractères \texttt{*}, \texttt{?} et \texttt{[...]} ont une signification
+spéciale et peuvent être désactivés à l'aide de guillemets ou d'un antislash.
+\end{infobox}
+
+\begin{itemize}
+    \item Créez les fichiers suivants dans un répertoire de test :
+    \begin{terminal}
+    \prompt\ \shcmd{touch} a.txt b.txt c.txt aa.txt bb.txt cc.txt
+
+    \prompt\ \shcmd{touch} a.java b.java c.java
+
+    \prompt\ \shcmd{touch} ba.txt ab.txt ca.txt ac.txt
+
+    \prompt\ \shcmd{touch} note.pdf image.png
+    \end{terminal}
+
+    % ---
+
+    \item Exécutez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls}
+
+    \prompt\ \shcmd{ls} *.txt
+
+    \prompt\ \shcmd{ls} *.java
+
+    \prompt\ \shcmd{ls} *.png
+
+    \prompt\ \shcmd{ls} *.pdf
+
+    \prompt\ \shcmd{ls} *.*
+
+    \prompt\ \shcmd{ls} *.TXT
+    \end{terminal}
+    Que remarquez-vous ?
+
+    \begin{infobox}
+    Le caractère \texttt{*} correspond à n'importe quelle suite de caractères
+    (dans un nom de fichier).
+    \end{infobox}
+
+    % ---
+
+    \item Exécutez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} ?.txt
+
+    \prompt\ \shcmd{ls} a?.txt
+
+    \prompt\ \shcmd{ls} A?.txt
+
+    \prompt\ \shcmd{ls} ?c.txt
+
+    \prompt\ \shcmd{ls} ??.txt
+
+    \prompt\ \shcmd{ls} ???.txt
+    \end{terminal}
+    
+    \begin{infobox}
+    Le caractère \texttt{?} correspond exactement à un seul caractère.
+    \end{infobox}
+
+    % ---
+
+    \item Exécutez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} [ab].txt
+
+    \prompt\ \shcmd{ls} [ba].txt
+
+    \prompt\ \shcmd{ls} [bc].txt
+
+    \prompt\ \shcmd{ls} [ac].txt
+
+    \prompt\ \shcmd{ls} a[bc].txt
+
+    \prompt\ \shcmd{ls} [bc]a.txt
+
+    \prompt\ \shcmd{ls} [abc][abc].txt
+    \end{terminal}
+    
+    \begin{infobox}
+    Les crochets \texttt{[ ]} permettent de rechercher un caractère parmi plusieurs possibilités.
+    Par exemple, \texttt{[ab]} correspond à soit 'a' soit 'b'.
+    \end{infobox}
+
+    % ---
+
+    \item Comparez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} *.txt
+
+    \prompt\ \shcmd{ls} "*.txt"
+    \end{terminal}
+    
+    \begin{infobox}
+    Lorsque le motif est entouré de guillemets, le globbing n'est pas interprété
+    par le shell.
+    \end{infobox}
+
+    \item Exécutez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} *
+
+    \prompt\ \shcmd{ls} .*
+    \end{terminal}
+
+    \begin{infobox}
+    Par défaut, le globbing ne correspond pas aux fichiers cachés
+    (commençant par un point).
+    \end{infobox}
+\end{itemize}
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -107,11 +236,11 @@ L'objectif de cette question est de découvrir la création et l'exécution d'un
     \prompt\ \shcmd{ls}
     \end{terminal}
 
-    \begin{warningbox}
+    \begin{infobox}
     Ajouter une extension aux fichiers, comme \texttt{.sh} dans \texttt{hello.sh}, est optionnel sous Linux.
     Cependant, c'est une bonne pratique : cela facilite la lecture et permet aux éditeurs de texte
     de colorer la syntaxe.
-    \end{warningbox}
+    \end{infobox}
 
     \item Éditez le fichier \texttt{hello.sh} afin qu'il affiche \texttt{Hello World} à l'écran,
     en y ajoutant les lignes suivantes :
@@ -120,10 +249,10 @@ echo "Hello World";
 echo "Ceci est mon premier script, mais certainement pas le dernier ;)";
 \end{minted}
 
-    \begin{warningbox}
+    \begin{infobox}
     Le point-virgule \texttt{;} est optionnel ici car chaque commande est sur une ligne distincte,
     mais il permet de séparer plusieurs commandes sur une même ligne.
-    \end{warningbox}
+    \end{infobox}
 
     \textit{Rappel :}  
     On peut lancer un éditeur de texte (\texttt{gedit}, \texttt{nano}, etc.) avec :
@@ -137,11 +266,11 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)";
     \prompt\ \shcmd{nano} hello.sh \&
     \end{terminal}
 
-    \begin{warningbox}
+    \begin{infobox}
     L'utilisation de \texttt{\&} permet de lancer le programme en arrière-plan
     et de conserver le contrôle du terminal.
     Le shell crée alors un processus fils pour exécuter la commande.
-    \end{warningbox}
+    \end{infobox}
 
     \item Exécutez le script en utilisant la commande \texttt{bash}.
     \begin{terminal}
@@ -157,7 +286,7 @@ echo "Hello World"
 echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
 \end{minted}
 
-    \begin{warningbox}
+    \begin{infobox}
     Le shebang \texttt{\#!/usr/bin/env bash} indique au système quel interpréteur doit être utilisé
     pour exécuter le script.
     
@@ -169,7 +298,7 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
     \texttt{\#!/usr/bin/env bash}, le système utilise la commande \texttt{env} pour rechercher
     automatiquement l'interpréteur \texttt{bash} dans les chemins définis par la variable
     \texttt{PATH}, ce qui rend le script plus portable d'un système à un autre.
-    \end{warningbox}
+    \end{infobox}
 
     \item Si on inspecte les droits du fichier avec :
     \begin{terminal}
@@ -181,7 +310,7 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
     \prompt\ \shcmd{chmod} +x hello.sh
     \end{terminal}
 
-    \begin{warningbox}
+    \begin{infobox}
     Les droits d'un fichier sont définis par :
     \begin{itemize}
         \item \texttt{r} : droit de lecture (read)
@@ -189,7 +318,7 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
         \item \texttt{x} : droit d'exécution (execute)
     \end{itemize}
     Ces droits sont définis pour le propriétaire du fichier, le groupe et les autres utilisateurs.
-    \end{warningbox}
+    \end{infobox}
 
     \item Exécutez le script directement, sans utiliser la commande \texttt{bash}.
     \begin{terminal}
@@ -207,12 +336,12 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
     \prompt\ hello.sh
     \end{terminal}
 
-    \begin{warningbox}
+    \begin{infobox}
     Cette commande ne fonctionne pas car le répertoire courant n'est pas inclus
     dans la variable d'environnement \texttt{PATH}.
     Contrairement à des commandes comme \texttt{ls} ou \texttt{pwd},
     le shell ne sait pas où chercher \texttt{hello.sh}.
-    \end{warningbox}
+    \end{infobox}
 
     \item Modifiez le script pour définir une variable nommée \texttt{prenom}
     contenant votre prénom, et affichez le message :
@@ -224,10 +353,10 @@ prenom="Toto"
 echo "Coucou ${prenom}"
 \end{minted}
 
-    \begin{warningbox}
+    \begin{infobox}
     Il est recommandé d'utiliser \texttt{\{\}} autour des variables afin d'éviter
     toute ambiguïté lors de l'expansion.
-    \end{warningbox}
+    \end{infobox}
     
     \item Modifiez le script afin de lire le prénom lors de l'exécution à l'aide de la commande \texttt{read}.
 \begin{minted}{bash}
@@ -249,14 +378,14 @@ prenom=$1
 echo "Coucou ${prenom}"
 \end{minted}
 
-    \begin{warningbox}
+    \begin{infobox}
     Lors de l'exécution d'un script Bash, certaines variables spéciales sont définies automatiquement.
 
     \texttt{\$0} contient le nom du script tel qu'il a été utilisé pour le lancer.
 
-    \texttt{\$1}, \texttt{\$2}, \ldots correspondent aux arguments passés au script :
+    \texttt{\$1}, \texttt{\$2}, \ldots \, correspondent aux arguments passés au script :
     \texttt{\$1} est le premier argument, \texttt{\$2} le second, etc.
-    \end{warningbox}
+    \end{infobox}
 
     \item Modifiez le script afin de demander également l'âge de l'utilisateur,
     puis affichez un message prenant en compte cet âge.
@@ -301,6 +430,7 @@ prochain_age=$((age + 1))
 cowsay -f stegosaurus "Le ${prochain_age}e sera encore meilleur :)"
 \end{minted}
 \end{itemize}
+
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -469,18 +599,6 @@ Sans utiliser d'éditeur de texte :
 Justifiez vos réponses à l'aide de commandes Linux.
 
 
-\section*{Pour aller plus loin -- Exercice ludique (optionnel)}
-
-Installez les programmes \texttt{cowsay} et \texttt{fortune}.
-Testez ensuite l'utilisation d'un pipe entre les deux commandes.
-
-\begin{terminal}
-\prompt\ \shcmd{sudo} apt install cowsay fortune
-
-\prompt\ \shcmd{fortune}
-
-\prompt\ \shcmd{fortune} \texttt{|} \shcmd{cowsay}
-\end{terminal}
 
 
 % --------------------------------------------------
