@@ -770,14 +770,11 @@ Globbing vs Regex \\
     \end{infobox}
 \end{itemize}
 
-
 % ---
 
-
-\subsection{Regex de base (\texttt{.}, \texttt{[...]}, \texttt{*})}
+\subsection{Ancrages \texttt{\^{}} (début de ligne) et \texttt{\$} (fin de ligne)}
 
 \begin{itemize}
-
     \item Analysez les résultats des commandes suivantes :
     \begin{terminal}
     \prompt\ \shcmd{grep} '\$' donnees.txt
@@ -788,7 +785,7 @@ Globbing vs Regex \\
 
     \prompt\ \shcmd{grep} 'HH\$' donnees.txt
 
-    \prompt\ \shcmd{grep} -E '000\$' donnees.txt
+    \prompt\ \shcmd{grep} '000\$' donnees.txt
     \end{terminal}
 
     \begin{infobox}
@@ -799,6 +796,60 @@ Globbing vs Regex \\
 
     % ---
 
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '\^{}' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash \^{}' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}e' donnees.txt
+
+    \prompt\ \shcmd{grep} -i '\^{}e' donnees.txt
+
+    \prompt\ \shcmd{grep} -i '\^{}er' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    En expression régulière, le symbole \texttt{\^{}} ne signifie pas ``caractère \texttt{\^{}} littéral'' :
+    il signifie ``début de ligne''.
+    Pour chercher un vrai \texttt{\^{}} dans le texte, il faut utiliser \texttt{\textbackslash\^{}}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '[\textbackslash \$]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\$]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\^{}]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\textbackslash \^{}]' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}M' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}[M]' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}[\^{}M]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\^{}Z]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[Z\^{}]' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    \texttt{\^{}} et \texttt{\$} servent d'ancres (début/fin de ligne) uniquement \emph{en dehors}
+    des crochets \texttt{[ ]}. À l'intérieur, ils sont soit de la syntaxe de classe négative
+    (\texttt{[\^{}...]}) soit de simples caractères normaux.
+    \end{infobox}
+\end{itemize}
+
+% ---
+
+\subsection{Regex de base (\texttt{.}, \texttt{[ ]}, \texttt{*})}
+
+\begin{itemize}
     \item Analysez les résultats des commandes suivantes :
     \begin{terminal}
     \prompt\ \shcmd{grep} '.' donnees.txt
@@ -827,17 +878,33 @@ Globbing vs Regex \\
 
     \item Analysez les résultats des commandes suivantes :
     \begin{terminal}
+    \prompt\ \shcmd{grep} '*' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash*' donnees.txt
+
+    \prompt\ \shcmd{grep} 'K*' donnees.txt
+
+    \prompt\ \shcmd{grep} '*K' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash*K' donnees.txt
+
     \prompt\ \shcmd{grep} 'V*' donnees.txt
 
     \prompt\ \shcmd{grep} 'V\textbackslash*' donnees.txt
+
+    \prompt\ \shcmd{grep} 'V*V' donnees.txt
+
+    \prompt\ \shcmd{grep} 'V*VV' donnees.txt
+
+    \prompt\ \shcmd{grep} 'tel: 01*' donnees.txt
     \end{terminal}
 
     \begin{infobox}
     Dans une expression régulière, le caractère \texttt{*} n'est pas un caractère
     normal : c'est un ``quantificateur'' qui signifie ``zéro ou plusieurs
     occurrences de l'élément précédent''.
-    Par exemple, le regex \texttt{V*} signifie ``zéro ou plusieurs \texttt{V}''.
-    Pour chercher un \emph{vrai} caractère \texttt{*}, on l'échappe avec un antislash \texttt{\textbackslash}.
+    Pour chercher un \emph{vrai} caractère \texttt{*}, on l'échappe avec un antislash \texttt{\textbackslash} 
+    (si \texttt{*} est precede par un autre character).
     \end{infobox}
 
     % ---
@@ -870,29 +937,67 @@ Globbing vs Regex \\
       \item \texttt{[A-Z]} : une lettre majuscule.
       \item \texttt{[A-Za-z0-9\_]} : lettre majuscule, ou minuscule, ou chiffre, ou \texttt{\_}.
     \end{itemize}
-    
-    Exemples avec \texttt{grep} :
-    \begin{itemize}
-        \item \texttt{grep '[0-9]' donnees.txt} : lignes contenant au moins un chiffre.
-        \item \texttt{grep '\^{}[0-9][0-9][0-9]\$' donnees.txt} : lignes composées exactement de 3 chiffres.
-    \end{itemize}
-    
     On peut aussi utiliser une ``classe négative'' avec \texttt{\^{}} en premier caractère :
     \begin{itemize}
         \item \texttt{[\^{}0-9]} : un caractère qui n'est pas un chiffre.
     \end{itemize}
     \end{infobox}
+\end{itemize}
+
+% ---
+
+\subsection{Quantificateurs : \texttt{+}, \texttt{?}, \texttt{\{m,n\}}}
+
+\begin{infobox}
+Avec \texttt{grep -E}, on dispose de quantificateurs pratiques :
+\begin{itemize}
+    \item \texttt{+} : une ou plusieurs occurrences de l'élément précédent.
+    \item \texttt{?} : zéro ou une occurrence de l'élément précédent.
+    \item \texttt{\{m\}} : exactement \texttt{m} occurrences.
+    \item \texttt{\{m,n\}} : entre \texttt{m} et \texttt{n} occurrences.
+\end{itemize}
+\end{infobox}
+
+\begin{itemize}
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} "[0-9]" donnees.txt
+
+    \prompt\ \shcmd{grep} "[0-9][0-9][0-9][0-9][0-9]" donnees.txt
+
+    \prompt\ \shcmd{grep} "[0-9]\{5\}" donnees.txt
+
+    \prompt\ \shcmd{grep} "[0-9]\textbackslash\{5\textbackslash\}" donnees.txt
+
+    \prompt\ \shcmd{grep} -E "[0-9]\{5\}" donnees.txt
+
+    \prompt\ \shcmd{grep} -E "[0-9]\textbackslash\{5\textbackslash\}" donnees.txt
+
+    \prompt\ \shcmd{grep} -E "[0-9]\{3,6\}" donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\$' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[A-Z]\{6,8\}: \textbackslash\$[0-9]\{4\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{2\}/[0-9]\{2\}/[0-9]\{4\}' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Avec \texttt{grep} \emph{(sans \texttt{-E})}, on utilise les ``regex basiques''.
+    La répétition se fait avec \texttt{\textbackslash\{m\textbackslash\}} ou \texttt{\textbackslash\{m,n\textbackslash\}}.
+
+    Avec \texttt{grep -E},  on active les ``regex étendues''. Ici, \texttt{\{ \}} sont directement des quantificateurs, \emph{sans antislash}.
+    \begin{itemize}
+        \item \texttt{\{m\}} = exactement \texttt{m} répétitions.
+        \item \texttt{\{m,n\}} = entre \texttt{m} et \texttt{n} répétitions.
+    \end{itemize}
+    \end{infobox}
 
     % ---
 
-    % TODO
-    \item
-
-    \begin{terminal}
-    \prompt\ \shcmd{grep} 'code postal: [0-9][0-9][0-9][0-9][0-9]' donnees.txt
-    
-    \prompt\ \shcmd{grep} -E 'code postal: [0-9]{5}' donnees.txt
-    \end{terminal}
+    \item TODO
 
     \begin{infobox}
     \textbf{\texttt{grep} vs \texttt{grep -E}}
@@ -951,7 +1056,7 @@ Globbing vs Regex \\
 
     % ---
 
-    \item Cherchez toutes les lignes contenant des heures (format \texttt(hh:mm:ss))
+    \item Cherchez toutes les lignes contenant des heures (format \texttt{hh:mm:ss})
     \begin{terminal}
     \prompt\ \shcmd{grep} '..:..:..' donnees.txt
 
@@ -959,79 +1064,6 @@ Globbing vs Regex \\
 
     \prompt\ \shcmd{grep} '\([01][0-9]\|2[0-3]\):[0-5][0-9]:[0-5][0-9]' donnees.txt
     \end{terminal}
-
-    % ---
-\end{itemize}
-
-% ---
-
-\subsection{Ancrages \texttt{\^} (début de ligne) et \texttt{\$} (fin de ligne)}
-
-\begin{infobox}
-\begin{itemize}
-  \item \texttt{\^{}} (début de ligne) : la regex doit commencer en début de ligne. \\
-        Exemple : \texttt{\^{}ERROR} : lignes qui commencent par \texttt{ERROR}.
-  \item \texttt{\$} (fin de ligne) : la regex doit finir en fin de ligne. \\
-        Exemple : \texttt{\.com\$} : lignes qui se terminent par \texttt{.com}.
-\end{itemize}
-\end{infobox}
-
-\begin{itemize}
-  \item
-  Affichez toutes les lignes de \texttt{donnees.txt} qui commencent par \texttt{ERROR}.
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '\^{}ERROR' donnees.txt
-  \end{terminal}
-
-  \item Affichez toutes les lignes qui commencent par \texttt{INFO}.
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '\^{}INFO' donnees.txt
-  \end{terminal}
-
-  \item Affichez toutes les lignes qui se terminent par \texttt{.com}.
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '.com\$' donnees.txt
-  \end{terminal}
-
-  \item Affichez toutes les lignes qui se terminent par un chiffre (\texttt{0} à \texttt{9}).
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '[0-9]\$' donnees.txt
-  \end{terminal}
-\end{itemize}
-
-\subsection{Quantificateurs : \texttt{+}, \texttt{?}, \texttt{\{m,n\}} (avec \texttt{grep -E})}
-
-\begin{infobox}
-Avec \texttt{grep -E}, on dispose de quantificateurs pratiques :
-\begin{itemize}
-  \item \texttt{+} : « une ou plusieurs occurrences » de l'élément précédent.
-  \item \texttt{?} : « zéro ou une occurrence » de l'élément précédent.
-  \item \texttt{\{m\}} : exactement \texttt{m} occurrences.
-  \item \texttt{\{m,n\}} : entre \texttt{m} et \texttt{n} occurrences.
-\end{itemize}
-Exemples : \texttt{[0-9]\{5\}} : exactement 5 chiffres ; \texttt{[A-Z]+} : une ou plusieurs majuscules.
-\end{infobox}
-
-\begin{itemize}
-  \item Affichez les lignes contenant un code postal à 5 chiffres (lignes commençant par \texttt{code postal: } suivi d'exactement 5 chiffres).
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '\^{}code postal: [0-9]{5}\$' donnees.txt
-  \end{terminal}
-
-  \item Affichez toutes les lignes contenant une séquence d'au moins 3 chiffres consécutifs.
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '[0-9]{3,}' donnees.txt
-  \end{terminal}
-
-  \item Affichez les lignes de date au format \texttt{2023-03-01} (année sur 4 chiffres, tiret, mois sur 2 chiffres, tiret, jour sur 2 chiffres).
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '\^{}date: [0-9]{4}-[0-9]{2}-[0-9]{2}\$' donnees.txt
-  \end{terminal}
-
-  \item Affichez les lignes de date au format \texttt{01/03/2023} (jour/mois/année, avec des chiffres et des slashs).
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '\^{}date: [0-9]{2}/[0-9]{2}/[0-9]{4}\$' donnees.txt
-  \end{terminal}
 \end{itemize}
 
 % ---
