@@ -24,6 +24,11 @@ avec le terminal.
 
 
 \begin{warningbox}
+Ce TP introduit de nombreuses notions nouvelles.
+Il est fortement recommandé de prendre des notes au fur et à mesure.
+\end{warningbox}
+
+\begin{warningbox}
 Avant de regarder les solutions proposées dans ce TD, prenez le temps de réfléchir
 et de tenter de résoudre les questions par vous-même.
 L'erreur fait partie du processus d'apprentissage.
@@ -948,32 +953,72 @@ Globbing vs Regex \\
 
 \subsection{Quantificateurs : \texttt{+}, \texttt{?}, \texttt{\{m,n\}}}
 
-\begin{infobox}
-Avec \texttt{grep -E}, on dispose de quantificateurs pratiques :
-\begin{itemize}
-    \item \texttt{+} : une ou plusieurs occurrences de l'élément précédent.
-    \item \texttt{?} : zéro ou une occurrence de l'élément précédent.
-    \item \texttt{\{m\}} : exactement \texttt{m} occurrences.
-    \item \texttt{\{m,n\}} : entre \texttt{m} et \texttt{n} occurrences.
-\end{itemize}
-\end{infobox}
-
 \begin{itemize}
     \item Analysez les résultats des commandes suivantes :
     \begin{terminal}
-    \prompt\ \shcmd{grep} "[0-9]" donnees.txt
+    \prompt\ \shcmd{grep} 'a*' donnees.txt
 
-    \prompt\ \shcmd{grep} "[0-9][0-9][0-9][0-9][0-9]" donnees.txt
+    \prompt\ \shcmd{grep} 'a\textbackslash+' donnees.txt
 
-    \prompt\ \shcmd{grep} "[0-9]\{5\}" donnees.txt
+    \prompt\ \shcmd{grep} 'a+' donnees.txt
 
-    \prompt\ \shcmd{grep} "[0-9]\textbackslash\{5\textbackslash\}" donnees.txt
+    \prompt\ \shcmd{grep} -E 'a\textbackslash+' donnees.txt
 
-    \prompt\ \shcmd{grep} -E "[0-9]\{5\}" donnees.txt
+    \prompt\ \shcmd{grep} -E 'a+' donnees.txt
 
-    \prompt\ \shcmd{grep} -E "[0-9]\textbackslash\{5\textbackslash\}" donnees.txt
+    \prompt\ \shcmd{grep} -E 's+s+' donnees.txt
+    
+    \prompt\ \shcmd{grep} -E 'ss+' donnees.txt
+    
+    \prompt\ \shcmd{grep} -E '1+2+3+' donnees.txt
+    
+    \prompt\ \shcmd{grep} -E '123+' donnees.txt 
 
-    \prompt\ \shcmd{grep} -E "[0-9]\{3,6\}" donnees.txt
+    \prompt\ \shcmd{grep} -E 'a+t' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans les regex, \texttt{+} désigne ``une ou plusieurs occurrences'' du motif précédent. \\
+    Avec \texttt{grep} (regex basiques), il faut l'écrire \texttt{\textbackslash+}.  
+    Avec \texttt{grep -E} (regex étendues), on écrit simplement \texttt{+}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '4' donnees.txt
+
+    \prompt\ \shcmd{grep} '4\textbackslash?' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '4?' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '4\textbackslash?' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans les regex, \texttt{?} signifie ``zéro ou une occurrence'' du motif précédent. \\
+    Avec \texttt{grep} (regex basiques), il faut l'écrire \texttt{\textbackslash?}.  
+    Avec \texttt{grep -E} (regex étendues), on écrit simplement \texttt{?}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '[0-9]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[0-9][0-9][0-9][0-9][0-9]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[0-9]\{5\}' donnees.txt
+
+    \prompt\ \shcmd{grep} '[0-9]\textbackslash\{5\textbackslash\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{5\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\textbackslash\{5\textbackslash\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{3,6\}' donnees.txt
 
     \prompt\ \shcmd{grep} -E '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}' donnees.txt
 
@@ -994,76 +1039,6 @@ Avec \texttt{grep -E}, on dispose de quantificateurs pratiques :
         \item \texttt{\{m,n\}} = entre \texttt{m} et \texttt{n} répétitions.
     \end{itemize}
     \end{infobox}
-
-    % ---
-
-    \item TODO
-
-    \begin{infobox}
-    \textbf{\texttt{grep} vs \texttt{grep -E}}
-    \begin{itemize}
-        \item \texttt{grep} (sans option) utilise des \textbf{expressions régulières basiques} (BRE).
-              Certains symboles doivent être échappés avec \texttt{\textbackslash} pour avoir leur sens regex :
-              \begin{itemize}
-                \item \texttt{\textbackslash+} : une ou plusieurs fois
-                \item \texttt{\textbackslash?} : zéro ou une fois
-                \item \texttt{\textbackslash|} : alternative (OU)
-                \item \texttt{\textbackslash( ... \textbackslash)} : groupement
-                \item \texttt{\textbackslash\{m,n\textbackslash\}} : répétitions
-              \end{itemize}
-        
-        \item \texttt{grep -E} active les \textbf{expressions régulières étendues} (ERE) : on peut utiliser
-              directement \texttt{+}, \texttt{?}, \texttt{|}, \texttt{( )}, \texttt{\{ \}} sans antislash.
-              \begin{itemize}
-                \item \texttt{grep -E 'a+'} : une ou plusieurs lettres \texttt{a}
-                \item \texttt{grep -E 'foo|bar'} : \texttt{foo} ou \texttt{bar}
-                \item \texttt{grep -E '(ab){3}'} : \texttt{ab} répété 3 fois
-              \end{itemize}
-        
-        \item Les éléments comme \texttt{.}, \texttt{*}, \texttt{[...]} , \texttt{[\^{}...]}, \texttt{\^{}} et \texttt{\$}
-              fonctionnent de la même manière avec \texttt{grep} et \texttt{grep -E}.
-    \end{itemize}
-    \end{infobox}
-
-    % ---
-
-    \item TODO
-
-    \begin{infobox}
-    En shell, les guillemets simples \texttt{' '} et les guillemets doubles \texttt{" "}
-    n'ont pas le même comportement :
-    \begin{itemize}
-        \item Les guillemets simples \texttt{'motif'} passent le texte tel quel
-              à la commande : aucune expansion de variable, pas de \texttt{\$(...)}.
-              C'est ce que l'on préfère pour écrire des regex avec \texttt{grep}, \texttt{sed}, etc.
-        \item Les guillemets doubles \texttt{"motif"} laissent encore le shell développer
-              les variables (\texttt{\$}) et les substitutions de commande (\texttt{\$(\dots)}).
-    \end{itemize}
-    \end{infobox}
-  
-    % ---
-
-  \item Affichez toutes les lignes contenant \texttt{tel:} suivi d'un chiffre (\texttt{0} à \texttt{9}) en première position après \texttt{tel: }.
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E '\^{}tel: [0-9]' donnees.txt
-  \end{terminal}
-
-  \item Affichez toutes les lignes contenant \texttt{PROD-} suivi de \texttt{ABC} ou \texttt{XYZ}, suivi de \texttt{-} et de n'importe quels caractères.
-        (Nous utiliserons ici \texttt{. *} pour « zéro ou plusieurs caractères quelconques ». Nous verrons plus tard une meilleure façon d'écrire cela.)
-  \begin{terminal}
-  \prompt\ \shcmd{grep} -E 'PROD-(ABC|XYZ)-.*' donnees.txt
-  \end{terminal}
-
-    % ---
-
-    \item Cherchez toutes les lignes contenant des heures (format \texttt{hh:mm:ss})
-    \begin{terminal}
-    \prompt\ \shcmd{grep} '..:..:..' donnees.txt
-
-    \prompt\ \shcmd{grep} '[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}' donnees.txt
-
-    \prompt\ \shcmd{grep} '\([01][0-9]\|2[0-3]\):[0-5][0-9]:[0-5][0-9]' donnees.txt
-    \end{terminal}
 \end{itemize}
 
 % ---
@@ -1100,6 +1075,14 @@ Exemples : \texttt{(INFO|WARN|ERROR)} : l'une des trois chaînes. \\
   \begin{terminal}
   \prompt\ \shcmd{grep} -E 'module=(auth|payments)' donnees.txt
   \end{terminal}
+
+    % ---
+
+    \item Affichez toutes les lignes contenant \texttt{PROD-} suivi de \texttt{ABC} ou \texttt{XYZ}, suivi de \texttt{-} et de n'importe quels caractères.
+          (Nous utiliserons ici \texttt{. *} pour « zéro ou plusieurs caractères quelconques ». Nous verrons plus tard une meilleure façon d'écrire cela.)
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -E 'PROD-(ABC|XYZ)-.*' donnees.txt
+    \end{terminal}
 \end{itemize}
 
 \subsection*{Bonus : classes négatives, \texttt{grep -v} et introduction à \texttt{sed}}
