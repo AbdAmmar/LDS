@@ -329,31 +329,28 @@ avec la commande \texttt{grep} pour rechercher des motifs dans des fichiers text
 \begin{infobox}
 Globbing vs Regex \\
 \begin{itemize}
-  \item 
-  Le globbing (\texttt{*}, \texttt{?}, \texttt{[...]} dans le shell) sert à
-  faire correspondre des motifs à des \textbf{noms de fichiers}.
-  \item
-  Les expressions régulières décrivent des motifs à l'intérieur du
-  contenu des fichiers (les lignes de texte).
+    \item Le globbing (\texttt{*}, \texttt{?}, \texttt{[...]} dans le shell) sert à
+          faire correspondre des motifs à des noms de fichiers.
+    \item Les expressions régulières décrivent des motifs à l'intérieur du
+          contenu des fichiers (les lignes de texte).
 \end{itemize}
 \end{infobox}
 
 \begin{itemize}
-  \item
-  Créez un sous-répertoire \texttt{Q3} dans \texttt{TD3} et placez-vous dedans.
-  \begin{terminal}
-  \prompt\ \shcmd{cd} \$HOME/TD3
+    \item Créez un sous-répertoire \texttt{Q3} dans \texttt{TD3} et placez-vous dedans.
+    \begin{terminal}
+    \prompt\ \shcmd{cd} \$HOME/TD3
+  
+    \prompt\ \shcmd{mkdir} Q3
+  
+    \prompt\ \shcmd{cd} Q3
+    \end{terminal}
 
-  \prompt\ \shcmd{mkdir} Q3
+    % ---
 
-  \prompt\ \shcmd{cd} Q3
-  \end{terminal}
-
-  % ---
-
-  % TODO
-  \item
-  Telechargez le fichier \texttt{donnees.txt}
+    % TODO
+    \item
+    Telechargez le fichier \texttt{donnees.txt}
 \end{itemize}
 
 % ---
@@ -551,10 +548,10 @@ Globbing vs Regex \\
     Dans une expression régulière, \texttt{[...]} définit une ``classe de caractères'' :
     la regex correspond à \emph{un seul caractère} parmi ceux listés entre les crochets.
     \begin{itemize}
-      \item \texttt{[aeiou]} : une lettre parmi \texttt{a}, \texttt{e}, \texttt{i}, \texttt{o}, \texttt{u}.
-      \item \texttt{[0-9]} : un chiffre (de 0 à 9).
-      \item \texttt{[A-Z]} : une lettre majuscule.
-      \item \texttt{[A-Za-z0-9\_]} : lettre majuscule, ou minuscule, ou chiffre, ou \texttt{\_}.
+        \item \texttt{[aeiou]} : une lettre parmi \texttt{a}, \texttt{e}, \texttt{i}, \texttt{o}, \texttt{u}.
+        \item \texttt{[0-9]} : un chiffre (de 0 à 9).
+        \item \texttt{[A-Z]} : une lettre majuscule.
+        \item \texttt{[A-Za-z0-9\_]} : lettre majuscule, ou minuscule, ou chiffre, ou \texttt{\_}.
     \end{itemize}
     On peut aussi utiliser une ``classe négative'' avec \texttt{\^{}} en premier caractère :
     \begin{itemize}
@@ -645,9 +642,11 @@ Globbing vs Regex \\
 
     \begin{infobox}
     Avec \texttt{grep} \emph{(sans \texttt{-E})}, on utilise les ``regex basiques''.
-    La répétition se fait avec \texttt{\textbackslash\{m\textbackslash\}} ou \texttt{\textbackslash\{m,n\textbackslash\}}.
+    La répétition se fait avec \texttt{\textbackslash\{m\textbackslash\}} ou 
+    \texttt{\textbackslash\{m,n\textbackslash\}}.
 
-    Avec \texttt{grep -E},  on active les ``regex étendues''. Ici, \texttt{\{ \}} sont directement des quantificateurs, \emph{sans antislash}.
+    Avec \texttt{grep -E},  on active les ``regex étendues''. Ici, \texttt{\{ \}}
+    sont directement des quantificateurs, \emph{sans antislash}.
     \begin{itemize}
         \item \texttt{\{m\}} = exactement \texttt{m} répétitions.
         \item \texttt{\{m,n\}} = entre \texttt{m} et \texttt{n} répétitions.
@@ -700,10 +699,9 @@ Globbing vs Regex \\
 
 % ---
 
-\subsection{\texttt{grep -v} : inverser la sélection}
+\subsection{Inverser la sélection}
 
 \begin{itemize}
-
     \item Analysez les résultats des commandes suivantes :
     \begin{terminal}
     \prompt\ \shcmd{grep} '1' donnees.txt
@@ -740,40 +738,52 @@ Globbing vs Regex \\
     \end{terminal}
 \end{itemize}
 
-% ---
 
-\subsection{Introduction à \texttt{sed} pour de simples remplacements}
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+\section{Introduction à \texttt{sed} pour de simples remplacements}
 
 \begin{infobox}
 \texttt{sed} est un éditeur de flux, très puissant. \\
 Commande de base pour un remplacement :
 \begin{itemize}
-  \item \texttt{sed 's/ancien/nouveau/'} remplace la \textbf{première} occurrence de \texttt{ancien}
+  \item \texttt{sed 's/ancien/nouveau/'} remplace la première occurrence de \texttt{ancien}
         par \texttt{nouveau} sur chaque ligne.
-  \item \texttt{sed 's/ancien/nouveau/g'} remplace \textbf{toutes} les occurrences sur chaque ligne.
+  \item \texttt{sed 's/ancien/nouveau/g'} remplace toutes les occurrences sur chaque ligne.
 \end{itemize}
 Par défaut, \texttt{sed} écrit le résultat sur la sortie standard (n'écrase pas le fichier original).
 \end{infobox}
 
 \begin{itemize}
-  \item Affichez le fichier \texttt{donnees.txt} en remplaçant \texttt{ERROR} par \texttt{ERREUR}
-        dans les lignes de logs.
-  \begin{terminal}
-  \prompt\ \shcmd{sed} 's/ERROR/ERREUR/g' donnees.txt
-  \end{terminal}
+    \item Affichez le fichier \texttt{donnees.txt} en remplaçant \texttt{ERROR} par \texttt{ERREUR}
+          dans les lignes de logs.
+    \begin{terminal}
+    \prompt\ \shcmd{sed} 's/ERROR/ERREUR/g' donnees.txt
+    \end{terminal}
 
-  \item Affichez seulement les lignes d'e-mails, en supprimant le préfixe \texttt{email: } au début de la ligne.
-        (Nous utilisons ici l'option \texttt{-n} et la commande \texttt{p} (\emph{print}) pour n'afficher
-        que les lignes modifiées.)
-  \begin{terminal}
-  \prompt\ \shcmd{sed} -n 's/\^email: //p' donnees.txt
-  \end{terminal}
+    \item Affichez seulement les lignes d'e-mails, en supprimant le préfixe \texttt{email: } au début de la ligne.
+          (Nous utilisons ici l'option \texttt{-n} et la commande \texttt{p} (\emph{print}) pour n'afficher
+          que les lignes modifiées.)
+    \begin{terminal}
+    \prompt\ \shcmd{sed} -n 's/\^{}email: //p' donnees.txt
+    \end{terminal}
 
-  \item Affichez les lignes de code postal en mettant le texte \texttt{code postal: } en majuscules
-        (\texttt{CODE POSTAL:}), sans modifier le reste.
-  \begin{terminal}
-  \prompt\ \shcmd{sed} 's/\^code postal:/CODE POSTAL:/' donnees.txt
-  \end{terminal}
+    \item Affichez les lignes de code postal en mettant le texte \texttt{code postal: } en majuscules
+          (\texttt{CODE POSTAL:}), sans modifier le reste.
+    \begin{terminal}
+    \prompt\ \shcmd{sed} 's/\^{}code postal:/CODE POSTAL:/' donnees.txt
+    \end{terminal}
 \end{itemize}
 
 
@@ -799,7 +809,9 @@ logiques, et quelques commandes classiques de traitement de texte.
   \item Créez un répertoire \texttt{TD3} dans votre répertoire personnel et placez-vous dedans.
   \begin{terminal}
   \prompt\ \shcmd{cd} \$HOME
+
   \prompt\ \shcmd{mkdir} TD3
+
   \prompt\ \shcmd{cd} TD3
   \end{terminal}
 \end{itemize}
@@ -817,6 +829,7 @@ de \texttt{commande}. Exemple : \texttt{AUJ=\$(date)}.
   \item Créez un sous-répertoire \texttt{Q1} et placez-vous dedans.
   \begin{terminal}
   \prompt\ \shcmd{mkdir} Q1
+
   \prompt\ \shcmd{cd} Q1
   \end{terminal}
 
@@ -834,12 +847,14 @@ de \texttt{commande}. Exemple : \texttt{AUJ=\$(date)}.
   \item Utilisez maintenant la substitution de commande pour stocker la date du jour dans une variable.
   \begin{terminal}
   \prompt\ AUJOURDHUI=\$(date +\%F)
+
   \prompt\ \shcmd{echo} \$AUJOURDHUI
   \end{terminal}
 
   \item À partir de cette variable, créez un fichier de log nommé \texttt{log-\$AUJOURDHUI.txt}.
   \begin{terminal}
   \prompt\ \shcmd{touch} log-\$AUJOURDHUI.txt
+
   \prompt\ \shcmd{ls}
   \end{terminal}
 
@@ -847,6 +862,7 @@ de \texttt{commande}. Exemple : \texttt{AUJ=\$(date)}.
         en utilisant \texttt{ls} et \texttt{wc -l} avec une substitution de commande.
   \begin{terminal}
   \prompt\ N\_RAPPORTS=\$(ls rapport\_*.txt | wc -l)
+
   \prompt\ \shcmd{echo} \$N\_RAPPORTS
   \end{terminal}
 \end{itemize}
@@ -863,6 +879,7 @@ Exemple : \texttt{ls | wc -l} compte le nombre de fichiers listés par \texttt{l
   \item Assurez-vous d'être dans \texttt{\$HOME/TD3/Q1}.
   \begin{terminal}
   \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+
   \prompt\ \shcmd{ls}
   \end{terminal}
 
@@ -876,6 +893,7 @@ Exemple : \texttt{ls | wc -l} compte le nombre de fichiers listés par \texttt{l
         le pipe et la substitution de commande \texttt{\$(...)}.
   \begin{terminal}
   \prompt\ N\_RAPPORTS=\$(ls rapport\_*.txt \textbar{} wc -l)
+
   \prompt\ \shcmd{echo} \$N\_RAPPORTS
   \end{terminal}
 
@@ -915,6 +933,7 @@ Exemples : \texttt{[ -f fichier ]} (fichier existe), \texttt{[ "\$A" -eq 3 ]} (e
   \item Créez une variable contenant une commande, par exemple une variante de \texttt{ls}.
   \begin{terminal}
   \prompt\ LSCMD="ls -1 rapport\_*.txt"
+
   \prompt\ \shcmd{echo} "\$LSCMD"
   \end{terminal}
 
