@@ -1,0 +1,36 @@
+user: alice
+user: bob
+user: charlie
+email: alice@example.com
+email: bob@example.org
+email: support@entreprise.com
+email: contact@entreprise.fr
+tel: 01-23-45-67-89
+tel: +33 1 23 45 67 89
+tel: 04-91-00-00-00
+date: 2023-03-01
+date: 2023-03-02
+date: 01/03/2023
+date: 02/03/2023
+ERROR 2023-03-01 10:00:01 module=auth message="invalid password"
+INFO  2023-03-01 10:00:05 module=auth message="login ok"
+WARN  2023-03-01 10:05:00 module=payments message="slow response"
+ERROR 2023-03-01 10:10:00 module=payments message="timeout"
+INFO  2023-03-01 10:15:00 module=payments message="payment ok"
+ref: PROD-ABC-123
+ref: PROD-XYZ-999
+ref: TEST-ABC-001
+code postal: 75001
+code postal: 13008
+code postal: 69000
+SALARY: $1761
+SALARY: $2412
+SALARY: $3161
+SALARY: $2105
+PASSWORD: flb42/7k[Dmkw*K9zq/8hAV*LoiOgLKkRn9f]ApF
+PASSWORD: +HaeLjJz7OxNq*fhFG0gW09HcUmo261zwsm/kC5r
+PASSWORD: VyXmC4XjTBN**oxJ1lOb83Uf+Es/cD*SbRcvV*HH
+PASSWORD: k6D/1+lS5yzU8sDxSlBRLy9g/61vzEUlAw+JW2CH
+MAC: 45:36:12:23:11:1a
+MAC: 61:11:11:22:10:1b
+MAC: 15:26:10:21:11:1c
