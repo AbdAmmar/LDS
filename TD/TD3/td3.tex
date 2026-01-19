@@ -16,78 +16,326 @@
 \maketitle
 
 
-% --------------------------------------------------
-\section{Qu'est-ce qu'un script bash ?}
 
-Un script bash est un fichier texte contenant une suite de commandes
-qui seront exécutées automatiquement par le shell.
 
-La première ligne d'un script bash est appelée \textit{shebang} :
-\texttt{\#!/bin/bash}
 
-% --------------------------------------------------
-\section{Créer et exécuter un premier script}
 
-\subsection*{Travail à faire}
 
-\begin{enumerate}
-    \item Créez un fichier nommé \texttt{script.sh}.
-    \item Ajoutez la ligne \texttt{\#!/bin/bash}.
-    \item Affichez un message à l'écran.
-    \item Rendez le script exécutable.
-    \item Exécutez le script.
-\end{enumerate}
 
-\subsection*{Commandes utiles}
 
-\begin{terminal}
-\prompt\ \shcmd{chmod} \texttt{+x} script.sh
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-\prompt\ ./script.sh
-\end{terminal}
 
-% --------------------------------------------------
-\section{Variables}
 
-Les variables permettent de stocker des informations dans un script.
 
-\subsection*{Travail à faire}
 
-\begin{enumerate}
-    \item Créez une variable contenant votre prénom.
-    \item Affichez la valeur de cette variable.
-    \item Modifiez la variable.
-    \item Réaffichez-la.
-\end{enumerate}
+\section{Premier script Bash}
 
-\subsection*{Exemple}
+L'objectif de cette question est de découvrir la création et l'exécution d'un script Bash simple.
 
-\begin{terminal}
-prenom="Alice"
+\begin{itemize}
+    \item Créez un répertoire nommé \texttt{TD2} dans votre répertoire personnel (\texttt{\$HOME}).
+    \begin{terminal}
+    \prompt\ \tcomment{d'abord, placez-vous dans votre répertoire personnel}
 
-\shcmd{echo} \$prenom
-\end{terminal}
+    \prompt\ \shcmd{cd} \$HOME
 
-% --------------------------------------------------
-\section{Paramètres d'un script}
+    \prompt\
 
-Un script peut recevoir des paramètres lors de son exécution.
+    \prompt\ \tcomment{ensuite, on crée le répertoire TD2}
 
-\subsection*{Travail à faire}
+    \prompt\ \shcmd{mkdir} TD2
 
-\begin{enumerate}
-    \item Modifiez votre script pour afficher le premier paramètre.
-    \item Testez le script avec différents paramètres.
-    \item Que contient la variable \texttt{\$0} ?
-\end{enumerate}
+    \prompt\
 
-\subsection*{Exemple}
+    \prompt\ \tcomment{optionnel :}
 
-\begin{terminal}
-\shcmd{echo} \$1
-\end{terminal}
+    \prompt\ \shcmd{pwd}
 
-% --------------------------------------------------
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    % ---
+
+    \item Placez-vous dans le répertoire \texttt{TD2} et créez un sous-répertoire nommé \texttt{Q1}.
+    \begin{terminal}
+    \prompt\ \tcomment{pour aller dans TD2}
+
+    \prompt\ \shcmd{cd} TD2
+
+    \prompt\ \tcomment{ou bien :}
+
+    \prompt\ \shcmd{cd} \$HOME/TD2
+
+    \prompt\
+
+    \prompt\ \shcmd{mkdir} Q1
+
+    \prompt\
+
+    \prompt\ \tcomment{optionnel :}
+
+    \prompt\ \shcmd{pwd}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    % ---
+
+    \item Placez-vous dans le répertoire \texttt{Q1} et créez un fichier nommé \texttt{hello.sh}.
+    \begin{terminal}
+    \prompt\ \tcomment{pour aller dans Q1}
+
+    \prompt\ \shcmd{cd} Q1
+
+    \prompt\ \tcomment{ou bien :}
+
+    \prompt\ \shcmd{cd} \$HOME/TD2/Q1
+
+    \prompt\
+
+    \prompt\ \tcomment{pour créer le fichier :}
+
+    \prompt\ \shcmd{touch} hello.sh
+
+    \prompt\
+
+    \prompt\ \tcomment{optionnel :}
+
+    \prompt\ \shcmd{pwd}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    \begin{infobox}
+    Ajouter une extension aux fichiers, comme \texttt{.sh} dans \texttt{hello.sh}, est optionnel sous Linux.
+    Cependant, c'est une bonne pratique : cela facilite la lecture et permet aux éditeurs de texte
+    de colorer la syntaxe.
+    \end{infobox}
+
+    % ---
+
+    \item Éditez le fichier \texttt{hello.sh} afin qu'il affiche \texttt{Hello World} à l'écran,
+    en y ajoutant les lignes suivantes :
+\begin{minted}{bash}
+echo "Hello World";
+echo "Ceci est mon premier script, mais certainement pas le dernier ;)";
+\end{minted}
+
+    \begin{infobox}
+    Le point-virgule \texttt{;} est optionnel ici car chaque commande est sur une ligne distincte,
+    mais il permet de séparer plusieurs commandes sur une même ligne.
+    \end{infobox}
+
+    \textit{Rappel :}
+    On peut lancer un éditeur de texte (\texttt{gedit}, \texttt{nano}, etc.) avec :
+    \begin{terminal}
+    \prompt\ \tcomment{pour utiliser gedit :}
+
+    \prompt\ \shcmd{gedit} hello.sh \&
+
+    \prompt\ \tcomment{pour utiliser nano :}
+
+    \prompt\ \shcmd{nano} hello.sh \&
+    \end{terminal}
+
+    \begin{infobox}
+    L'utilisation de \texttt{\&} permet de lancer le programme en arrière-plan
+    et de conserver le contrôle du terminal.
+    Le shell crée alors un processus fils pour exécuter la commande.
+    \end{infobox}
+
+    % ---
+
+    \item Exécutez le script en utilisant la commande \texttt{bash}.
+    \begin{terminal}
+    \prompt\ \shcmd{bash} hello.sh
+    \end{terminal}
+
+    % ---
+
+    \item Modifiez le fichier \texttt{hello.sh} pour ajouter une ligne de \textit{shebang}
+    en début de fichier :
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+echo "Hello World"
+echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
+\end{minted}
+
+    \begin{infobox}
+    Le shebang \texttt{\#!/usr/bin/env bash} indique au système quel interpréteur doit être utilisé
+    pour exécuter le script.
+
+    Sans cette ligne, lorsque l'on tente d'exécuter le fichier avec \texttt{./hello.sh},
+    le système essaie de l'exécuter comme un programme binaire, ce qui échoue car il s'agit
+    d'un script texte.
+
+    Il est également possible d'utiliser \texttt{\#!/bin/bash}. Cependant, avec
+    \texttt{\#!/usr/bin/env bash}, le système utilise la commande \texttt{env} pour rechercher
+    automatiquement l'interpréteur \texttt{bash} dans les chemins définis par la variable
+    \texttt{PATH}, ce qui rend le script plus portable d'un système à un autre.
+    \end{infobox}
+
+    % ---
+
+    \item Si on inspecte les droits du fichier avec :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} -l hello.sh
+    \end{terminal}
+    on constate qu'il n'est pas exécutable par défaut (\texttt{-rw-rw-r--}).
+    Pour le rendre exécutable (\texttt{-rwxrwxr-x}), on utilise :
+    \begin{terminal}
+    \prompt\ \shcmd{chmod} +x hello.sh
+    \end{terminal}
+
+    \begin{infobox}
+    Les droits d'un fichier sont définis par :
+    \begin{itemize}
+        \item \texttt{r} : droit de lecture (read)
+        \item \texttt{w} : droit d'écriture (write)
+        \item \texttt{x} : droit d'exécution (execute)
+    \end{itemize}
+    Ces droits sont définis pour le propriétaire du fichier, le groupe et les autres utilisateurs.
+    \end{infobox}
+
+    % ---
+
+    \item Exécutez le script directement, sans utiliser la commande \texttt{bash}.
+    \begin{terminal}
+    \prompt\ \tcomment{avec un chemin relatif :}
+
+    \prompt\ ./hello.sh
+
+    \prompt\ \tcomment{avec un chemin absolu :}
+
+    \prompt\ \$HOME/TD2/Q1/hello.sh
+    \end{terminal}
+
+    % ---
+
+    \item Essayez de l'exécuter sans préciser de chemin :
+    \begin{terminal}
+    \prompt\ hello.sh
+    \end{terminal}
+
+    \begin{infobox}
+    Cette commande ne fonctionne pas car le répertoire courant n'est pas inclus
+    dans la variable d'environnement \texttt{PATH}.
+    Contrairement à des commandes comme \texttt{ls} ou \texttt{pwd},
+    le shell ne sait pas où chercher \texttt{hello.sh}.
+    \end{infobox}
+
+    % ---
+
+    \item Modifiez le script pour définir une variable nommée \texttt{prenom}
+    contenant votre prénom, et affichez le message :
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+prenom="Toto"
+
+echo "Coucou ${prenom}"
+\end{minted}
+
+    \begin{infobox}
+    Il est recommandé d'utiliser \texttt{\{\}} autour des variables afin d'éviter
+    toute ambiguïté lors de l'expansion.
+    \end{infobox}
+
+    % ---
+    
+    \item Modifiez le script afin de lire le prénom lors de l'exécution à l'aide de la commande \texttt{read}.
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+echo "Entrez votre prénom :"
+read prenom
+
+echo "Coucou ${prenom}"
+\end{minted}
+
+    % ---
+
+    \item Modifiez le script afin que le prénom soit fourni comme argument
+    lors de l'exécution du script.
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+prenom=$1
+
+echo "Coucou ${prenom}"
+\end{minted}
+
+    \begin{infobox}
+    Lors de l'exécution d'un script Bash, certaines variables spéciales sont définies automatiquement.
+
+    \texttt{\$0} contient le nom du script tel qu'il a été utilisé pour le lancer.
+
+    \texttt{\$1}, \texttt{\$2}, \ldots \, correspondent aux arguments passés au script :
+    \texttt{\$1} est le premier argument, \texttt{\$2} le second, etc.
+    \end{infobox}
+
+    % ---
+
+    \item Modifiez le script afin de demander également l'âge de l'utilisateur,
+    puis affichez un message prenant en compte cet âge.
+
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+prenom=$1
+age=$2
+
+echo "Coucou ${prenom}"
+echo "J'espère que ton ${age}e anniversaire s'est bien passé !"
+\end{minted}
+
+    % ---
+
+    \item Modifiez le script afin d'afficher une phrase indiquant que le prochain anniversaire
+    sera encore meilleur, en utilisant un calcul sur l'âge.
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+prenom=$1
+age=$2
+
+echo "Coucou ${prenom}"
+echo "J'espère que ton ${age}e anniversaire s'est bien passé !"
+
+prochain_age=$((age + 1))
+echo "Le ${prochain_age}e sera encore meilleur :)"
+\end{minted}
+
+    % ---
+
+    \item Modifiez le script afin de réaliser l'affichage à l'aide d'un stégosaure
+    (en utilisant \texttt{cowsay}).
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+prenom=$1
+age=$2
+
+cowsay -f stegosaurus "Coucou ${prenom}"
+cowsay -f stegosaurus "J'espère que ton ${age}e anniversaire s'est bien passé !"
+
+prochain_age=$((age + 1))
+cowsay -f stegosaurus "Le ${prochain_age}e sera encore meilleur :)"
+\end{minted}
+\end{itemize}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
 \section{Tests et conditions simples}
 
 Les structures conditionnelles permettent d'exécuter du code
