@@ -8,8 +8,6 @@
           caractères spéciaux appelés \texttt{jokers} (\emph{wildcards})
   
     \item L'expansion est faite par le shell \textbf{avant} que la commande ne soit exécutée
-  
-    \item Exemple :
     \begin{terminal}
       \prompt\ \shcmd{ls} *.txt
     \end{terminal}
@@ -21,6 +19,19 @@
       \pause
       \item La commande \texttt{ls} ne voit que la liste finale des fichiers
     \end{itemize}
+
+    \pause
+
+    \item Les jokers principaux sont :
+    \begin{itemize}
+      \item \texttt{*} : Zéro ou plusieurs caractères quelconques
+      \pause
+      \item \texttt{?} : Exactement un caractère quelconque
+      \pause
+      \item \texttt{[...]} : Exactement un caractère parmi un ensemble ou un intervalle
+      \pause
+      \item \texttt{[!...]} : Exactement un caractère qui n'est pas dans l'ensemble
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -31,52 +42,54 @@
     \item L'astérisque \texttt{*} correspond à \textbf{n'importe quelle chaîne de caractères}, 
           y compris une chaîne vide (zéro ou plusieurs caractères)
 
-    \item Imaginons les fichiers suivants dans un dossier : \\
+    \pause
+
+    \item Imaginons les fichiers suivants dans un dossier :
     \begin{terminal}
-    \only<1,3,5>{
-    rapport.txt rapport\_final.pdf image.jpg doc.txt
+    \only<1,2,5,8>{
+    report.txt report\_final.pdf image.jpg doc.txt
     }
 
-    \only<2>{
-    rapport.\textbf{\color{red} txt} rapport\_final.pdf image.jpg doc.\textbf{\color{red} txt}
+    \only<3,4>{
+    report{\color{red} .txt} report\_final.pdf image.jpg doc{\color{red} .txt}
     }
 
-    \only<4>{
-    \textbf{\color{red} rap}port.txt \textbf{\color{red} rap}port\_final.pdf image.jpg doc.txt
+    \only<6,7>{
+    {\color{red} rap}port.txt {\color{red} rap}port\_final.pdf image.jpg doc.txt
     }
 
-    \only<6>{
-    \textbf{\color{red}rapport.txt rapport\_final.pdf image.jpg doc.txt}
+    \only<9,10>{
+    {\color{red}report.txt report\_final.pdf image.jpg doc.txt}
     }
     \end{terminal}
 
     \begin{terminal}
-    \onslide<1->{
+    \onslide<2->{
     \prompt\ \shcmd{ls} *.txt
     }
 
-    \onslide<2->{
-    rapport.txt doc.txt
+    \onslide<4->{
+    report.txt doc.txt
     }
     \end{terminal}
 
     \begin{terminal}
-    \onslide<1->{
+    \onslide<5->{
     \prompt\ \shcmd{ls} rap*
     }
 
-    \onslide<4->{
-    rapport.txt rapport\_final.pdf
+    \onslide<7->{
+    report.txt report\_final.pdf
     }
     \end{terminal}
 
     \begin{terminal}
-    \onslide<1->{
+    \onslide<8->{
     \prompt\ \shcmd{ls} *
     }
 
-    \onslide<6->{
-    rapport.txt rapport\_final.pdf image.jpg doc.txt
+    \onslide<10->{
+    report.txt report\_final.pdf image.jpg doc.txt
     }
     \end{terminal}
   \end{itemize}
@@ -86,20 +99,47 @@
 
 \begin{frame}{Le point d'interrogation: \texttt{?}}
   \begin{itemize}
-    \item Le point d'interrogation \texttt{?} correspond à \textbf{exactement un}
-          caractère, quel qu'il soit.
-  
-    \item Imaginons les fichiers : \\
-          \texttt{photo1.jpg photo2.jpg photoA.jpg photo10.jpg}
-    
-    \begin{itemize}
-      \item \texttt{ls photo?.jpg} \\
-            \textit{Résultat :} \texttt{photo1.jpg photo2.jpg photoA.jpg}
-      \item \textbf{Pourquoi pas \texttt{photo10.jpg} ?} \\
-            Car \texttt{?} ne remplace qu'un seul caractère, alors que "10" en contient deux.
-      \item \texttt{ls photo??.jpg} \\
-            \textit{Résultat :} \texttt{photo10.jpg}
-    \end{itemize}
+    \item Le point d'interrogation \texttt{?} correspond à \textbf{exactement un caractère}
+
+    \pause
+
+    \item Imaginons les fichiers :
+    \begin{terminal}
+    \only<1,2,5>{
+    photo1.jpg photo2.jpg photoA.jpg photo10.jpg
+    }
+
+    \only<3,4>{
+    {\color{red} photo}1{\color{red} .jpg} 
+    {\color{red} photo}2{\color{red} .jpg}
+    {\color{red} photo}A{\color{red} .jpg} 
+    photo10.jpg
+    }
+
+    \only<6,7>{
+    photo1.jpg photo2.jpg photoA.jpg {\color{red} photo}10{\color{red}.jpg}
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<2->{
+    \prompt\ \shcmd{ls} photo?.jpg
+    }
+
+    \onslide<4->{
+    photo1.jpg photo2.jpg photoA.jpg
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<5->{
+    \prompt\ \shcmd{ls} photo??.jpg
+    }
+
+    \onslide<7->{
+    photo10.jpg
+    }
+    \end{terminal}
   \end{itemize}
 \end{frame}
 
@@ -108,73 +148,132 @@
 \begin{frame}{Les crochets : \texttt{[...]}}
   \begin{itemize}
     \item Les crochets \texttt{[...]} correspondent à \textbf{un seul caractère} parmi 
-          ceux spécifiés dans l'ensemble. On peut y mettre une liste ou un intervalle.
+          ceux spécifiés dans l'ensemble
+
+    \pause
   
-    \item Imaginons les fichiers : \\
-          \texttt{rapport1.pdf rapport2.pdf rapport3.pdf rapportA.pdf}
-    
-    \begin{itemize}
-      \item \textbf{Avec une liste :} \texttt{ls rapport[13A].pdf} \\
-            \textit{Résultat :} \texttt{rapport1.pdf rapport3.pdf rapportA.pdf}
-      \item \textbf{Avec un intervalle :} \texttt{ls rapport[1-3].pdf} \\
-            \textit{Résultat :} \texttt{rapport1.pdf rapport2.pdf rapport3.pdf}
-      \item \textbf{Intervalle alphabétique :} \texttt{ls fichier[a-c].log} \\
-            \textit{Correspondra à :} \texttt{fichiera.log}, \texttt{fichierb.log}, \texttt{fichierc.log}
-    \end{itemize}
+    \item Imaginons les fichiers :
+    \begin{terminal}
+    \only<1,2,5,8>{
+    rep1.pdf rep2.pdf rep3.pdf repA.pdf repB.pdf
+    }
+
+    \only<3,4>{
+    {\color{red} rep}1{\color{red} .pdf}
+    {\color{red} rep}2{\color{red} .pdf}
+    {\color{red} rep}3{\color{red} .pdf}
+    {\color{red} rep}A{\color{red} .pdf}
+    {\color{red} rep}B{\color{red} .pdf}
+    }
+
+    \only<6,7>{
+    {\color{red} rep}1{\color{red} .pdf}
+    {\color{red} rep}2{\color{red} .pdf}
+    {\color{red} rep}3{\color{red} .pdf}
+    {\color{red} rep}A{\color{red} .pdf}
+    {\color{red} rep}B{\color{red} .pdf}
+    }
+
+    \only<9,10>{
+    {\color{red} rep}1{\color{red} .pdf}
+    {\color{red} rep}2{\color{red} .pdf}
+    {\color{red} rep}3{\color{red} .pdf}
+    {\color{red} rep}A{\color{red} .pdf}
+    {\color{red} rep}B{\color{red} .pdf}
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<2->{
+    \prompt\ \shcmd{ls} rep[13A].pdf
+    }
+
+    \onslide<4->{
+    rep1.pdf rep3.pdf repA.pdf
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<5->{
+    \prompt\ \shcmd{ls} rep[0-9].pdf
+    }
+
+    \onslide<7->{
+    rep1.pdf rep2.pdf rep3.pdf
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<8->{
+    \prompt\ \shcmd{ls} rep[A-Z].pdf
+    }
+
+    \onslide<10->{
+    repA.pdf repB.pdf
+    }
+    \end{terminal}
   \end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{La puissance des combinaisons}
-  \begin{exampleblock}{Exemples concrets}
-    \begin{itemize}
-      \item Lister toutes les images (\texttt{.jpg}, \texttt{.png}, \texttt{.gif}) qui commencent par "vacances" et ont un numéro à deux chiffres :
-      \begin{terminal}
-        \prompt\ \shcmd{ls} vacances[0-9][0-9].*
-      \end{terminal}
-      \textit{Correspondra à \texttt{vacances01.jpg}, \texttt{vacances25.png}, mais pas \texttt{vacances1.jpg}}.
-      
-      \item Supprimer tous les fichiers de log (\texttt{.log}) sauf celui du jour 5 :
-      \begin{terminal}
-        \prompt\ \shcmd{rm} 2023-10-[0-4]*.log 2023-10-[6-9]*.log
-      \end{terminal}
-      
-      \item Lister les chapitres 1 à 9 de n'importe quel type de fichier :
-      \begin{terminal}
-        \prompt\ \shcmd{ls} chap?.*
-      \end{terminal}
-      \textit{Ou plus précisément :}
-      \begin{terminal}
-        \prompt\ \shcmd{ls} chap[1-9].*
-      \end{terminal}
-    \end{itemize}
-  \end{exampleblock}
-\end{frame}
+\begin{frame}{La Négation \texttt{[!...]}}
+  \begin{itemize}
+    \item Le point d'exclamation ! (ou \^{}) placé en \textbf{première position} dans 
+          les crochets correspond à \textbf{un seul caractère} qui n'est \textit{pas} 
+          dans la liste ou l'intervalle spécifié
+  
+    \pause
 
-% ---
-\begin{frame}{Aller plus loin : Négation et Classes de Caractères}
-  \begin{block}{La Négation : \texttt{[!...]} ou \texttt{[\^{}...]}}
-    Le point d'exclamation (ou l'accent circonflexe) en premier dans les crochets signifie "tout sauf".
-    
-    \begin{itemize}
-      \item \texttt{ls photo[!0-9].jpg} \\
-      \textit{Liste les fichiers \texttt{photoX.jpg} où X n'est pas un chiffre.}
-    \end{itemize}
-  \end{block}
-  
-  \pause
-  
-  \begin{block}{Les Classes de Caractères POSIX}
-    Pour plus de portabilité, on peut utiliser des classes prédéfinies.
-    \begin{itemize}
-        \item \texttt{[[:alpha:]]} : Toutes les lettres (a-z, A-Z)
-        \item \texttt{[[:digit:]]} : Tous les chiffres (0-9)
-        \item \texttt{[[:alnum:]]} : Tous les alphanumériques
-        \item \texttt{[[:lower:]]} : Toutes les lettres minuscules
-    \end{itemize}
-    \textbf{Exemple :} \texttt{ls rapport[[:digit:]].pdf} est équivalent à \texttt{ls rapport[0-9].pdf}.
-  \end{block}
+    \item Imaginons les fichiers suivants :
+    \begin{terminal}
+    \only<1,2,5,8>{
+    rapport1.log rapportA.log rapportB.log rapport\_final.log
+    }
+
+    \only<3,4>{
+    {\color{red}rapport}1.log {\color{red}rapport}A.log {\color{red}rapport}B.log {\color{red}rapport}\_final.log
+    }
+
+    \only<6,7>{
+    {\color{red}r}apport1.log {\color{red}r}apportA.log {\color{red}r}apportB.log {\color{red}r}apport\_final.log
+    }
+
+    \only<9,10>{
+    {\color{red}rapport}1.log {\color{red}rapport}A.log {\color{red}rapport}B.log {\color{red}rapport}\_final.log
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<2->{
+    \prompt\ \shcmd{ls} rapport[!0-9].log
+    }
+
+    \onslide<4->{
+    rapportA.log rapportB.log rapport\_final.log
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<5->{
+    \prompt\ \shcmd{ls} [!abc]*
+    }
+
+    \onslide<7->{
+    rapport1.log rapportA.log rapportB.log rapport\_final.log
+    }
+    \end{terminal}
+
+    \begin{terminal}
+    \onslide<8->{
+    \prompt\ \shcmd{ls} rapport[!A-Z].log
+    }
+
+    \onslide<10->{
+    rapport1.log rapport\_final.log
+    }
+    \end{terminal}
+  \end{itemize}
 \end{frame}
 
 % ---
@@ -209,22 +308,6 @@
 \end{frame}
 
 % ---
-
-% --- Diapositive 8 : Résumé ---
-\begin{frame}{Résumé}
-  \begin{itemize}
-    \item Le \textbf{globbing} est une fonctionnalité du shell pour manipuler des groupes de fichiers.
-    \item Les jokers principaux sont :
-    \begin{itemize}
-      \item \texttt{*} : Zéro ou plusieurs caractères quelconques.
-      \item \texttt{?} : Exactement un caractère quelconque.
-      \item \texttt{[...]} : Exactement un caractère parmi un ensemble ou un intervalle.
-      \item \texttt{[!...]} : Exactement un caractère qui n'est pas dans l'ensemble.
-    \end{itemize}
-    \item La combinaison de ces jokers vous permet de cibler des fichiers de manière très précise et efficace.
-    \item C'est un outil fondamental pour travailler en ligne de commande.
-  \end{itemize}
-\end{frame}
 
 % ---
 
