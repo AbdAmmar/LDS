@@ -4,25 +4,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings}       % Pour afficher du code
 \usepackage{graphicx}       % Pour les images
-\usepackage{hyperref}       % Pour les liens
 
 \usepackage{emoji}
+
+\usepackage{../ldsstyle}
 
 
 %\usepackage{enumitem}
 %\setlist[itemize]{label=$\bullet$} % Premier niveau
 %\setlist[itemize,2]{label=--}      % Deuxième niveau
 %\setlist[itemize,3]{label=$\ast$}  % Troisième niveau
-
-
-% Pour la coloration syntaxique avancée
-\usepackage[outputdir=build]{minted}
-\setminted{
-  linenos=true,       % Numérotation des lignes
-  breaklines=true,    % Retour à la ligne automatique
-  fontsize=\footnotesize,
-  bgcolor=lightgray!10 % Fond gris clair
-}
 
 % Thème et couleurs
 \usetheme{Madrid}
@@ -36,7 +27,6 @@
   frame=single,
   backgroundcolor=\color{lightgray!10},
 }
-\setminted{linenos, breaklines, fontsize=\footnotesize}
 
 % Informations du cours
 \title{Langages de Script}
@@ -44,8 +34,6 @@
 \author{Abdallah AMMAR}
 \institute{CNRS - Université de Lorraine}
 \date{\today}
-
-
 
 
 \titlegraphic{%
@@ -99,54 +87,14 @@
 
 % ---
 
-\section{Références}
+\section{Introduction au Globbing}
 \begin{frame}{Sommaire}
   \tableofcontents[currentsection]
 \end{frame}
 
-\input{sections/ref}
+\input{sections_td/globbing}
 
 % ---
 
-\section{Évolution des ordinateurs}
-\begin{frame}{Sommaire}
-  \tableofcontents[currentsection]
-\end{frame}
-
-\input{sections/intro_hardware}
-
-% ---
-
-\section{Système d'exploitation}
-\begin{frame}{Sommaire}
-  \tableofcontents[currentsection]
-\end{frame}
-
-\input{sections/intro_os}
-
-% ---
-
-\section{Le Shell}
-\begin{frame}{Sommaire}
-  \tableofcontents[currentsection]
-\end{frame}
-
-\input{sections/shell}
-
-% ---
-
-%TODO
-%\section{Bash}
-%\input{sections/bash}
-
-% ---
-
-% Page de fin
-%\begin{frame}{Fin du cours}
-%  \centering
-%  \Huge Merci pour votre attention ! \\
-%  \vspace{1cm}
-%  \normalsize Questions ?
-%\end{frame}
 
 \end{document}

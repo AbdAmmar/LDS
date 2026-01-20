@@ -1,0 +1,143 @@
+\documentclass{beamer}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}       % Pour afficher du code
+\usepackage{graphicx}       % Pour les images
+
+\usepackage{emoji}
+
+\usepackage{../ldsstyle}
+
+
+%\usepackage{enumitem}
+%\setlist[itemize]{label=$\bullet$} % Premier niveau
+%\setlist[itemize,2]{label=--}      % Deuxième niveau
+%\setlist[itemize,3]{label=$\ast$}  % Troisième niveau
+
+
+% Thème et couleurs
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+
+% Configuration pour les blocs de code
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{lightgray!10},
+}
+
+% Informations du cours
+\title{Langages de Script}
+%\subtitle{Introduction aux scripts Bash, Python, etc.}
+\author{Abdallah AMMAR}
+\institute{CNRS - Université de Lorraine}
+\date{\today}
+
+
+
+
+\titlegraphic{%
+  \vspace*{1cm} % Espace vertical avant les logos
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[width=0.65\linewidth]{images/UL-logo.png}
+    \centering
+  \end{minipage}
+  \hfill % Espace horizontal entre les logos
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.65\linewidth]{images/IDMC-logo.png}
+  \end{minipage}
+}
+
+\begin{document}
+
+%\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\centering\insertcaption\par}
+
+%\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{$\ast$}
+\setbeamertemplate{itemize subsubitem}{--}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\insertshortauthor
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertframenumber/\inserttotalframenumber\hspace*{2ex}
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
+
+% Page de titre
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Sommaire
+\begin{frame}{Sommaire}
+  \tableofcontents
+\end{frame}
+
+% ---
+
+\section{Références}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\input{sections_cm/ref}
+
+% ---
+
+\section{Évolution des ordinateurs}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\input{sections_cm/intro_hardware}
+
+% ---
+
+\section{Système d'exploitation}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\input{sections_cm/intro_os}
+
+% ---
+
+\section{Le Shell}
+\begin{frame}{Sommaire}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\input{sections_cm/shell}
+
+% ---
+
+%TODO
+%\section{Bash}
+%\input{sections/bash}
+
+% ---
+
+% Page de fin
+%\begin{frame}{Fin du cours}
+%  \centering
+%  \Huge Merci pour votre attention ! \\
+%  \vspace{1cm}
+%  \normalsize Questions ?
+%\end{frame}
+
+\end{document}

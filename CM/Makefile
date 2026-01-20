@@ -1,15 +1,24 @@
-MAIN_TEX = main.tex
-BUILD_DIR = build
+CM_TEX = cm.tex
+TD_TEX = td.tex
 LATEX = lualatex -shell-escape
 
-all: clean pdf
+all: clean CM TD
 
-pdf:
-	mkdir -p $(BUILD_DIR)
-	$(LATEX) -output-directory=$(BUILD_DIR) $(MAIN_TEX)
-	$(LATEX) -output-directory=$(BUILD_DIR) $(MAIN_TEX)
+CM:
+	@echo "==> Compilation $@"
+	mkdir -p build
+	$(LATEX) -output-directory=build $(CM_TEX)
+	$(LATEX) -output-directory=build $(CM_TEX)
+
+TD:
+	@echo "==> Compilation $@"
+	mkdir -p build
+	$(LATEX) -output-directory=build $(TD_TEX)
+	$(LATEX) -output-directory=build $(TD_TEX)
 
 clean:
-	rm -rf $(BUILD_DIR)/*
+	@echo "==> Nettoyage build"
+	@rm -rf build/*
 
-.PHONY: all clean pdf
+.PHONY: all clean CM TD
+
