@@ -33,27 +33,27 @@
       \item \texttt{\$} : Fin de la ligne
     \end{itemize}
 
-    \item Exemples avec \texttt{grep}
+    \item Exemples :
     \begin{itemize}
-      \item \texttt{\^{}Erreur} : Trouve les lignes commençant par "Erreur"
-      \item \texttt{fin\$} : Trouve les lignes finissant par "fin"
-      \item \texttt{\^{}vide\$} : Trouve les lignes contenant exactement le mot "vide"
+      \item \texttt{grep \^{}Erreur} $\rightarrow$ lignes commençant par "Erreur"
+      \item \texttt{grep fin\$} $\rightarrow$ lignes finissant par "fin"
+      \item \texttt{grep \^{}vide\$} $\rightarrow$ lignes contenant exactement le mot "vide"
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{Les Classes de Caractères \texttt{[...]}}
+\begin{frame}{Les Classes de Caractères \texttt{[ ]}}
   \begin{itemize}
     \item Cela fonctionne presque comme le globbing, \textbf{mais attention à la négation !}
     \begin{itemize}
-      \item \texttt{[abc]} signifie "soit a, soit b, soit c".
-      \item \texttt{[a-z]} signifie "une lettre minuscule".
+      \item \texttt{[abc]} signifie "soit a, soit b, soit c"
+      \item \texttt{[a-z]} signifie "une lettre minuscule"
     \end{itemize}
 
-    \item Contrairement au globbing qui utilise \texttt{!}, les regex utilisent l'accent 
-          circonflexe \textbf{à l'intérieur} des crochets pour dire "tout sauf"
+    \item Les regex utilisent l'accent circonflexe \texttt{\^{}} \textbf{à l'intérieur} des crochets 
+          pour dire "tout sauf"
 
     \item Exemples
     \begin{itemize}
@@ -66,24 +66,15 @@
 
 % ---
 
-\begin{frame}{Les Quantificateurs}
+\begin{frame}{L'astérisque : \texttt{*}}
   \begin{itemize}
-    \item Le quantificateur s'applique \textbf{toujours} à l'élément qui le précède immédiatement
+    \item L'astérisque s'applique \textbf{toujours} à l'élément qui le \textbf{précède immédiatement}
 
-    \begin{itemize}
-      \item \texttt{?} (0 ou 1 fois): L'élément est \textit{optionnel} \\
-            \textbf{Ex:} \texttt{colou?r} $\rightarrow$ "color", "colour"
-      \item \texttt{+} (1 ou plusieurs fois) : L'élément est présent \textit{au moins une fois} \\
-            \textbf{Ex:} \texttt{go+d} $\rightarrow$ "god", "good", "gooood" \textit{(Mais pas "gd")}
-      \item \texttt{*} (0 ou plusieurs fois) : L'élément peut être absent ou répété \\
-            \textbf{Ex:} \texttt{go*d} $\rightarrow$ "gd", "god", "good"
-      \item \texttt{\{n\}} (Exactement n fois) \\
-            \textbf{Ex:} \texttt{a\{3\}} $\rightarrow$ "aaa"
-      \item \texttt{\{m,n\}} (Entre m et n fois)
-    \end{itemize}
+    \item \texttt{*} (0 ou plusieurs fois) : L'élément peut être absent ou répété \\
+          \textbf{Ex:} \texttt{go*d} $\rightarrow$ "gd", "god", "good"
   
-    \item \textbf{Attention :} En Regex, \texttt{*} ne veut PAS dire "n'importe quoi" (ça c'est le globbing). 
-          En Regex, "n'importe quoi" s'écrit \texttt{.*} (n'importe quel caractère \texttt{.}, répété \texttt{*} fois)
+    \item \textbf{Attention :} En Regex, \texttt{*} ne veut PAS dire "n'importe quoi" (ça c'est le globbing) %\\
+          %En Regex, "n'importe quoi" s'écrit \texttt{.*} (n'importe quel caractère \texttt{.}, répété \texttt{*} fois)
   \end{itemize}
 \end{frame}
 
@@ -92,7 +83,7 @@
 \begin{frame}{Caractères spéciaux et Échappement}
   \begin{itemize}
     \item Comment chercher un vrai point \texttt{.} ou une vraie étoile \texttt{*} ?
-          Le backslash annule la signification spéciale du caractère qui suit.
+          Le backslash annule la signification spéciale du caractère qui suit
   
     \begin{itemize}
       \item Je veux chercher "google.com" : \\
@@ -107,63 +98,42 @@
 
 % ---
 
-\begin{frame}
-  \frametitle{Récapitulatif : Globbing vs Regex}
-  
-  \begin{center}
-  \renewcommand{\arraystretch}{1.5}
-  \begin{tabular}{|c|c|c|}
-    \hline
-    \textbf{Symbole} & \textbf{Globbing (Fichiers)} & \textbf{Regex (Texte)} \\
-    \hline
-    \texttt{*} & N'importe quelle chaîne & Répétition (0 à N) \\
-    \hline
-    \texttt{?} & Un seul caractère & Optionnel (0 ou 1) \\
-    \hline
-    \texttt{.} & Un point littéral & N'importe quel caractère \\
-    \hline
-    Négation & \texttt{[!abc]} & \texttt{[\^{}abc]} \\
-    \hline
-    Début/Fin & (Automatique) & \texttt{\^{}} et \texttt{\$} \\
-    \hline
-  \end{tabular}
-  \end{center}
-\end{frame}
-
-% ---
-
-
-
-
-
-
-
-
-
-% --- Diapo 1 : BRE vs ERE ---
-\begin{frame}{BRE vs. ERE : Pourquoi "Étendu" ?}
+\begin{frame}{Regex Étendues : Les quantificateurs}
   \begin{itemize}
-    \item Par défaut, \texttt{grep} utilise les Regex de Base (BRE). Pour utiliser les symboles puissants 
-          sans douleur, on utilise les \textbf{Regex Étendues (ERE)}
 
-    \item Comment les activer ?
+    \item Le quantificateur s'applique \textbf{toujours} à l'élément qui le précède immédiatement
     \begin{itemize}
-      \item Avec la commande : \texttt{grep -E "motif" fichier}
-      \item \textit{(Anciennement \texttt{egrep}, mais déprécié)}
+      \item \texttt{?} (0 ou 1 fois): L'élément est \textit{optionnel} \\
+            \textbf{Ex:} \texttt{colou?r} $\rightarrow$ "color", "colour"
+      \item \texttt{+} (1 ou plusieurs fois) : L'élément est présent \textit{au moins une fois} \\
+            \textbf{Ex:} \texttt{go+d} $\rightarrow$ "god", "good", "gooood" \textit{(Mais pas "gd")}
+      \item \texttt{\{n\}} (Exactement n fois) \\
+            \textbf{Ex:} \texttt{a\{3\}} $\rightarrow$ "aaa"
+      \item \texttt{\{m,n\}} (Entre m et n fois)
     \end{itemize}
 
-    \item La différence majeure : 
-    \begin{itemize}
-      \item En BRE (grep standard), les caractères \texttt{?, +, |, (, )}
-            doivent être échappés avec \texttt{\textbackslash} pour fonctionner comme métacaractères
-      \item En \textbf{ERE (grep -E)}, ils sont magiques par défaut ! C'est beaucoup plus lisible
-    \end{itemize}
+    \item En grep standard, les caractères doivent être échappés avec \texttt{\textbackslash} pour 
+          fonctionner comme métacaractères \\
+          TODO : Exemples
+
+    %\item Comment les activer ?
+    %\begin{itemize}
+    %  \item Avec la commande : \texttt{grep -E "motif" fichier}
+    %  \item \textit{(Anciennement \texttt{egrep}, mais déprécié)}
+    %\end{itemize}
+
+    %\item La différence majeure : 
+    %\begin{itemize}
+    %  \item En BRE (grep standard), les caractères \texttt{?, +, |, (, )}
+    %        doivent être échappés avec \texttt{\textbackslash} pour fonctionner comme métacaractères
+    %  \item En \textbf{ERE (grep -E)}, ils sont magiques par défaut ! C'est beaucoup plus lisible
+    %\end{itemize}
   \end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{L'Alternative : Le symbole Pipe \texttt{|}}
+\begin{frame}{Regex Étendues : Le symbole Pipe \texttt{|}}
   \begin{itemize}
     \item Le symbole \texttt{|} (barre verticale) agit comme un \textbf{OU logique}
 
@@ -184,7 +154,7 @@
 
 % ---
 
-\begin{frame}{Les Groupes : Parenthèses \texttt{( )}}
+\begin{frame}{Regex Étendues : Parenthèses \texttt{( )}}
   \begin{itemize}
     \item Les parenthèses servent à limiter la portée d'une
           alternative ou d'un quantificateur
@@ -272,4 +242,31 @@
 %\end{frame}
 %
 %% ---
+
+% ---
+
+\begin{frame}
+  \frametitle{Récapitulatif : Globbing vs Regex}
+  
+  \begin{center}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Symbole} & \textbf{Globbing (Fichiers)} & \textbf{Regex (Texte)} \\
+    \hline
+    \texttt{*} & N'importe quelle chaîne & Répétition (0 à N) \\
+    \hline
+    \texttt{?} & Un seul caractère & Optionnel (0 ou 1) \\
+    \hline
+    \texttt{.} & Un point littéral & N'importe quel caractère \\
+    \hline
+    Négation & \texttt{[!abc]} & \texttt{[\^{}abc]} \\
+    \hline
+    Début/Fin & (Automatique) & \texttt{\^{}} et \texttt{\$} \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{frame}
+
+% ---
 

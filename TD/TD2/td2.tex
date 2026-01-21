@@ -364,6 +364,13 @@ Globbing vs Regex
 
     % ---
 
+    \item Affichez toutes les lignes contenant des codes postaux avec le numéro des lignes.
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -n 'code postal' donnees.txt
+    \end{terminal}
+
+    % ---
+
     \item Affichez toutes les lignes contenant une adresse e-mail quelconque (celles qui contiennent le caractère \texttt{@}).
     \begin{terminal}
     \prompt\ \shcmd{grep} '@' donnees.txt
@@ -376,12 +383,32 @@ Globbing vs Regex
     \prompt\ \shcmd{grep} 'info' donnees.txt
 
     \prompt\ \shcmd{grep} -i 'info' donnees.txt
+
+    \prompt\ \shcmd{grep} -in 'info' donnees.txt
     \end{terminal}
 
     \begin{infobox}
     Par défaut, \texttt{grep} distingue les majuscules et les minuscules.
     Avec l'option \texttt{-i} (\emph{ignore case}), la recherche devient
     insensible à la casse.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '1' donnees.txt
+
+    \prompt\ \shcmd{grep} -v '1' donnees.txt
+
+    \prompt\ \shcmd{grep} '11' donnees.txt
+
+    \prompt\ \shcmd{grep} -v '11' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    \texttt{grep -v motif} affiche les lignes qui ne correspondent pas au motif.
+    C'est l'inverse de \texttt{grep motif}.
     \end{infobox}
 \end{itemize}
 
@@ -539,6 +566,8 @@ Globbing vs Regex
     \prompt\ \shcmd{grep} '[aeiou]' donnees.txt
     
     \prompt\ \shcmd{grep} '[x-z]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[xz-]' donnees.txt
     
     \prompt\ \shcmd{grep} '[x-zX-Z]' donnees.txt
     
@@ -641,6 +670,8 @@ Globbing vs Regex
     \prompt\ \shcmd{grep} -E '[A-Z]\{6,8\}: \textbackslash\$[0-9]\{4\}' donnees.txt
 
     \prompt\ \shcmd{grep} -E '[0-9]\{2\}/[0-9]\{2\}/[0-9]\{4\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -Ev '[0-9]' donnees.txt
     \end{terminal}
 
     \begin{infobox}
@@ -655,6 +686,21 @@ Globbing vs Regex
         \item \texttt{\{m,n\}} = entre \texttt{m} et \texttt{n} répétitions.
     \end{itemize}
     \end{infobox}
+
+    % ---
+
+    \item Affichez toutes les lignes qui ne contiennent pas des lettres majuscules.
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -Ev '[A-Z]' donnees.txt
+    \end{terminal}
+
+    % ---
+
+    \item Affichez toutes les lignes qui ne contiennent pas des lettres (majuscules ou minusclues) entre
+    \texttt{A} et \texttt{D}.
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -Ev '[A-Da-d]' donnees.txt
+    \end{terminal}
 \end{itemize}
 
 % ---
@@ -700,46 +746,6 @@ Globbing vs Regex
     \end{infobox}
 \end{itemize}
 
-% ---
-
-\subsection{Inverser la sélection}
-
-\begin{itemize}
-    \item Analysez les résultats des commandes suivantes :
-    \begin{terminal}
-    \prompt\ \shcmd{grep} '1' donnees.txt
-
-    \prompt\ \shcmd{grep} -v '1' donnees.txt
-
-    \prompt\ \shcmd{grep} '11' donnees.txt
-
-    \prompt\ \shcmd{grep} -v '11' donnees.txt
-
-    \prompt\ \shcmd{grep} -E '[0-9]' donnees.txt
-
-    \prompt\ \shcmd{grep} -Ev '[0-9]' donnees.txt
-    \end{terminal}
-
-    \begin{infobox}
-    \texttt{grep -v motif} affiche les lignes qui ne correspondent pas au motif.
-    C'est l'inverse de \texttt{grep motif}.
-    \end{infobox}
-
-    % ---
-
-    \item Affichez toutes les lignes qui ne contiennent pas des lettres majuscules.
-    \begin{terminal}
-    \prompt\ \shcmd{grep} -Ev '[A-Z]' donnees.txt
-    \end{terminal}
-
-    % ---
-
-    \item Affichez toutes les lignes qui ne contiennent pas des lettres (majuscules ou minusclues) entre
-    \texttt{A} et \texttt{D}.
-    \begin{terminal}
-    \prompt\ \shcmd{grep} -Ev '[A-Da-d]' donnees.txt
-    \end{terminal}
-\end{itemize}
 
 
 
