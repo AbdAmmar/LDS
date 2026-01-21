@@ -327,10 +327,9 @@ Dans cette exercice, nous allons utiliser des expressions régulières (\emph{re
 avec la commande \texttt{grep} pour rechercher des motifs dans des fichiers texte.
 
 \begin{infobox}
-Globbing vs Regex \\
+Globbing vs Regex
 \begin{itemize}
-    \item Le globbing (\texttt{*}, \texttt{?}, \texttt{[...]} dans le shell) sert à
-          faire correspondre des motifs à des noms de fichiers.
+    \item Le globbing sert à faire correspondre des motifs à des noms de fichiers.
     \item Les expressions régulières décrivent des motifs à l'intérieur du
           contenu des fichiers (les lignes de texte).
 \end{itemize}
@@ -483,6 +482,10 @@ Globbing vs Regex \\
     \prompt\ \shcmd{grep} ':..:' donnees.txt
 
     \prompt\ \shcmd{grep} ':...:' donnees.txt
+
+    \prompt\ \shcmd{grep} 'com' donnees.txt
+
+    \prompt\ \shcmd{grep} 'com.' donnees.txt
     \end{terminal}
 
     \begin{infobox}

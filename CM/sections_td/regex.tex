@@ -1,146 +1,108 @@
 
 % ---
 
-% --- Diapo 1 : Définition ---
-\begin{frame}
-  \frametitle{Introduction aux Expressions Régulières (Regex)}
-  
-  \begin{block}{Définition}
-    Une expression régulière est une chaîne de caractères décrivant un \textbf{motif de recherche} (pattern) dans du texte.
-  \end{block}
-  
-  \begin{alertblock}{Différence fondamentale avec le Globbing}
-    \begin{itemize}
-      \item \textbf{Globbing :} Sert à sélectionner des \textit{fichiers}. Le motif doit correspondre à \textbf{tout} le nom du fichier.
-      \item \textbf{Regex :} Sert à chercher du \textit{texte} à l'intérieur de fichiers ou de flux. Le motif peut correspondre à une \textbf{partie} de la ligne.
-    \end{itemize}
-  \end{alertblock}
+\begin{frame}{Introduction aux Expressions Régulières (Regex)}
+  \begin{itemize}
 
-  \begin{block}{Outils courants}
-    \texttt{grep}, \texttt{sed}, \texttt{awk}, éditeurs de texte (VS Code, Vim), langages (Python, Java, PHP...).
-  \end{block}
+    \item Une expression régulière est une chaîne de caractères décrivant 
+          un \textbf{motif de recherche} (pattern) dans du texte
+    
+    \item Globbing vs Regex
+    \begin{itemize}
+      \item \textbf{Globbing :} Sert à sélectionner des \textit{fichiers}
+      \item \textbf{Regex :} Sert à chercher du \textit{texte} à l'intérieur de fichiers ou de flux
+    \end{itemize}
+
+    \item Outils courants : \texttt{grep}, \texttt{sed}, \texttt{awk}, etc.
+  \end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{Les bases : Le Point et les Ancrages}
-  \begin{block}{Le Point \texttt{.}}
-    Il correspond à \textbf{n'importe quel caractère} (sauf le saut de ligne).
+\begin{frame}{Le Point et les Ancrages}
+  \begin{itemize}
+    \item Le Point \texttt{.} correspond à \textbf{n'importe quel caractère} (sauf le saut de ligne)
     \begin{itemize}
-        \item \texttt{chat.} correspond à "chat1", "chata", "chat!", mais pas "chat".
+        \item \texttt{chat.} correspond à "chat1", "chata", "chat!", mais pas "chat"
     \end{itemize}
-  \end{block}
-  
-  \pause
-  
-  \begin{block}{Les Ancrages (début et fin de ligne)}
-    Ils ne correspondent pas à un caractère, mais à une \textbf{position}.
-    \begin{itemize}
-      \item \texttt{\^{}} : Début de la ligne.
-      \item \texttt{\$} : Fin de la ligne.
-    \end{itemize}
-  \end{block}
 
-  \begin{exampleblock}{Exemples avec \texttt{grep}}
+    \item Les Ancrages (début et fin de ligne) ne correspondent pas à un caractère, 
+          mais à une \textbf{position}
+    \begin{itemize}
+      \item \texttt{\^{}} : Début de la ligne
+      \item \texttt{\$} : Fin de la ligne
+    \end{itemize}
+
+    \item Exemples avec \texttt{grep}
     \begin{itemize}
       \item \texttt{\^{}Erreur} : Trouve les lignes commençant par "Erreur"
       \item \texttt{fin\$} : Trouve les lignes finissant par "fin"
       \item \texttt{\^{}vide\$} : Trouve les lignes contenant exactement le mot "vide"
     \end{itemize}
-  \end{exampleblock}
+  \end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}
-  \frametitle{Les Classes de Caractères \texttt{[...]}}
-  
-  Cela fonctionne presque comme le globbing, \textbf{mais attention à la négation !}
-  
-  \begin{block}{Principe}
-    \texttt{[abc]} signifie "soit a, soit b, soit c".
-    \texttt{[a-z]} signifie "une lettre minuscule".
-  \end{block}
+\begin{frame}{Les Classes de Caractères \texttt{[...]}}
+  \begin{itemize}
+    \item Cela fonctionne presque comme le globbing, \textbf{mais attention à la négation !}
+    \begin{itemize}
+      \item \texttt{[abc]} signifie "soit a, soit b, soit c".
+      \item \texttt{[a-z]} signifie "une lettre minuscule".
+    \end{itemize}
 
-  \pause
+    \item Contrairement au globbing qui utilise \texttt{!}, les regex utilisent l'accent 
+          circonflexe \textbf{à l'intérieur} des crochets pour dire "tout sauf"
 
-  \begin{alertblock}{La Négation dans les Regex : \texttt{[\^{}...]}}
-    Contrairement au globbing qui utilise \texttt{!}, les regex utilisent l'accent circonflexe \textbf{à l'intérieur} des crochets pour dire "tout sauf"
-  \end{alertblock}
-
-  \begin{exampleblock}{Exemples}
+    \item Exemples
     \begin{itemize}
       \item \texttt{gr[ai]s} $\rightarrow$ correspond à "gras" ou "gris"
       \item \texttt{202[0-9]} $\rightarrow$ correspond à une année de 2020 à 2029
       \item \texttt{[\^{}0-9]} $\rightarrow$ correspond à tout caractère qui \textbf{n'est pas} un chiffre
     \end{itemize}
-  \end{exampleblock}
+  \end{itemize}
 \end{frame}
 
 % ---
 
-% --- Diapo 4 : Les Quantificateurs ---
 \begin{frame}{Les Quantificateurs}
-  Le quantificateur s'applique \textbf{toujours} à l'élément qui le précède immédiatement
-  
-  \begin{columns}[T]
-    \begin{column}{.45\textwidth}
-      \begin{block}{\texttt{?} (0 ou 1 fois)}
-        L'élément est \textit{optionnel}. \\
-        \textbf{Ex:} \texttt{colou?r} \\
-        $\rightarrow$ "color", "colour"
-      \end{block}
-      
-      \begin{block}{\texttt{+} (1 ou plusieurs fois)}
-        L'élément est présent \textit{au moins une fois}. \\
-        \textbf{Ex:} \texttt{go+d} \\
-        $\rightarrow$ "god", "good", "gooood" \\
-        \textit{(Mais pas "gd")}
-      \end{block}
-    \end{column}
+  \begin{itemize}
+    \item Le quantificateur s'applique \textbf{toujours} à l'élément qui le précède immédiatement
 
-    \begin{column}{.45\textwidth}
-      \begin{block}{\texttt{*} (0 ou plusieurs fois)}
-        L'élément peut être absent ou répété. \\
-        \textbf{Ex:} \texttt{go*d} \\
-        $\rightarrow$ "gd", "god", "good"
-      \end{block}
-      
-      \begin{block}{\texttt{\{n\}} (Exactement n fois)}
-        \textbf{Ex:} \texttt{a\{3\}} \\
-        $\rightarrow$ "aaa"
-      \end{block}
-    \end{column}
-  \end{columns}
+    \begin{itemize}
+      \item \texttt{?} (0 ou 1 fois): L'élément est \textit{optionnel} \\
+            \textbf{Ex:} \texttt{colou?r} $\rightarrow$ "color", "colour"
+      \item \texttt{+} (1 ou plusieurs fois) : L'élément est présent \textit{au moins une fois} \\
+            \textbf{Ex:} \texttt{go+d} $\rightarrow$ "god", "good", "gooood" \textit{(Mais pas "gd")}
+      \item \texttt{*} (0 ou plusieurs fois) : L'élément peut être absent ou répété \\
+            \textbf{Ex:} \texttt{go*d} $\rightarrow$ "gd", "god", "good"
+      \item \texttt{\{n\}} (Exactement n fois) \\
+            \textbf{Ex:} \texttt{a\{3\}} $\rightarrow$ "aaa"
+      \item \texttt{\{m,n\}} (Entre m et n fois)
+    \end{itemize}
   
-  \vspace{0.5cm}
-  \textbf{Attention :} En Regex, \texttt{*} ne veut PAS
-  dire "n'importe quoi" (ça c'est le globbing). 
-  En Regex, "n'importe quoi" s'écrit \texttt{.*} (n'importe quel 
-  caractère \texttt{.}, répété \texttt{*} fois).
+    \item \textbf{Attention :} En Regex, \texttt{*} ne veut PAS dire "n'importe quoi" (ça c'est le globbing). 
+          En Regex, "n'importe quoi" s'écrit \texttt{.*} (n'importe quel caractère \texttt{.}, répété \texttt{*} fois)
+  \end{itemize}
 \end{frame}
 
 % ---
 
 \begin{frame}{Caractères spéciaux et Échappement}
+  \begin{itemize}
+    \item Comment chercher un vrai point \texttt{.} ou une vraie étoile \texttt{*} ?
+          Le backslash annule la signification spéciale du caractère qui suit.
   
-  Comment chercher un vrai point \texttt{.} ou une vraie étoile \texttt{*} ?
-  
-  \begin{block}{Le caractère d'échappement : \texttt{\textbackslash}}
-    Le backslash annule la signification spéciale du caractère qui suit.
-  \end{block}
-  
-  \begin{exampleblock}{Exemples concrets}
     \begin{itemize}
       \item Je veux chercher "google.com" : \\
-      \textbf{Mauvais :} \texttt{google.com} (le point matche n'importe quoi, ex: "googleAcom") \\
-      \textbf{Bon :} \texttt{google\textbackslash.com}
+            \textbf{Mauvais :} \texttt{google.com} (le point matche n'importe quoi, ex: "googleAcom") \\
+            \textbf{Bon :} \texttt{google\textbackslash.com}
       
-      \pause
       \item Je veux chercher une étoile mathématique "3 * 4" : \\
-      \textbf{Bon :} \texttt{3 \textbackslash* 4}
+            \textbf{Bon :} \texttt{3 \textbackslash* 4}
     \end{itemize}
-  \end{exampleblock}
+  \end{itemize}
 \end{frame}
 
 % ---
@@ -179,139 +141,135 @@
 
 
 % --- Diapo 1 : BRE vs ERE ---
-\begin{frame}
-  \frametitle{BRE vs. ERE : Pourquoi "Étendu" ?}
-  
-  Par défaut, \texttt{grep} utilise les Regex de Base (BRE). Pour utiliser les symboles puissants sans douleur, on utilise les **Regex Étendues (ERE)**.
+\begin{frame}{BRE vs. ERE : Pourquoi "Étendu" ?}
+  \begin{itemize}
+    \item Par défaut, \texttt{grep} utilise les Regex de Base (BRE). Pour utiliser les symboles puissants 
+          sans douleur, on utilise les \textbf{Regex Étendues (ERE)}
 
-  \begin{block}{Comment les activer ?}
+    \item Comment les activer ?
     \begin{itemize}
       \item Avec la commande : \texttt{grep -E "motif" fichier}
-      \item \textit{(Anciennement \texttt{egrep}, mais déprécié).}
+      \item \textit{(Anciennement \texttt{egrep}, mais déprécié)}
     \end{itemize}
-  \end{block}
 
-  \begin{alertblock}{La différence majeure}
-    En BRE (grep standard), les caractères \texttt{?}, \texttt{+}, \texttt{|}, \texttt{(}, et \texttt{)} doivent être échappés avec \texttt{\textbackslash} pour fonctionner comme métacaractères.
-    \medskip
-    \\
-    En \textbf{ERE (grep -E)}, ils sont magiques par défaut ! C'est beaucoup plus lisible.
-  \end{alertblock}
-\end{frame}
-
-% --- Diapo 2 : L'Alternative (OU) ---
-\begin{frame}
-  \frametitle{L'Alternative : Le symbole Pipe \texttt{|}}
-  
-  Le symbole \texttt{|} (barre verticale) agit comme un \textbf{OU logique}.
-  
-  \begin{exampleblock}{Exemple avec grep -E}
-    Je veux trouver les lignes contenant "Erreur" OU "Warning" dans un fichier de log.
-    
-    \vspace{0.2cm}
-    \texttt{grep -E "Erreur|Warning" system.log}
-    \vspace{0.2cm}
-    
+    \item La différence majeure : 
     \begin{itemize}
-      \item Trouvera : "Une Erreur est survenue"
-      \item Trouvera : "Juste un Warning ici"
-      \item Ne trouvera pas : "Tout va bien"
+      \item En BRE (grep standard), les caractères \texttt{?, +, |, (, )}
+            doivent être échappés avec \texttt{\textbackslash} pour fonctionner comme métacaractères
+      \item En \textbf{ERE (grep -E)}, ils sont magiques par défaut ! C'est beaucoup plus lisible
     \end{itemize}
-  \end{exampleblock}
-
-  \pause
-  \textbf{Note :} Sans l'option \texttt{-E}, Bash chercherait littéralement le caractère barre verticale.
-\end{frame}
-
-% --- Diapo 3 : Les Groupes ---
-\begin{frame}
-  \frametitle{Les Groupes : Parenthèses \texttt{( )}}
-  
-  Les parenthèses servent à limiter la portée d'une alternative ou d'un quantificateur.
-  
-  \begin{block}{Utilisation avec le OU \texttt{|}}
-    \textbf{Motif :} \texttt{gr(i|o)s}
-    \begin{itemize}
-      \item Correspond à "gris" OU "gros".
-      \item Sans parenthèses, \texttt{gri|os} chercherait "gri" OU "os".
-    \end{itemize}
-  \end{block}
-  
-  \pause
-
-  \begin{block}{Utilisation avec répétition}
-    \textbf{Motif :} \texttt{(ha)+}
-    \begin{itemize}
-      \item Correspond à "ha", "haha", "hahaha"...
-      \item Sans parenthèses, \texttt{ha+} chercherait un "h" suivi de plusieurs "a" (ex: "haaa").
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-% [fragile] est nécessaire pour le verbatim complexe
-\begin{frame}[fragile]{Bash Natif : L'opérateur \texttt{=~}}
-  
-  Bash possède son propre moteur de regex étendues intégré, très utile dans les conditions \texttt{if}. On utilise les \textbf{doubles crochets}.
-  
-  \begin{block}{Syntaxe}
-    \texttt{if [[ "\$variable" =\textasciitilde \ motif ]]; then ...}
-  \end{block}
-  
-  \begin{alertblock}{Attention aux pièges !}
-    \textbf{Ne mettez PAS de guillemets autour du motif} (regex) dans le test Bash, sinon il sera traité comme une chaîne de caractères littérale.
-  \end{alertblock}
-  
-  \begin{exampleblock}{Exemple de script}
-\verb|fichier="image_2024.jpg"|\\
-\verb|if [[ $fichier =~ \.jpg$ ]]; then|\\
-\verb|    echo "C'est une image JPEG."|\\
-\verb|else|\\
-\verb|    echo "Ce n'est pas un JPEG."|\\
-\verb|fi|
-  \end{exampleblock}
+  \end{itemize}
 \end{frame}
 
 % ---
 
-% [fragile] est nécessaire pour le verbatim complexe
-\begin{frame}[fragile]{Exercice : Valider une réponse utilisateur}
-  On demande à l'utilisateur de répondre par "Oui" ou "Non" (insensible à la casse, ou juste O/N).
-  
-  \begin{block}{Le Script Bash}
-\verb|#!/bin/bash| \\
-\verb|read -p "Voulez-vous continuer ? (o/n) : " reponse| \\
-\verb|# Regex expliquée :| \\
-\verb|# ^        : Début de ligne| \\
-\verb|# [oO]     : La lettre o ou O| \\
-\verb|# (ui)?    : Suivi optionnellement de "ui" (pour Oui)| \\
-\verb|# $        : Fin de ligne| \\
-\verb|if [[ $reponse =~ ^[oO](ui)?$ ]]; then| \\
-\verb|    echo "D'accord, on continue !"| \\
-\verb|elif [[ $reponse =~ ^[nN](on)?$ ]]; then| \\
-\verb|    echo "Arrêt du script."| \\
-\verb|else| \\
-\verb|    echo "Je n'ai pas compris."| \\
-\verb|fi|
-  \end{block}
-\end{frame}
+\begin{frame}{L'Alternative : Le symbole Pipe \texttt{|}}
+  \begin{itemize}
+    \item Le symbole \texttt{|} (barre verticale) agit comme un \textbf{OU logique}
 
-% --- 
+    \item Exemple avec \texttt{grep -E} \\
+          Je veux trouver les lignes contenant "Erreur" OU "Warning" dans un fichier de log \\
+          \vspace{0.2cm}
+          \texttt{grep -E "Erreur|Warning" system.log}
+          \vspace{0.2cm}
+          \begin{itemize}
+            \item Trouvera : "Une Erreur est survenue"
+            \item Trouvera : "Juste un Warning ici"
+            \item Ne trouvera pas : "Tout va bien"
+          \end{itemize}
 
-\begin{frame}[fragile]{Bonus : Capturer des données avec BASH\_REMATCH}
-  
-  Quand on utilise \texttt{=~}, Bash stocke les parties trouvées entre parenthèses dans un tableau spécial : \texttt{BASH\_REMATCH}.
-  
-  \begin{exampleblock}{Extraction de date}
-\verb|date="2023-10-25"| \\
-\verb|# Motif : (4 chiffres)-(2 chiffres)-(2 chiffres)| \\
-\verb|if [[ $date =~ ([0-9]{4})-([0-9]{2})-([0-9]{2}) ]]; then| \\
-\verb|    echo "Année : ${BASH_REMATCH[1]}"| \\
-\verb|    echo "Mois  : ${BASH_REMATCH[2]}"| \\
-\verb|    echo "Jour  : ${BASH_REMATCH[3]}"| \\
-\verb|fi|
-  \end{exampleblock}
-  
-  \textit{Résultat :} Affiche l'année, le mois et le jour séparément.
+    \item \textbf{Note :} Sans l'option \texttt{-E}, Bash chercherait littéralement le caractère barre verticale
+  \end{itemize}
 \end{frame}
 
 % ---
+
+\begin{frame}{Les Groupes : Parenthèses \texttt{( )}}
+  \begin{itemize}
+    \item Les parenthèses servent à limiter la portée d'une
+          alternative ou d'un quantificateur
+
+    \item Utilisation avec le OU \texttt{|} : \textbf{Motif :} \texttt{gr(i|o)s}
+          \begin{itemize}
+            \item Correspond à "gris" OU "gros"
+            \item Sans parenthèses, \texttt{gri|os} chercherait "gri" OU "os"
+          \end{itemize}
+
+    \item Utilisation avec répétition : \textbf{Motif :} \texttt{(ha)+}
+    \begin{itemize}
+      \item Correspond à "ha", "haha", "hahaha", etc.
+      \item Sans parenthèses, \texttt{ha+} chercherait un "h" suivi de plusieurs "a" (ex: "haaa")
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ---
+
+%% [fragile] est nécessaire pour le verbatim complexe
+%\begin{frame}[fragile]{Bash Natif : L'opérateur \texttt{=~}}
+%  
+%  Bash possède son propre moteur de regex étendues intégré, très utile dans les conditions \texttt{if}. On utilise les \textbf{doubles crochets}.
+%  
+%  \begin{block}{Syntaxe}
+%    \texttt{if [[ "\$variable" =\textasciitilde \ motif ]]; then ...}
+%  \end{block}
+%  
+%  \begin{alertblock}{Attention aux pièges !}
+%    \textbf{Ne mettez PAS de guillemets autour du motif} (regex) dans le test Bash, sinon il sera traité comme une chaîne de caractères littérale.
+%  \end{alertblock}
+%  
+%  \begin{exampleblock}{Exemple de script}
+%\verb|fichier="image_2024.jpg"|\\
+%\verb|if [[ $fichier =~ \.jpg$ ]]; then|\\
+%\verb|    echo "C'est une image JPEG."|\\
+%\verb|else|\\
+%\verb|    echo "Ce n'est pas un JPEG."|\\
+%\verb|fi|
+%  \end{exampleblock}
+%\end{frame}
+%
+%% ---
+%
+%% [fragile] est nécessaire pour le verbatim complexe
+%\begin{frame}[fragile]{Exercice : Valider une réponse utilisateur}
+%  On demande à l'utilisateur de répondre par "Oui" ou "Non" (insensible à la casse, ou juste O/N).
+%  
+%  \begin{block}{Le Script Bash}
+%\verb|#!/bin/bash| \\
+%\verb|read -p "Voulez-vous continuer ? (o/n) : " reponse| \\
+%\verb|# Regex expliquée :| \\
+%\verb|# ^        : Début de ligne| \\
+%\verb|# [oO]     : La lettre o ou O| \\
+%\verb|# (ui)?    : Suivi optionnellement de "ui" (pour Oui)| \\
+%\verb|# $        : Fin de ligne| \\
+%\verb|if [[ $reponse =~ ^[oO](ui)?$ ]]; then| \\
+%\verb|    echo "D'accord, on continue !"| \\
+%\verb|elif [[ $reponse =~ ^[nN](on)?$ ]]; then| \\
+%\verb|    echo "Arrêt du script."| \\
+%\verb|else| \\
+%\verb|    echo "Je n'ai pas compris."| \\
+%\verb|fi|
+%  \end{block}
+%\end{frame}
+%
+%% --- 
+%
+%\begin{frame}[fragile]{Bonus : Capturer des données avec BASH\_REMATCH}
+%  
+%  Quand on utilise \texttt{=~}, Bash stocke les parties trouvées entre parenthèses dans un tableau spécial : \texttt{BASH\_REMATCH}.
+%  
+%  \begin{exampleblock}{Extraction de date}
+%\verb|date="2023-10-25"| \\
+%\verb|# Motif : (4 chiffres)-(2 chiffres)-(2 chiffres)| \\
+%\verb|if [[ $date =~ ([0-9]{4})-([0-9]{2})-([0-9]{2}) ]]; then| \\
+%\verb|    echo "Année : ${BASH_REMATCH[1]}"| \\
+%\verb|    echo "Mois  : ${BASH_REMATCH[2]}"| \\
+%\verb|    echo "Jour  : ${BASH_REMATCH[3]}"| \\
+%\verb|fi|
+%  \end{exampleblock}
+%  
+%  \textit{Résultat :} Affiche l'année, le mois et le jour séparément.
+%\end{frame}
+%
+%% ---
+
