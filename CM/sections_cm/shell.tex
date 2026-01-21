@@ -10,16 +10,9 @@
 
   \vspace{0.10 cm}
   \centering
-  \begin{minipage}{0.45\textwidth}
+  \begin{minipage}{\textwidth}
     \centering
-    \includegraphics[width=0.9\linewidth]{images/Fig2_Barrett.png}
-
-    %{\footnotesize\centering }
-  \end{minipage}
-  \hfill
-  \begin{minipage}{0.45\textwidth}
-    \centering
-    \includegraphics[width=0.9\linewidth]{images/terminal.png}
+    \includegraphics[width=0.5\linewidth]{images/Fig2_Barrett.png}
 
     %{\footnotesize\centering }
   \end{minipage}
@@ -27,38 +20,150 @@
 
 % ---
 
-\begin{frame}{Quelques shells UNIX}
+\begin{frame}{Le Shell : Interface et Langage}
   \begin{itemize}
-    \item TODO: SHELL vs implemantation
-
-    \item \texttt{sh} : Bourne shell, shell UNIX historique (Steve Bourne)
-
-    \pause
-    \item \texttt{bash} (\textit{Bourne Again SHell}) :
+    \item Le shell, c'est deux choses à la fois :
     \begin{itemize}
-      \footnotesize
-      \item shell du projet \texttt{GNU}
-      \item très répandu sur les systèmes Linux
+      \item \textbf{Une Interface Système :} Un programme qui lit les commandes et les transmet au noyau
+      \item \textbf{Un Langage de Programmation :} Une syntaxe (variables, boucles, conditions) %permettant d'écrire des scripts pour automatiser des tâches
     \end{itemize}
 
-    \pause
-    \item Autres shells :
+    \vspace{0.3cm}
+
+    \item \textbf{Standard et Implémentations :}
     \begin{itemize}
-      \footnotesize
-      \item \texttt{csh} (C shell)
-      \item \texttt{ksh} (Korn shell)
-      \item \texttt{zsh} (shell par défaut sur macOS)
+      \item \textbf{POSIX sh} : La norme officielle (la "grammaire") que le langage doit respecter
+      \item \textbf{Les Interpréteurs (Les logiciels)} :
+      \begin{itemize}
+        \item \texttt{sh} : L'implémentation historique (Steve Bourne)
+        \item \texttt{\textbf{bash}} (\textit{Bourne Again SHell}) : Le standard sous Linux %Il respecte la norme POSIX tout en ajoutant des outils modernes
+        \item \texttt{zsh} : Populaire pour son interactivité (défaut sur macOS)
+      \end{itemize}
     \end{itemize}
   \end{itemize}
 
-  \vspace{0.10 cm}
-  \centering
-  \begin{minipage}{\textwidth}
-    \centering
-    \includegraphics[width=0.49\linewidth]{images/terminal_bash.png}
+  %\vspace{0.10 cm}
+  %\centering
+  %\begin{minipage}{\textwidth}
+  %  \centering
+  %  \includegraphics[width=0.49\linewidth]{images/terminal_bash.png}
 
-    %{\footnotesize\centering }
-  \end{minipage}
+  %  %{\footnotesize\centering }
+  %\end{minipage}
+\end{frame}
+
+% ---
+
+\begin{frame}{L'invite de commande (Terminal/Prompt)}
+  Une fois le terminal ouvert, le shell affiche une \textbf{invite de commande} (\textit{prompt}) en attendant vos instructions
+
+  \vspace{0.5cm}
+  \begin{block}{Anatomie d'un prompt classique}
+    \texttt{\textcolor{blue}{user}@\textcolor{green}{machine}:\textcolor{blue}{\textasciitilde}\$}
+  \end{block}
+
+  \begin{itemize}
+    \item \texttt{\textcolor{blue}{user}} : L'utilisateur connecté
+    \item \texttt{\textcolor{green}{machine}} : Le nom de l'ordinateur (hostname)
+    \item \texttt{\textcolor{blue}{\textasciitilde}} : Le répertoire courant (\texttt{\textasciitilde} signifie \textit{home})
+    \item \texttt{\$} : Indique un utilisateur standard (\texttt{\#} pour l'administrateur/root)
+  \end{itemize}
+\end{frame}
+
+% ---
+
+\begin{frame}{Les commandes fondamentales}
+  \begin{itemize}
+    \item \texttt{pwd} : affiche le chemin absolu du dossier actuel (Où suis-je ?)
+
+    \item \texttt{ls} : affiche le contenu du dossier
+
+    \item \texttt{cd} : permet de changer de dossier
+    \begin{itemize}
+      {\footnotesize
+      \item \texttt{.} : dossier courant
+      \item \texttt{..} : dossier parent
+      \item \texttt{/} : La racine (Root)
+      }
+    \end{itemize}
+
+    \item \texttt{mkdir} : crée un nouveau dossier vide
+
+    \item \texttt{mv} : déplace un fichier OU le renomme.
+
+    \item \texttt{cp} : copie un fichier (ou un dossier avec \texttt{-r})
+
+    \item \texttt{rm} : Supprime un fichier \newline
+          \textbf{\textcolor{red}{Attention :}} Pas de corbeille, suppression définitive !
+  \end{itemize}
+
+  %\vspace{0.2cm}
+  %\centering
+  %\footnotesize
+  %\textit{Astuce : Si vous êtes perdu, tapez \texttt{man commande} pour lire le manuel.}
+\end{frame}
+
+% ---
+
+\begin{frame}{Naviguer dans le système}
+  \begin{columns}
+    \column{0.8\textwidth}
+      \begin{itemize}
+        \item \texttt{\color{blue}/} : La racine (Root)
+        \begin{itemize}
+          \item pas de \texttt{C:} ou \texttt{D:}
+          \item séparateur de dossier est \texttt{/} (et non \textbackslash)
+        \end{itemize}
+
+        \item chemin Absolu
+        \begin{itemize}
+            \item commence toujours par la racine \texttt{\color{blue}/}
+            \item c'est l'adresse complète
+        \end{itemize}
+
+        \item Chemin Relatif
+        \begin{itemize}
+            \item dépend de l'endroit où l'on se trouve actuellement
+            \item ne commence \textbf{pas} par \texttt{\color{blue}/}
+        \end{itemize}
+
+        \item raccourcis utiles :
+        \begin{itemize}
+          \item \texttt{.} : dossier courant
+          \item \texttt{..} : dossier parent
+        \end{itemize}
+      \end{itemize}
+    \column{0.2\textwidth}
+    % Idéalement, insère ici une image d'arborescence (Tree)
+    % \includegraphics[width=\linewidth]{images/linux_tree.png}
+    \centering
+    \dirtree{% Si tu utilises le package dirtree, sinon fait une liste simple
+    .1 \texttt{\color{blue}/}.
+    .2 \texttt{\color{blue}boot}.
+    .2 \texttt{\color{blue}home}.
+    .2 \texttt{\color{blue}bin}.
+    .2 \texttt{\color{blue}etc}.
+    .2 \texttt{\color{blue}dev}.
+    .2 \texttt{\color{blue}\ldots}.
+    }
+  \end{columns}
+\end{frame}
+
+% ---
+
+\begin{frame}{Vers la programmation...}
+  Le Shell n'est pas seulement un lanceur de programmes, c'est aussi un langage de programmation complet (\textbf{Shell Scripting}).
+
+  \begin{itemize}
+    \item Lorsque vous tapez une commande, le Shell la lit, l'analyse et l'exécute immédiatement.
+    \item C'est un fonctionnement \textbf{Interprété}.
+  \end{itemize}
+
+  \vspace{0.5cm}
+  \begin{alertblock}{Question}
+    Quelle est la différence avec des langages comme C ou C++ que nous verrons plus tard (ou Java) ?
+    \rightarrow \text{Introduction à la compilation vs interprétation.}
+  \end{alertblock}
 \end{frame}
 
 %\begin{frame}{TODO}
@@ -73,106 +178,107 @@
 
 % ---
 
-\begin{frame}{Premières commandes du shell}
-  \begin{itemize}
-    \item \texttt{pwd} : affiche le répertoire courant
-    \item \texttt{ls} : liste le contenu d'un répertoire
-    \item \texttt{cd} : change de répertoire
-    \item \texttt{mkdir} : crée un répertoire
-    \item \texttt{touch} : crée un fichier vide
-  \end{itemize}
-\end{frame}
+%\begin{frame}{Premières commandes du shell}
+%  \begin{itemize}
+%    \item Commande \textit{built-in} (ou \textit{keyword}) vs commande externe
+%    \item \texttt{pwd} : affiche le répertoire courant
+%    \item \texttt{ls} : liste le contenu d'un répertoire
+%    \item \texttt{cd} : change de répertoire
+%    \item \texttt{mkdir} : crée un répertoire
+%    \item \texttt{touch} : crée un fichier vide
+%  \end{itemize}
+%\end{frame}
 
 % ---
 
-\begin{frame}{Arborescence et chemins}
-  \begin{itemize}
-    \item Le système de fichiers est organisé en arborescence
-    \item La racine est notée \texttt{/}
-    \item Deux types de chemins :
-    \begin{itemize}
-      \footnotesize
-      \item Chemin absolu : commence par \texttt{/}
-      \item Chemin relatif : dépend du répertoire courant
-    \end{itemize}
-    \item Raccourcis :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{.} : répertoire courant
-      \item \texttt{..} : répertoire parent
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-% ---
-
-\begin{frame}{Fichiers et permissions}
-  \begin{itemize}
-    \item Chaque fichier possède des permissions :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{r} : lecture
-      \item \texttt{w} : écriture
-      \item \texttt{x} : exécution
-    \end{itemize}
-    \item Trois niveaux :
-    \begin{itemize}
-      \footnotesize
-      \item utilisateur (u), groupe (g), autres (o)
-    \end{itemize}
-    \item Commandes utiles :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{ls -l}
-      \item \texttt{chmod}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-% ---
-
-\begin{frame}{Redirections et pipes}
-
-\begin{itemize}
-  \item Entrée / sortie standard :
-  \begin{itemize}
-    \footnotesize
-    \item \texttt{stdin}, \texttt{stdout}, \texttt{stderr}
-  \end{itemize}
-  \item Redirections :
-  \begin{itemize}
-    \footnotesize
-    \item \texttt{>} : redirige la sortie
-    \item \texttt{<} : redirige l'entrée
-  \end{itemize}
-  \item Pipe :
-  \begin{itemize}
-    \footnotesize
-    \item \texttt{|} : relie la sortie d'un programme à l'entrée d'un autre
-  \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-% ---
-
-\begin{frame}{Processus et contrôle}
-  \begin{itemize}
-    \item Une commande lancée = un processus
-    \item Commandes utiles :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{ps} : liste des processus
-      \item \texttt{top} : processus en temps réel
-      \item \texttt{kill} : termine un processus
-    \end{itemize}
-    \item Exécution en arrière-plan :
-    \begin{itemize}
-      \footnotesize
-      \item \texttt{\&}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-% ---
-
+%\begin{frame}{Arborescence et chemins}
+%  \begin{itemize}
+%    \item Le système de fichiers est organisé en arborescence
+%    \item La racine est notée \texttt{/}
+%    \item Deux types de chemins :
+%    \begin{itemize}
+%      \footnotesize
+%      \item Chemin absolu : commence par \texttt{/}
+%      \item Chemin relatif : dépend du répertoire courant
+%    \end{itemize}
+%    \item Raccourcis :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{.} : répertoire courant
+%      \item \texttt{..} : répertoire parent
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+%
+%% ---
+%
+%\begin{frame}{Fichiers et permissions}
+%  \begin{itemize}
+%    \item Chaque fichier possède des permissions :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{r} : lecture
+%      \item \texttt{w} : écriture
+%      \item \texttt{x} : exécution
+%    \end{itemize}
+%    \item Trois niveaux :
+%    \begin{itemize}
+%      \footnotesize
+%      \item utilisateur (u), groupe (g), autres (o)
+%    \end{itemize}
+%    \item Commandes utiles :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{ls -l}
+%      \item \texttt{chmod}
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+%
+%% ---
+%
+%\begin{frame}{Redirections et pipes}
+%
+%\begin{itemize}
+%  \item Entrée / sortie standard :
+%  \begin{itemize}
+%    \footnotesize
+%    \item \texttt{stdin}, \texttt{stdout}, \texttt{stderr}
+%  \end{itemize}
+%  \item Redirections :
+%  \begin{itemize}
+%    \footnotesize
+%    \item \texttt{>} : redirige la sortie
+%    \item \texttt{<} : redirige l'entrée
+%  \end{itemize}
+%  \item Pipe :
+%  \begin{itemize}
+%    \footnotesize
+%    \item \texttt{|} : relie la sortie d'un programme à l'entrée d'un autre
+%  \end{itemize}
+%\end{itemize}
+%
+%\end{frame}
+%
+%% ---
+%
+%\begin{frame}{Processus et contrôle}
+%  \begin{itemize}
+%    \item Une commande lancée = un processus
+%    \item Commandes utiles :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{ps} : liste des processus
+%      \item \texttt{top} : processus en temps réel
+%      \item \texttt{kill} : termine un processus
+%    \end{itemize}
+%    \item Exécution en arrière-plan :
+%    \begin{itemize}
+%      \footnotesize
+%      \item \texttt{\&}
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+%
+%% ---
+%
