@@ -2,43 +2,48 @@
 % ---
 
 \begin{frame}{Globbing (expansion des noms de fichiers)}
+
   \begin{itemize}
-    \item Le \texttt{globbing} est un mécanisme du shell qui permet de faire 
+    \setlength\itemsep{1em}
+
+    \item le \texttt{globbing} est un mécanisme du shell qui permet de faire 
           correspondre des \texttt{motifs} (\emph{patterns}) en utilisant des 
           caractères spéciaux appelés \texttt{jokers} (\emph{wildcards})
+
+    \pause
   
-    \item L'expansion est faite par le shell \textbf{avant} que la commande ne soit exécutée
+    \item l'expansion est faite par le shell \textbf{avant} que la commande ne soit exécutée
     \begin{terminal}
       \prompt\ \shcmd{ls} *.txt
     \end{terminal}
     \begin{itemize}
-      \pause
-      \item Le shell cherche tous les fichiers qui correspondent à \texttt{*.txt}
-      \pause
-      \item Il remplace ensuite \texttt{*.txt} par la liste des fichiers trouvés
-      \pause
-      \item La commande \texttt{ls} ne voit que la liste finale des fichiers
+      \item le shell cherche tous les fichiers qui correspondent à \texttt{*.txt}
+      \item il remplace ensuite \texttt{*.txt} par la liste des fichiers trouvés
+      \item la commande \texttt{ls} ne voit que la liste finale des fichiers
     \end{itemize}
 
-    \pause
-
-    \item Les jokers principaux sont :
-    \begin{itemize}
-      \item \texttt{*} : Zéro ou plusieurs caractères quelconques
-      \pause
-      \item \texttt{?} : Exactement un caractère quelconque
-      \pause
-      \item \texttt{[...]} : Exactement un caractère parmi un ensemble ou un intervalle
-      \pause
-      \item \texttt{[!...]} : Exactement un caractère qui n'est pas dans l'ensemble
-    \end{itemize}
+%    \pause
+%
+%    \item Les jokers principaux sont :
+%    \begin{itemize}
+%      \item \texttt{*} : Zéro ou plusieurs caractères quelconques
+%      \pause
+%      \item \texttt{?} : Exactement un caractère quelconque
+%      \pause
+%      \item \texttt{[...]} : Exactement un caractère parmi un ensemble ou un intervalle
+%      \pause
+%      \item \texttt{[!...]} : Exactement un caractère qui n'est pas dans l'ensemble
+%    \end{itemize}
   \end{itemize}
 \end{frame}
 
 % ---
 
-\begin{frame}{L'astérisque : \texttt{*}}
+\begin{frame}{L'astérisque (\texttt{*})}
+
   \begin{itemize}
+    \setlength\itemsep{1em}
+
     \item L'astérisque \texttt{*} correspond à \textbf{n'importe quelle chaîne de caractères}, 
           y compris une chaîne vide (zéro ou plusieurs caractères)
 
@@ -55,7 +60,7 @@
     }
 
     \only<6,7>{
-    {\color{red} rap}port.txt {\color{red} rap}port\_final.pdf image.jpg doc.txt
+    {\color{red} rep}ort.txt {\color{red} rep}ort\_final.pdf image.jpg doc.txt
     }
 
     \only<9,10>{
@@ -75,7 +80,7 @@
 
     \begin{terminal}
     \onslide<5->{
-    \prompt\ \shcmd{ls} rap*
+    \prompt\ \shcmd{ls} rep*
     }
 
     \onslide<7->{
@@ -97,8 +102,11 @@
 
 % ---
 
-\begin{frame}{Le point d'interrogation: \texttt{?}}
+\begin{frame}{Point d'interrogation (\texttt{?})}
+
   \begin{itemize}
+    \setlength\itemsep{1em}
+
     \item Le point d'interrogation \texttt{?} correspond à \textbf{exactement un caractère}
 
     \pause
@@ -141,12 +149,16 @@
     }
     \end{terminal}
   \end{itemize}
+
 \end{frame}
 
 % ---
 
-\begin{frame}{Les crochets : \texttt{[...]}}
+\begin{frame}{Crochets (\texttt{[ ]})}
+
   \begin{itemize}
+    \setlength\itemsep{1em}
+
     \item Les crochets \texttt{[...]} correspondent à \textbf{un seul caractère} parmi 
           ceux spécifiés dans l'ensemble
 
@@ -160,24 +172,24 @@
 
     \only<3,4>{
     {\color{red} rep}1{\color{red} .pdf}
-    {\color{red} rep}2{\color{red} .pdf}
+    rep2.pdf
     {\color{red} rep}3{\color{red} .pdf}
     {\color{red} rep}A{\color{red} .pdf}
-    {\color{red} rep}B{\color{red} .pdf}
+    repB.pdf
     }
 
     \only<6,7>{
     {\color{red} rep}1{\color{red} .pdf}
     {\color{red} rep}2{\color{red} .pdf}
     {\color{red} rep}3{\color{red} .pdf}
-    {\color{red} rep}A{\color{red} .pdf}
-    {\color{red} rep}B{\color{red} .pdf}
+    repA.pdf
+    repB.pdf
     }
 
     \only<9,10>{
-    {\color{red} rep}1{\color{red} .pdf}
-    {\color{red} rep}2{\color{red} .pdf}
-    {\color{red} rep}3{\color{red} .pdf}
+    rep1.pdf
+    rep2.pdf
+    rep3.pdf
     {\color{red} rep}A{\color{red} .pdf}
     {\color{red} rep}B{\color{red} .pdf}
     }
@@ -213,13 +225,17 @@
     }
     \end{terminal}
   \end{itemize}
+
 \end{frame}
 
 % ---
 
-\begin{frame}{La Négation \texttt{[!...]}}
+\begin{frame}{Négation (\texttt{[!...]})}
+
   \begin{itemize}
-    \item Le point d'exclamation ! (ou \^{}) placé en \textbf{première position} dans 
+    \setlength\itemsep{1em}
+
+    \item le point d'exclamation ! (ou \texttt{\^{}}) placé en \textbf{première position} dans 
           les crochets correspond à \textbf{un seul caractère} qui n'est \textit{pas} 
           dans la liste ou l'intervalle spécifié
   
@@ -232,7 +248,7 @@
     }
 
     \only<3,4>{
-    {\color{red}rapport}1.log {\color{red}rapport}A.log {\color{red}rapport}B.log {\color{red}rapport}\_final.log
+    rapport1.log {\color{red}rapport}A.log {\color{red}rapport}B.log {\color{red}rapport}\_final.log
     }
 
     \only<6,7>{
@@ -240,7 +256,7 @@
     }
 
     \only<9,10>{
-    {\color{red}rapport}1.log {\color{red}rapport}A.log {\color{red}rapport}B.log {\color{red}rapport}\_final.log
+    {\color{red}rapport}1.log rapportA.log rapportB.log {\color{red}rapport}\_final.log
     }
     \end{terminal}
 
@@ -274,40 +290,8 @@
     }
     \end{terminal}
   \end{itemize}
+
 \end{frame}
-
-% ---
-
-% --- Diapositive 7 : Globbing vs Regex ---
-\begin{frame}{Globbing vs. Expressions Régulières (Regex)}
-  
-  C'est une confusion très fréquente !
-  
-  \begin{columns}[T]
-    \begin{column}{.5\textwidth}
-      \begin{block}{Globbing}
-        \begin{itemize}
-          \item \textbf{But :} Expansion des noms de fichiers.
-          \item \textbf{Où :} Dans le shell (\texttt{ls}, \texttt{cp}, \texttt{mv}...).
-          \item \textbf{Syntaxe :} Simple (\texttt{*}, \texttt{?}, \texttt{[]}).
-          \item \texttt{*} = Zéro ou plusieurs caractères.
-        \end{itemize}
-     \end{block}
-    \end{column}
-    \begin{column}{.5\textwidth}
-      \begin{block}{Expressions Régulières (Regex)}
-        \begin{itemize}
-          \item \textbf{But :} Recherche de motifs dans du texte.
-          \item \textbf{Où :} Dans des commandes comme \texttt{grep}, \texttt{sed}, \texttt{awk}, et en programmation.
-          \item \textbf{Syntaxe :} Plus riche et complexe (\texttt{.}, \texttt{+}, \texttt{*}, \texttt{\^{}}, \texttt{\$}, \texttt{()}).
-          \item \texttt{*} = Zéro ou plusieurs occurrences du caractère \textit{précédent}.
-        \end{itemize}
-      \end{block}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% ---
 
 % ---
 
