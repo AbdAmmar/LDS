@@ -81,19 +81,21 @@
 
 
 % Page de titre
-\begin{frame}
+\begin{frame}[plain,noframenumbering]
   \titlepage
 \end{frame}
+\addtocounter{framenumber}{1}
+
 
 % Sommaire
-\begin{frame}{Sommaire}
+\begin{frame}[noframenumbering]{Sommaire}
   \tableofcontents
 \end{frame}
 
 % ---
 
 \section{Références}
-\begin{frame}{Sommaire}
+\begin{frame}[noframenumbering]{Sommaire}
   \tableofcontents[currentsection]
 \end{frame}
 
@@ -102,7 +104,7 @@
 % ---
 
 \section{Évolution des ordinateurs}
-\begin{frame}{Sommaire}
+\begin{frame}[noframenumbering]{Sommaire}
   \tableofcontents[currentsection]
 \end{frame}
 
@@ -111,7 +113,7 @@
 % ---
 
 \section{Système d'exploitation}
-\begin{frame}{Sommaire}
+\begin{frame}[noframenumbering]{Sommaire}
   \tableofcontents[currentsection]
 \end{frame}
 
@@ -120,20 +122,20 @@
 % ---
 
 \section{Shell UNIX}
-\begin{frame}{Sommaire}
+\begin{frame}[noframenumbering]{Sommaire}
   \tableofcontents[currentsection]
 \end{frame}
 
-%\input{sections_cm/shell}
+\input{sections_cm/shell}
 
 % ---
 
-\section{Introduction au Scripting Bash}
-\begin{frame}{Sommaire}
+\section{Introduction au Bash}
+\begin{frame}[noframenumbering]{Sommaire}
   \tableofcontents[currentsection]
 \end{frame}
 
-\input{sections_cm/bash}
+%\input{sections_cm/bash}
 
 % ---
 
