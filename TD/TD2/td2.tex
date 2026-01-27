@@ -377,28 +377,28 @@ Globbing vs Regex
     \begin{terminal}
     \prompt\ \tcomment{Je définis le lien sur plusieurs lignes car il est trop long}
 
-    \prompt\ UrlGit="https://github.com/AbdAmmar/LDS/blob"
+    \prompt\ UrlGit="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
 
-    \prompt\ Commit="03eff847f0b55cdf2cc8558b6654b5cd7b2cf282"
-
-    \prompt\ Rep="TD/TD2/data/globbing/entreprise\_data.tar.gz"
+    \prompt\ Rep="TD/TD2/data/regex/donnees.txt"
 
     \prompt\
 
     \prompt\ \tcomment{On télécharge maintenant}
     
-    \prompt\ \shcmd{wget} "\$\{UrlGit\}/\$\{Commit\}/\$\{Rep\}"
+    \prompt\ \shcmd{wget} "\$\{UrlGit\}/\$\{Rep\}"
+
+    \prompt\
 
     \prompt\ \tcomment{Vérifiez le téléchargement}
 
-    \prompt\ \shcmd{ls}
+    \prompt\ \shcmd{ls} donnees.txt
     \end{terminal}
 
     Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
     \begin{terminal}
-    \prompt\ \shcmd{sudo} apt update
+    \prompt\ \shcmd{sudo} \shcmd{apt} update
     
-    \prompt\ \shcmd{sudo} apt install wget
+    \prompt\ \shcmd{sudo} \shcmd{apt} install wget
     \end{terminal}
 \end{itemize}
 

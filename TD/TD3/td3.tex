@@ -34,7 +34,7 @@
 L'objectif de cette question est de découvrir la création et l'exécution d'un script Bash simple.
 
 \begin{itemize}
-    \item Créez un répertoire nommé \texttt{TD2} dans votre répertoire personnel (\texttt{\$HOME}).
+    \item Créez un répertoire nommé \texttt{TD3} dans votre répertoire personnel (\texttt{\$HOME}).
     \begin{terminal}
     \prompt\ \tcomment{d'abord, placez-vous dans votre répertoire personnel}
 
@@ -42,9 +42,9 @@ L'objectif de cette question est de découvrir la création et l'exécution d'un
 
     \prompt\
 
-    \prompt\ \tcomment{ensuite, on crée le répertoire TD2}
+    \prompt\ \tcomment{ensuite, on crée le répertoire TD3}
 
-    \prompt\ \shcmd{mkdir} TD2
+    \prompt\ \shcmd{mkdir} TD3
 
     \prompt\
 
@@ -57,15 +57,19 @@ L'objectif de cette question est de découvrir la création et l'exécution d'un
 
     % ---
 
-    \item Placez-vous dans le répertoire \texttt{TD2} et créez un sous-répertoire nommé \texttt{Q1}.
+    \item Placez-vous dans le répertoire \texttt{TD3} et créez un sous-répertoire nommé \texttt{Q1}.
     \begin{terminal}
-    \prompt\ \tcomment{pour aller dans TD2}
+    \prompt\ \tcomment{pour aller dans TD3}
 
-    \prompt\ \shcmd{cd} TD2
+    \prompt\ \shcmd{cd} TD3
 
     \prompt\ \tcomment{ou bien :}
 
-    \prompt\ \shcmd{cd} \$HOME/TD2
+    \prompt\ \shcmd{cd} \$HOME/TD3
+
+    \prompt\ \tcomment{ou bien :}
+
+    \prompt\ \shcmd{cd} \textasciitilde/TD3
 
     \prompt\
 
@@ -90,7 +94,11 @@ L'objectif de cette question est de découvrir la création et l'exécution d'un
 
     \prompt\ \tcomment{ou bien :}
 
-    \prompt\ \shcmd{cd} \$HOME/TD2/Q1
+    \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+
+    \prompt\ \tcomment{ou bien :}
+
+    \prompt\ \shcmd{cd} \textasciitilde/TD3/Q1
 
     \prompt\
 
@@ -209,7 +217,7 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
 
     \prompt\ \tcomment{avec un chemin absolu :}
 
-    \prompt\ \$HOME/TD2/Q1/hello.sh
+    \prompt\ \$HOME/TD3/Q1/hello.sh
     \end{terminal}
 
     % ---
@@ -249,11 +257,16 @@ echo "Coucou ${prenom}"
 \begin{minted}{bash}
 #!/usr/bin/env bash
 
-echo "Entrez votre prénom :"
-read prenom
+read -p "Entrez votre prénom : " prenom
 
 echo "Coucou ${prenom}"
 \end{minted}
+
+    \begin{infobox}
+    La commande \texttt{read} peut afficher un message à l'utilisateur avant de lire l'entrée 
+    grâce à l'option \texttt{-p}.
+    Cela permet de rendre le script plus interactif et plus lisible.
+    \end{infobox}
 
     % ---
 
@@ -334,777 +347,134 @@ cowsay -f stegosaurus "Le ${prochain_age}e sera encore meilleur :)"
 
 
 
-
-
-\section{Tests et conditions simples}
-
-Les structures conditionnelles permettent d'exécuter du code
-en fonction d'une condition.
-
-\subsection*{Travail à faire}
+\section{Jeu du nombre inconnu}
 
 \begin{enumerate}
-    \item Si aucun paramètre n'est fourni, affichez un message d'erreur.
-    \item Sinon, affichez le paramètre fourni.
+
+    \item Placez-vous dans le répertoire \texttt{TD3} et créez un sous-répertoire nommé \texttt{Q2}.
+
+    % ---
+
+    \item Placez-vous dans le répertoire \texttt{Q2} et créez un fichier nommé \texttt{game.sh}.
+
+    % ---
+
+    \item Modifiez le fichier \texttt{game.sh} pour ajouter une ligne de \textit{shebang}, puis rendez votre script exécutable.
+
+    % ---
+
+    \item Créez une variable \texttt{VAR\_RAND} et ajoutez une ligne pour l'afficher à l'écran.
+    Amusez-vous à lancer le script 4 ou 5 fois.
+\begin{minted}{bash}
+VAR_RAND=$RANDOM
+echo "$VAR_RAND"
+\end{minted}
+
+    \begin{infobox}
+    La variable spéciale \texttt{RANDOM} permet de générer des nombres pseudo-aléatoires compris entre 
+    \texttt{0} et \texttt{32767}.
+    \end{infobox}
+
+    % ---
+
+    \item Nous allons maintenant modifier la variable pour la normaliser entre \texttt{1} et \texttt{100}.
+    Vérifiez le nouveau script en l'exécutant quelques fois.
+\begin{minted}{bash}
+VAR_RAND=$((VAR_RAND % 100 + 1))
+echo $VAR_RAND
+\end{minted}
+
+    % ---
+
+    \item Ajoutez une ligne qui récupère une valeur entrée par l'utilisateur dans la 
+          variable \texttt{GUESS} à l'aide de la commande \texttt{read}.
+
+    % ---
+
+    \item Modifiez le code pour tester si \texttt{GUESS} correspond au nombre aléatoire choisi ou non.
+          Lancez le code plusieurs fois pour tester différents cas.
+\begin{minted}{bash}
+if [[ $GUESS -eq $VAR_RAND ]]; then
+    echo "QUELLE CHANCE !!!!!!!!!!!"
+else
+    echo "Raté, essayez encore."
+fi
+\end{minted}
+
+    \begin{infobox}
+    La structure
+\begin{minted}{bash}
+if [[ condition ]]; then
+    commandes
+fi
+\end{minted}
+    permet de tester une \texttt{condition} et, si elle est vraie, d'exécuter des \texttt{commandes}.
+    En bash, il est recommandé d'utiliser \texttt{[[ ... ]]} pour les tests, même si \texttt{[ ... ]} reste possible.
+    Pour tester plusieurs conditions, la syntaxe devient :
+\begin{minted}{bash}
+if [[ condition_1 ]]; then
+    commandes_1
+elif [[ condition_2 ]]; then
+    commandes_2
+elif [[ condition_3 ]]; then
+    commandes_3
+fi
+\end{minted}
+    \end{infobox}
+
+    % ---
+
+    \item Créez une boucle \texttt{while} qui permet de proposer à l'utilisateur de faire plusieurs tentatives successives
+    et de tester à chaque fois si \texttt{GUESS} correspond au nombre aléatoire.
+    Pensez à utiliser \texttt{break} dans votre comparaison afin d'éviter une boucle infinie.
+\begin{minted}{bash}
+while true; do
+    # TODO: récupérer une valeur GUESS
+    # TODO: comparer avec VAR_RAND
+done
+\end{minted}
+
+    \begin{infobox}
+    La structure
+\begin{minted}{bash}
+while [[ condition ]]; do
+    commandes
+done
+\end{minted}
+    permet de créer une boucle qui s'exécute tant que la \texttt{condition} est vraie.
+
+    Une autre manière courante de construire ce type de boucle est d'utiliser une condition toujours vraie,
+    puis de sortir explicitement de la boucle avec \texttt{break} :
+\begin{minted}{bash}
+while true; do
+    commandes
+    if [[ condition_sortie ]]; then
+        break
+    fi
+done
+\end{minted}
+    \end{infobox}
+
+    % ---
+
+    \item Améliorez le jeu en indiquant à l'utilisateur si le nombre proposé est supérieur ou inférieur au 
+          nombre aléatoire.
+
+    % ---
+
+    \item Ajoutez un compteur \texttt{COUNT} qui permet de compter le nombre d'essais effectués par l'utilisateur.
+          Incrémentez ce compteur à chaque nouvelle tentative et affichez sa valeur lorsque le bon nombre est trouvé.
+          Si le nombre d'essais est inférieur ou égal à \texttt{3}, affichez également ce message "Bien joué !!".
+
 \end{enumerate}
 
-\subsection*{Structure générale}
 
-\begin{terminal}
-\shcmd{if} [ condition ]; \shcmd{then}
-  commandes
-\shcmd{fi}
-\end{terminal}
 
-% --------------------------------------------------
-\section{Tester l'existence d'un fichier}
 
-\subsection*{Travail à faire}
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-Écrivez un script qui :
-\begin{itemize}
-    \item prend un nom de fichier en paramètre ;
-    \item affiche \texttt{"Fichier trouvé"} s'il existe ;
-    \item affiche \texttt{"Fichier inexistant"} sinon.
-\end{itemize}
 
-\subsection*{Tests utiles}
 
-\begin{terminal}
-\texttt{-f} fichier \quad (teste si c'est un fichier)
-\texttt{-d} dossier \quad (teste si c'est un répertoire)
-\end{terminal}
 
-% --------------------------------------------------
-\section{Mini-script d'automatisation}
-
-\subsection*{Travail à faire}
-
-Écrivez un script qui :
-\begin{itemize}
-    \item prend un répertoire en paramètre ;
-    \item vérifie qu'il existe ;
-    \item affiche le nombre de fichiers qu'il contient.
-\end{itemize}
-
-\subsection*{Indications}
-
-Vous pouvez utiliser les commandes suivantes :
-\begin{itemize}
-    \item \texttt{ls}
-    \item \texttt{wc -l}
-\end{itemize}
-
-% --------------------------------------------------
-\section*{Remarques}
-
-\begin{itemize}
-    \item Un script est simplement une suite de commandes déjà connues.
-    \item Les erreurs sont normales lors de l'écriture d'un script.
-    \item Lisez attentivement les messages d'erreur.
-\end{itemize}
-
-
-\section*{Pour aller plus loin -- Exercice ludique (optionnel)}
-
-Écrivez un script bash affichant un message personnalisé à l'utilisateur,
-en utilisant une variable et un paramètre.
-
-Par exemple :
-\begin{itemize}
-    \item \texttt{./bonjour.sh Alice}
-    \item affiche : \texttt{Bonjour Alice !}
-\end{itemize}
-
-
-% --------------------------------------------------
-\section{Pourquoi utiliser une boucle ?}
-
-Lorsque l'on souhaite appliquer le même traitement à plusieurs éléments
-(fichiers, lignes, nombres, etc.), écrire une commande par élément n'est
-ni pratique ni robuste.
-
-\subsection*{Question}
-
-Expliquez pourquoi il n'est pas raisonnable d'écrire une commande différente
-pour chaque fichier lorsque le nombre de fichiers peut varier.
-
-% --------------------------------------------------
-\section{Boucle \texttt{for} simple}
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Écrivez un script affichant les nombres de 1 à 5.
-    \item Modifiez le script pour afficher les nombres de 1 à 10.
-\end{enumerate}
-
-\subsection*{Structure générale}
-
-\begin{terminal}
-\shcmd{for} i in 1 2 3 4 5; \shcmd{do}
-  \shcmd{echo} \$i
-\shcmd{done}
-\end{terminal}
-
-% --------------------------------------------------
-\section{Boucle sur des fichiers}
-
-\subsection*{Travail à faire}
-
-Dans un répertoire contenant plusieurs fichiers texte :
-
-\begin{enumerate}
-    \item Affichez le nom de chaque fichier \texttt{.txt}.
-    \item Affichez le nombre de lignes de chaque fichier.
-\end{enumerate}
-
-\subsection*{Indication}
-
-\begin{terminal}
-\shcmd{for} f in *.txt; \shcmd{do}
-  \shcmd{echo} \$f
-  \shcmd{wc} \texttt{-l} \$f
-\shcmd{done}
-\end{terminal}
-
-% --------------------------------------------------
-\section{Automatisation sur les fichiers du TD3}
-
-Dans le TD3, vous avez manipulé plusieurs fichiers texte dans un répertoire \texttt{data}.
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Placez-vous dans le répertoire \texttt{data}.
-    \item Parcourez tous les fichiers texte.
-    \item Pour chaque fichier, affichez :
-    \begin{itemize}
-        \item son nom ;
-        \item son nombre de lignes.
-    \end{itemize}
-\end{enumerate}
-
-% --------------------------------------------------
-\section{Lire un fichier ligne par ligne}
-
-Il est possible de lire un fichier texte ligne par ligne à l'aide d'une boucle \texttt{while}.
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Écrivez un script qui lit le fichier \texttt{users.txt} ligne par ligne.
-    \item Affichez chaque ligne précédée du texte \texttt{"Utilisateur :"}.
-\end{enumerate}
-
-\subsection*{Structure générale}
-
-\begin{terminal}
-\shcmd{while} \shcmd{read} line; \shcmd{do}
-  \shcmd{echo} "Utilisateur : \$line"
-\shcmd{done} \texttt{<} users.txt
-\end{terminal}
-
-% --------------------------------------------------
-\section{Mini-script d'automatisation}
-
-\subsection*{Travail à faire}
-
-Écrivez un script qui :
-\begin{itemize}
-    \item prend un répertoire en paramètre ;
-    \item vérifie que ce répertoire existe ;
-    \item parcourt tous les fichiers \texttt{.txt} qu'il contient ;
-    \item affiche pour chacun :
-    \begin{itemize}
-        \item le nom du fichier ;
-        \item le nombre de lignes.
-    \end{itemize}
-\end{itemize}
-
-\subsection*{Indications}
-
-Vous pouvez utiliser :
-\begin{itemize}
-    \item les paramètres du script (\texttt{\$1}) ;
-    \item le test \texttt{-d} pour vérifier l'existence d'un répertoire ;
-    \item les commandes \texttt{ls} et \texttt{wc -l}.
-\end{itemize}
-
-% --------------------------------------------------
-\section*{Remarques}
-
-\begin{itemize}
-    \item Une boucle permet d'éviter la répétition de code.
-    \item Un script doit rester simple et lisible.
-    \item En cas d'erreur, lisez attentivement les messages affichés.
-\end{itemize}
-
-
-\section*{Pour aller plus loin -- Exercice ludique (optionnel)}
-
-Écrivez un script utilisant une boucle \texttt{for} pour afficher plusieurs fois
-un message ou une suite de symboles à l'écran.
-
-Par exemple :
-\begin{itemize}
-    \item afficher une ligne de \texttt{*}
-    \item afficher les nombres de 1 à 20
-\end{itemize}
-
-
-% --------------------------------------------------
-\section{Contexte}
-
-Vous disposez de fichiers texte contenant des informations sur des utilisateurs
-et des événements (logs).  
-Ces fichiers sont ceux utilisés lors du TD3.
-
-L'objectif est d'écrire un script bash unique permettant d'analyser automatiquement
-ces fichiers.
-
-% --------------------------------------------------
-\section{Consignes générales}
-
-\begin{itemize}
-    \item Le script doit s'appeler \texttt{analyze.sh}.
-    \item Il doit être exécutable.
-    \item Il prend un répertoire en paramètre.
-    \item Il doit vérifier que ce répertoire existe.
-    \item Il doit produire une sortie lisible et structurée.
-    \item L'utilisation d'éditeurs graphiques est interdite.
-\end{itemize}
-
-% --------------------------------------------------
-\section{Étape 1 -- Vérification des paramètres}
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Si aucun paramètre n'est fourni, affichez un message d'erreur.
-    \item Si le paramètre fourni n'est pas un répertoire, affichez un message d'erreur.
-\end{enumerate}
-
-\subsection*{Indications}
-
-Vous pouvez utiliser :
-\begin{itemize}
-    \item les paramètres du script (\texttt{\$1}) ;
-    \item le test \texttt{-d}.
-\end{itemize}
-
-% --------------------------------------------------
-\section{Étape 2 -- Analyse des utilisateurs}
-
-À partir du fichier \texttt{users.txt} présent dans le répertoire fourni :
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Affichez le nombre total d'utilisateurs.
-    \item Affichez la liste des shells utilisés.
-    \item Indiquez le shell le plus utilisé.
-\end{enumerate}
-
-\subsection*{Indications}
-
-Vous pouvez réutiliser les commandes vues en TD3 et TD5 :
-\begin{itemize}
-    \item \texttt{cut}
-    \item \texttt{sort}
-    \item \texttt{uniq}
-    \item \texttt{wc}
-\end{itemize}
-
-% --------------------------------------------------
-\section{Étape 3 -- Analyse des logs}
-
-À partir du fichier \texttt{logs.txt} présent dans le répertoire fourni :
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Affichez le nombre total d'événements.
-    \item Affichez le nombre d'erreurs.
-    \item Affichez la liste des utilisateurs ayant généré une erreur.
-\end{enumerate}
-
-\subsection*{Indications}
-
-Vous pouvez utiliser :
-\begin{itemize}
-    \item \texttt{grep}
-    \item \texttt{cut}
-    \item \texttt{sort}
-    \item \texttt{uniq}
-\end{itemize}
-
-% --------------------------------------------------
-\section{Étape 4 -- Affichage structuré}
-
-Votre script doit afficher les résultats de manière claire,
-avec des titres explicites pour chaque partie de l'analyse.
-
-\subsection*{Exemple indicatif de sortie}
-
-\begin{terminal}
-=== Analyse des utilisateurs ===
-Nombre total d'utilisateurs : 5
-Shells utilisés :
-  /bin/bash (3)
-  /bin/zsh (1)
-  /usr/sbin/nologin (1)
-
-=== Analyse des logs ===
-Nombre total d'événements : 20
-Nombre d'erreurs : 4
-Utilisateurs ayant généré une erreur :
-  alice
-  bob
-\end{terminal}
-
-Cet exemple est fourni à titre indicatif.
-La présentation exacte peut varier.
-
-% --------------------------------------------------
-\section{Extensions (optionnelles)}
-
-Pour les étudiants les plus rapides :
-
-\begin{itemize}
-    \item vérifier la présence des fichiers avant analyse ;
-    \item sauvegarder les résultats dans un fichier ;
-    \item ajouter une option \texttt{-h} affichant une aide ;
-    \item analyser automatiquement tous les fichiers \texttt{.txt} du répertoire.
-\end{itemize}
-
-% --------------------------------------------------
-\section*{Remarques}
-
-\begin{itemize}
-    \item Ce TD ne demande aucun concept nouveau.
-    \item Réutilisez les commandes et scripts déjà écrits précédemment.
-    \item Testez votre script avec différents cas.
-    \item Un script clair et simple est préférable à un script complexe.
-\end{itemize}
-
-
-\section*{Pour aller plus loin -- Exercice ludique (optionnel)}
-
-Recherchez dans les fichiers de logs :
-\begin{itemize}
-    \item les messages contenant \texttt{WARNING} ;
-    \item les messages contenant \texttt{ERROR} ;
-    \item les messages contenant votre prénom (s'il y en a).
-\end{itemize}
-
-Expliquez ce que vous observez.
-
-
-
-% --------------------------------------------------
-\section*{Récupération des fichiers de logs}
-Ce TD a pour objectif d'apprendre à analyser des fichiers de logs
-similaires à ceux que l'on trouve sur un système Linux réel.
-
-Créez un répertoire \texttt{data} et téléchargez les fichiers de logs :
-
-\begin{terminal}
-\prompt\ \shcmd{mkdir} data
-
-\prompt\ \shcmd{cd} data
-
-\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD3/data/auth.log
-
-\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD3/data/syslog
-
-\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD3/data/kernel.log
-\end{terminal}
-
-% --------------------------------------------------
-\section{Lecture et observation des logs}
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Affichez le contenu de \texttt{auth.log}.
-    \item Combien de lignes contient ce fichier ?
-    \item Repérez les informations suivantes :
-    \begin{itemize}
-        \item date et heure ;
-        \item service concerné ;
-        \item message.
-    \end{itemize}
-\end{enumerate}
-
-% --------------------------------------------------
-\section{Recherche d'événements}
-
-\subsection*{Travail à faire}
-
-À partir de \texttt{auth.log} :
-
-\begin{enumerate}
-    \item Affichez les tentatives de connexion échouées.
-    \item Affichez les connexions réussies.
-    \item Affichez les lignes contenant \texttt{sudo}.
-\end{enumerate}
-
-\subsection*{Commandes utiles}
-
-\begin{terminal}
-\prompt\ \shcmd{grep} Failed auth.log
-
-\prompt\ \shcmd{grep} Accepted auth.log
-
-\prompt\ \shcmd{grep} sudo auth.log
-\end{terminal}
-
-% --------------------------------------------------
-\section{Analyse par pipelines}
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Comptez le nombre total de tentatives de connexion échouées.
-    \item Affichez la liste des utilisateurs concernés.
-\end{enumerate}
-
-\subsection*{Exemples}
-
-\begin{terminal}
-\prompt\ \shcmd{grep} Failed auth.log \texttt{|} \shcmd{wc} \texttt{-l}
-
-\prompt\ \shcmd{grep} Failed auth.log \texttt{|} \shcmd{cut} \texttt{-d" "} \texttt{-f9} \texttt{|} \shcmd{sort} \texttt{|} \shcmd{uniq}
-\end{terminal}
-
-% --------------------------------------------------
-\section{Analyse temporelle}
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Recherchez les événements ayant eu lieu à une heure donnée (par exemple 10h).
-    \item Comptez le nombre d'événements sur cette plage horaire.
-\end{enumerate}
-
-\begin{terminal}
-\prompt\ \shcmd{grep} "Jan 10 10" auth.log
-\end{terminal}
-
-% --------------------------------------------------
-\section{Script : génération d'un rapport de sécurité}
-
-\subsection*{Travail à faire}
-
-Écrivez un script \texttt{report.sh} qui :
-\begin{itemize}
-    \item prend un répertoire de logs en paramètre ;
-    \item analyse \texttt{auth.log} ;
-    \item affiche :
-    \begin{itemize}
-        \item le nombre de connexions réussies ;
-        \item le nombre de connexions échouées ;
-        \item la liste des utilisateurs impliqués ;
-    \end{itemize}
-    \item produit un rapport lisible à l'écran.
-\end{itemize}
-
-\subsection*{Exemple indicatif de sortie}
-
-\begin{terminal}
-=== Rapport de sécurité ===
-Connexions réussies : 3
-Connexions échouées : 5
-
-Utilisateurs concernés :
-  alice
-  bob
-\end{terminal}
-
-% --------------------------------------------------
-\section{Extensions (optionnelles)}
-
-\begin{itemize}
-    \item analyser \texttt{syslog} ou \texttt{kernel.log} ;
-    \item détecter des avertissements ;
-    \item sauvegarder le rapport dans un fichier.
-\end{itemize}
-
-
-\section*{Pour aller plus loin -- Exercice ludique (optionnel)}
-
-Une fois connecté à la machine distante via SSH, lancez le programme
-\texttt{neofetch}.
-
-Comparez les informations affichées avec celles de votre machine locale.
-
-
-% --------------------------------------------------
-\section{Installation des outils}
-Ce TD a pour objectif de comprendre comment créer une commande personnalisée
-sous Linux, à la manière de la commande \texttt{fortune}.
-
-Installez les programmes nécessaires :
-
-\begin{terminal}
-\prompt\ \shcmd{sudo apt update}
-
-\prompt\ \shcmd{sudo apt install cowsay}
-\end{terminal}
-
-% --------------------------------------------------
-\section{Création des citations}
-
-Créez un fichier contenant des citations, blagues ou proverbes en français.
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Créez un fichier nommé \texttt{citations.txt}.
-    \item Ajoutez au moins 5 phrases en français (une par ligne).
-\end{enumerate}
-
-\subsection*{Exemple}
-
-\begin{terminal}
-\prompt\ \shcmd{nano} citations.txt
-\end{terminal}
-
-Contenu possible :
-\begin{verbatim}
-Linux est puissant.
-Tout est fichier.
-Ça marche chez moi.
-Il n'y a pas de bug, seulement des fonctionnalités.
-RTFM.
-\end{verbatim}
-
-% --------------------------------------------------
-\section{Afficher une citation aléatoire}
-
-Linux fournit la commande \texttt{shuf} permettant de choisir une ligne aléatoire.
-
-\subsection*{Travail à faire}
-
-Affichez une citation aléatoire depuis le fichier \texttt{citations.txt}.
-
-\begin{terminal}
-\prompt\ \shcmd{shuf} \texttt{-n 1} citations.txt
-\end{terminal}
-
-% --------------------------------------------------
-\section{Création d'une commande personnalisée}
-
-Nous allons maintenant créer une commande appelée \texttt{fortune-fr}.
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Créez un fichier nommé \texttt{fortune-fr}.
-    \item Ajoutez la ligne \texttt{\#!/bin/bash}.
-    \item Écrivez un script qui affiche une citation aléatoire.
-\end{enumerate}
-
-\subsection*{Exemple de script}
-
-\begin{terminal}
-\#!/bin/bash
-\shcmd{shuf} \texttt{-n 1} \$HOME/citations.txt
-\end{terminal}
-
-Rendez le script exécutable :
-
-\begin{terminal}
-\prompt\ \shcmd{chmod} \texttt{+x} fortune-fr
-\end{terminal}
-
-Testez-le :
-
-\begin{terminal}
-\prompt\ ./fortune-fr
-\end{terminal}
-
-% --------------------------------------------------
-\section{Ajouter la commande au PATH}
-
-Pour pouvoir utiliser votre commande depuis n'importe quel répertoire,
-elle doit se trouver dans un répertoire du \texttt{PATH}.
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Créez le répertoire \texttt{\$HOME/bin} s'il n'existe pas.
-    \item Déplacez votre script dans ce répertoire.
-    \item Vérifiez que \texttt{\$HOME/bin} est bien dans le \texttt{PATH}.
-\end{enumerate}
-
-\begin{terminal}
-\prompt\ \shcmd{mkdir} \texttt{-p} \$HOME/bin
-
-\prompt\ \shcmd{mv} fortune-fr \$HOME/bin
-
-\prompt\ \shcmd{echo} \$PATH
-\end{terminal}
-
-Si nécessaire, ajoutez cette ligne à votre fichier \texttt{\textasciitilde/.bashrc} :
-
-\begin{terminal}
-\shcmd{export} PATH=\$PATH:\$HOME/bin
-\end{terminal}
-
-Rechargez la configuration :
-
-\begin{terminal}
-\prompt\ \shcmd{source} \texttt{\textasciitilde/.bashrc}
-\end{terminal}
-
-% --------------------------------------------------
-\section{Combiner avec cowsay}
-
-Utilisez maintenant votre commande personnalisée avec \texttt{cowsay}.
-
-\begin{terminal}
-\prompt\ \shcmd{fortune-fr} \texttt{|} \shcmd{cowsay}
-\end{terminal}
-
-Essayez différentes exécutions.
-
-% --------------------------------------------------
-\section{Extensions (optionnelles)}
-
-Pour aller plus loin :
-\begin{itemize}
-    \item ajouter une option \texttt{-h} affichant une aide ;
-    \item gérer plusieurs fichiers de citations ;
-    \item afficher le nombre total de citations ;
-    \item utiliser une vache différente avec \texttt{cowsay -l}.
-\end{itemize}
-
-
-
-% --------------------------------------------------
-\section{Pourquoi structurer un script ?}
-Ce TD a pour objectif d'apprendre à écrire des scripts bash plus lisibles,
-plus structurés et plus faciles à maintenir.
-
-Jusqu'à présent, vous avez écrit des scripts contenant une suite de commandes.
-Lorsque les scripts deviennent plus longs, il devient difficile :
-\begin{itemize}
-    \item de comprendre ce qu'ils font ;
-    \item de les modifier ;
-    \item de corriger des erreurs.
-\end{itemize}
-
-Structurer un script permet de le rendre plus lisible et plus robuste.
-
-% --------------------------------------------------
-\section{Découper un script en fonctions}
-
-Une fonction permet de regrouper des commandes ayant un rôle précis.
-
-\subsection*{Travail à faire}
-
-Reprenez un script écrit lors d'un TD précédent (TD6 ou TD7 par exemple)
-et identifiez les différentes parties du script.
-
-Par exemple :
-\begin{itemize}
-    \item vérification des paramètres ;
-    \item analyse d'un fichier ;
-    \item affichage des résultats.
-\end{itemize}
-
-Créez une fonction pour chacune de ces parties.
-
-% --------------------------------------------------
-\section{Définir et utiliser des fonctions}
-
-\subsection*{Structure générale}
-
-\begin{terminal}
-nom\_fonction() \{
-  commandes
-\}
-\end{terminal}
-
-Une fonction peut ensuite être appelée simplement par son nom.
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Créez une fonction \texttt{check\_args} qui vérifie les paramètres.
-    \item Créez une fonction \texttt{analyze} qui effectue le traitement principal.
-    \item Créez une fonction \texttt{print\_result} qui affiche les résultats.
-    \item Appelez ces fonctions dans la partie principale du script.
-\end{enumerate}
-
-% --------------------------------------------------
-\section{Variables et portée}
-
-Les variables définies dans un script sont accessibles dans les fonctions.
-
-\subsection*{Travail à faire}
-
-\begin{enumerate}
-    \item Définissez une variable au début du script.
-    \item Modifiez cette variable dans une fonction.
-    \item Affichez la variable après l'appel de la fonction.
-\end{enumerate}
-
-\subsection*{Question}
-
-Que constatez-vous ?
-Expliquez pourquoi la valeur de la variable a changé.
-
-% --------------------------------------------------
-\section{Ajouter une aide au script}
-
-Un script bien écrit doit expliquer comment il s'utilise.
-
-\subsection*{Travail à faire}
-
-Ajoutez une option \texttt{-h} ou \texttt{--help} à votre script.
-Lorsque cette option est fournie, le script doit afficher :
-\begin{itemize}
-    \item une description du script ;
-    \item les paramètres attendus ;
-    \item un exemple d'utilisation.
-\end{itemize}
-
-\subsection*{Indication}
-
-Vous pouvez utiliser une structure conditionnelle du type :
-
-\begin{terminal}
-\shcmd{if} [ "\$1" = "\texttt{-h}" ]; \shcmd{then}
-  \shcmd{echo} "Aide du script"
-  \shcmd{exit} 0
-\shcmd{fi}
-\end{terminal}
-
-% --------------------------------------------------
-\section{Organisation finale du script}
-
-Votre script final doit être organisé de la manière suivante :
-\begin{itemize}
-    \item commentaires en début de fichier ;
-    \item définition des variables ;
-    \item définition des fonctions ;
-    \item partie principale (appels des fonctions).
-\end{itemize}
-
-\subsection*{Travail à faire}
-
-Réorganisez votre script pour qu'il respecte cette structure.
-
-% --------------------------------------------------
-\section*{Remarques}
-
-\begin{itemize}
-    \item Un script lisible est plus important qu'un script court.
-    \item Les fonctions permettent d'éviter les répétitions.
-    \item Ce TD prépare l'écriture de scripts plus complexes.
-\end{itemize}
 
 \end{document}
