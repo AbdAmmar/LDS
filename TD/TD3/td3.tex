@@ -116,6 +116,12 @@ L'objectif de cette question est de découvrir la création et l'exécution d'un
     \end{terminal}
 
     \begin{infobox}
+    Sous Linux, un nom de fichier peut contenir des lettres, des chiffres, des points (\texttt{.}), des tirets (\texttt{-})
+    et des underscores (\texttt{\_}).  
+    Il est fortement déconseillé d'utiliser des espaces ou des caractères spéciaux dans les noms de fichiers.
+    \end{infobox}
+
+    \begin{infobox}
     Ajouter une extension aux fichiers, comme \texttt{.sh} dans \texttt{hello.sh}, est optionnel sous Linux.
     Cependant, c'est une bonne pratique : cela facilite la lecture et permet aux éditeurs de texte
     de colorer la syntaxe.
@@ -271,7 +277,11 @@ echo "Coucou ${prenom}"
     % ---
 
     \item Modifiez le script afin que le prénom soit fourni comme argument
-    lors de l'exécution du script.
+          lors de l'exécution du script.
+          Par exemple, l'appel du script devrait ressembler à ceci :
+    \begin{terminal}
+    \prompt\ ./hello.sh Toto
+    \end{terminal}
 \begin{minted}{bash}
 #!/usr/bin/env bash
 
@@ -343,62 +353,163 @@ cowsay -f stegosaurus "Le ${prochain_age}e sera encore meilleur :)"
 
 
 
+
+
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
 
-\section{Jeu du nombre inconnu}
+
+
+\section{Boucle \texttt{for}}
 
 \begin{enumerate}
 
-    \item Placez-vous dans le répertoire \texttt{TD3} et créez un sous-répertoire nommé \texttt{Q2}.
+    \item Placez-vous dans le répertoire \texttt{\$HOME/TD3} et créez un sous-répertoire nommé \texttt{Q2}.
 
     % ---
 
-    \item Placez-vous dans le répertoire \texttt{Q2} et créez un fichier nommé \texttt{game.sh}.
+    \item Placez-vous dans le répertoire \texttt{Q2} et créez un fichier nommé \texttt{boucle.sh}.
 
     % ---
 
-    \item Modifiez le fichier \texttt{game.sh} pour ajouter une ligne de \textit{shebang}, puis rendez votre script exécutable.
+    \item Modifiez le fichier \texttt{boucle.sh} pour ajouter une ligne de \textit{shebang},
+    puis ajoutez une ligne qui affiche le message \texttt{"coucou"} à l'écran.
+    Rendez ensuite le script exécutable et vérifiez son bon fonctionnement.
 
     % ---
 
-    \item Créez une variable \texttt{VAR\_RAND} et ajoutez une ligne pour l'afficher à l'écran.
-    Amusez-vous à lancer le script 4 ou 5 fois.
+    \item Créez une boucle \texttt{for} qui parcourt une liste de mots et affiche chaque mot à l'écran.
 \begin{minted}{bash}
-VAR_RAND=$RANDOM
-echo "$VAR_RAND"
+echo "voici quelques distributions Linux"
+for i in Ubuntu Debian Fedora openSUSE; do
+    echo $i
+done
+\end{minted}
+
+    % ---
+
+    \item Dans le fichier \texttt{boucle.sh}, créez une première boucle \texttt{for} en utilisant l'expansion d'accolades
+    afin d'afficher les entiers de \texttt{1} à \texttt{10}.
+\begin{minted}{bash}
+for i in {1..10}; do
+    echo $i
+done
+\end{minted}
+
+    % ---
+
+    \item Comparez le résultat des exercices précédents avec les structures suivantes et observez les différences
+          dans les valeurs affichées :
+\begin{minted}{bash}
+for i in {01..10}; do
+    echo $i
+done
+\end{minted}
+    puis :
+\begin{minted}{bash}
+for i in {001..010}; do
+    echo $i
+done
 \end{minted}
 
     \begin{infobox}
-    La variable spéciale \texttt{RANDOM} permet de générer des nombres pseudo-aléatoires compris entre 
-    \texttt{0} et \texttt{32767}.
+    Avec l'expansion d'accolades, bash conserve le nombre de chiffres utilisé dans les bornes.
+    Cela permet de générer des suites avec des zéros en tête,
+    ce qui est pratique pour nommer des fichiers de manière ordonnée.
     \end{infobox}
 
     % ---
 
-    \item Nous allons maintenant modifier la variable pour la normaliser entre \texttt{1} et \texttt{100}.
-    Vérifiez le nouveau script en l'exécutant quelques fois.
+    \item Modifiez la boucle précédente pour afficher les entiers de \texttt{10} à \texttt{-10}.
 \begin{minted}{bash}
-VAR_RAND=$((VAR_RAND % 100 + 1))
-echo $VAR_RAND
+for i in {10..-10}; do
+    echo $i
+done
 \end{minted}
 
     % ---
 
-    \item Ajoutez une ligne qui récupère une valeur entrée par l'utilisateur dans la 
-          variable \texttt{GUESS} à l'aide de la commande \texttt{read}.
+    \item Modifiez le code pour définir les valeurs de début et de fin à l'aide de variables.
+          Qu'observez-vous ?
+\begin{minted}{bash}
+START=10
+END=-10
+for i in {$START..$END}; do
+    echo $i
+done
+\end{minted}
+
+    \begin{infobox}
+    L'expansion d'accolades est effectuée avant l'expansion des variables.
+    Elle ne peut donc pas utiliser de variables.
+    \end{infobox}
 
     % ---
 
-    \item Modifiez le code pour tester si \texttt{GUESS} correspond au nombre aléatoire choisi ou non.
-          Lancez le code plusieurs fois pour tester différents cas.
+    \item Modifiez maintenant la boucle pour afficher les lettres de \texttt{a} à \texttt{h}.
 \begin{minted}{bash}
-if [[ $GUESS -eq $VAR_RAND ]]; then
-    echo "QUELLE CHANCE !!!!!!!!!!!"
+for c in {a..h}; do
+    echo $c
+done
+\end{minted}
+
+    % ---
+
+    \item Nous allons maintenant utiliser la syntaxe \texttt{(( ))}, basée sur une initialisation,
+          une condition et une incrémentation.
+          Créez une boucle qui affiche les entiers de \texttt{1} à \texttt{10} avec un pas de \texttt{1}.
+\begin{minted}{bash}
+for ((i=1; i<=10; i++)); do
+    echo $i
+done
+\end{minted}
+
+    \begin{infobox}
+    En bash, les opérateurs de comparaison dépendent du contexte.
+
+    Dans un test \texttt{[[ ... ]]}, on utilise \texttt{-eq}, \texttt{-lt}, \texttt{-gt} pour les comparaisons numériques.
+
+    Dans une expression arithmétique \texttt{(( ... ))}, on utilise les opérateurs classiques
+    \texttt{==}, \texttt{<}, \texttt{>} car bash manipule directement des entiers.
+    \end{infobox}
+
+    % ---
+
+    \item Modifiez la boucle précédente afin d'afficher les entiers de \texttt{1} à \texttt{10} avec un pas de \texttt{2}.
+\begin{minted}{bash}
+for ((i=1; i<=10; i+=2)); do
+    echo $i
+done
+\end{minted}
+
+    % ---
+
+    \item Modifiez votre script afin que la valeur initiale, la valeur finale et le pas de la boucle
+    soient fournis par l'utilisateur via les arguments de la ligne de commande :
+    \texttt{\$1} pour la valeur initiale, \texttt{\$2} pour la valeur finale et \texttt{\$3} pour le pas.
+    Utilisez ensuite ces variables dans une boucle \texttt{for} avec la syntaxe \texttt{(( ))}.
+\begin{minted}{bash}
+START=$1
+END=$2
+STEP=$3
+
+for ((i=START; i<=END; i+=STEP)); do
+    echo $i
+done
+\end{minted}
+
+    % ---
+
+    \item À l'intérieur de la boucle \texttt{for}, ajoutez une condition \texttt{if} permettant d'indiquer
+          si le nombre courant est pair ou impair.
+\begin{minted}{bash}
+if (( i % 2 == 0 )); then
+    echo "$i est pair"
 else
-    echo "Raté, essayez encore."
+    echo "$i est impair"
 fi
+done
 \end{minted}
 
     \begin{infobox}
@@ -421,6 +532,81 @@ elif [[ condition_3 ]]; then
 fi
 \end{minted}
     \end{infobox}
+
+    \begin{infobox}
+    L'opérateur \texttt{\%} permet de calculer le reste de la division entière (modulo).
+    \end{infobox}
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+
+\section{Jeu du nombre inconnu}
+
+\begin{enumerate}
+
+    \item Placez-vous dans le répertoire \texttt{TD3} et créez un sous-répertoire nommé \texttt{Q3}.
+
+    % ---
+
+    \item Placez-vous dans le répertoire \texttt{Q3} et créez un fichier nommé \texttt{game.sh}.
+
+    % ---
+
+    \item Modifiez le fichier \texttt{game.sh} pour ajouter une ligne de \textit{shebang}, puis rendez votre script exécutable.
+
+    % ---
+
+    \item Créez une variable \texttt{VAR\_RAND} et ajoutez une ligne pour l'afficher à l'écran.
+    Amusez-vous à lancer le script 4 ou 5 fois.
+\begin{minted}{bash}
+VAR_RAND=$RANDOM
+\end{minted}
+
+    \begin{infobox}
+    La variable spéciale \texttt{RANDOM} permet de générer des nombres pseudo-aléatoires compris entre 
+    \texttt{0} et \texttt{32767}.
+    \end{infobox}
+
+    % ---
+
+    \item Nous allons maintenant modifier la variable pour la normaliser entre \texttt{1} et \texttt{100}.
+    Vérifiez le nouveau script en l'exécutant quelques fois.
+\begin{minted}{bash}
+VAR_RAND=$((VAR_RAND % 100 + 1))
+\end{minted}
+
+    % ---
+
+    \item Ajoutez une ligne qui récupère une valeur entrée par l'utilisateur dans la 
+          variable \texttt{GUESS} à l'aide de la commande \texttt{read}.
+
+    % ---
+
+    \item Modifiez le code pour tester si \texttt{GUESS} correspond au nombre aléatoire choisi ou non.
+          Lancez le code plusieurs fois pour tester différents cas.
+\begin{minted}{bash}
+if [[ $GUESS -eq $VAR_RAND ]]; then
+    echo "QUELLE CHANCE !!!!!!!!!!!"
+else
+    echo "Raté, essayez encore."
+fi
+\end{minted}
 
     % ---
 
