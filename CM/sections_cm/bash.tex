@@ -216,9 +216,7 @@
 
 % ---
 
-\begin{frame}[fragile]{Évaluer des conditions}
-
-  Il existe 3 manières d'écrire un test
+\begin{frame}[fragile]{Conditions}
 
   \begin{terminal}
     \onslide<1->{
@@ -226,76 +224,57 @@
     }
 
     \onslide<2->{
-    \prompt\
-
     \prompt\ \shcmd{test} -f "fichier.txt"  \tcomment{Historique}
     }
 
     \onslide<3->{
-    \prompt\
-
     \prompt\ \shcmd{[} -f "fichier.txt" \shcmd{]}  \tcomment{POSIX (Attention aux espaces !)}
     }
 
     \onslide<4->{
-    \prompt\
-
     \prompt\ \shcmd{[[} -f "fichier.txt" \shcmd{]]}  \tcomment{Spécifique Bash (Recommandé)}
     }
   \end{terminal}
 
-  \onslide<5->{
   \begin{itemize}
-  \setlength\itemsep{1em}
+  \setlength\itemsep{0.75em}
 
-    \item[\emoji{warning}]
-    contrairement à l'algèbre booléenne, Bash raisonne en "code de retour" (\texttt{\$?})
+    \onslide<5->{
+    \item nombres : \texttt{[[ a -eq b ]]}
     \begin{itemize}
-      \setlength\itemsep{0.5em}
-      \footnotesize
-      \item 0 signifie succès (Vrai)
-      \item 1 (ou plus) signifie échec (Faux)
-    \end{itemize}
-  \end{itemize}
-  }
-
-\end{frame}
-
-% ---
-
-\begin{frame}[fragile]{Les Opérateurs de Comparaison}
-
-  \begin{itemize}
-  \setlength\itemsep{1em}
-
-    \item nombres
-    \begin{itemize}
-      \setlength\itemsep{0.5em}
+      \setlength\itemsep{0.25em}
       \footnotesize
       \item \texttt{-eq} (equal) / \texttt{-ne} (not equal)
       \item \texttt{-lt} (lower than) / \texttt{-le} (lower or equal)
       \item \texttt{-gt} (greater than) / \texttt{-ge} (greater or equal)
     \end{itemize}
+    }
 
-    \pause
+    % ---
 
-    \item texte (chaînes de caractères)
+    \onslide<6->{
+    \item texte (chaînes de caractères) : \texttt{[[ a == b ]]}
     \begin{itemize}
       \setlength\itemsep{0.5em}
       \footnotesize
       \item \texttt{==} : identique (préféré à \texttt{=})
       \item \texttt{!=} : différent
     \end{itemize}
+    }
 
-    \pause
+    % ---
 
-    \item fichiers
+    \onslide<7->{
+    \item[\emoji{warning}]
+    code de retour (\texttt{\$?})
     \begin{itemize}
       \setlength\itemsep{0.5em}
       \footnotesize
-      \item \texttt{-f fichier} : le fichier existe 
-      \item \texttt{-d dossier} : le dossier existe
+      \item 0 : succès (Vrai)
+      \item 1 (ou plus) : échec (Faux)
     \end{itemize}
+    }
+
   \end{itemize}
 
 \end{frame}
@@ -310,8 +289,6 @@ do
   # commandes...
 done
 \end{minted}
-
-  Exemples :
 
   \pause
 
@@ -347,9 +324,9 @@ done
 
 % ---
 
-\begin{frame}[fragile]{Conditions (If / Else)}
+\begin{frame}[fragile]{if / elif / else}
 
-\begin{minted}{bash}
+  \begin{minted}{bash}
 if [[ condition ]]; then
     # commandes si vrai
 elif [[ autre_cond ]]; then
@@ -357,17 +334,64 @@ elif [[ autre_cond ]]; then
 else
     # sinon...
 fi
-\end{minted}
+  \end{minted}
+
+  \begin{terminal}
+    \footnotesize
+    \prompt\ \tcomment{condition1 et condition2 :}
+
+    \prompt\ condition1 \&\& condition2
+
+    \prompt\ \tcomment{condition1 ou condition2 :}
+
+    \prompt\ condition1 || condition2
+  \end{terminal}
 
 \end{frame}
 
 % ---
 
-\begin{frame}[fragile]{Boucle WHILE}
+\begin{frame}[fragile]{Exemples}
+
+  \begin{terminal}
+    \footnotesize
+    \prompt\ a=5; b=1
+
+    \prompt\ \shcmd{[[} a > b \shcmd{]]} \&\& \shcmd{echo} "a > b"
+
+    \prompt\
+
+    \prompt\ \shcmd{[[} a < b \shcmd{]]} \&\& \shcmd{echo} "a < b"
+
+    \prompt\ a < b
+
+    \prompt\ \shcmd{[[} a -gt b \shcmd{]]} \&\& \shcmd{echo} "a > b"
+
+    \prompt\ a > b
+
+    \prompt\ ((a > b)) \&\& \shcmd{echo} "a > b"
+
+    \prompt\ a > b
+  \end{terminal}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Boucle While}
 
 \begin{minted}{bash}
 while [[ condition ]]; do
     # Commandes à répéter
+done
+\end{minted}
+
+\begin{minted}{bash}
+while true; do
+    # Commandes à répéter
+    if [[ condition_fin ]]; then
+        break
+    fi
 done
 \end{minted}
 
@@ -377,10 +401,6 @@ done
 \end{frame}
 
 % ---
-
-
-
-
 
 %\begin{frame}{Structure d'un script Bash}
 %
@@ -461,34 +481,6 @@ done
 
 % ---
 
-%\begin{frame}[fragile]{L'interaction utilisateur (read)}
-%
-%  Pour demander une information à l'utilisateur pendant l'exécution, on utilise la commande \texttt{read}.
-%
-%  \vspace{0.5cm}
-%  \begin{block}{Syntaxe}
-%    \texttt{read -p "Message à afficher : " nom\_variable}
-%  \end{block}
-%
-%  \vspace{0.3cm}
-%  \textbf{Exemple de script interactif :}
-%  \begin{exampleblock}{}
-%\begin{minted}{bash}
-%#!/bin/bash
-%
-%read -p "Quel est votre nom ? " user_name
-%echo "Bienvenue, $user_name !"
-%
-%read -p "Voulez-vous continuer ? (o/n) " reponse
-%if [ "$reponse" = "o" ]; then
-%    echo "On continue..."
-%fi
-%\end{minted}
-%  \end{exampleblock}
-%\end{frame}
-
-% ---
-
 %\begin{frame}{Bonnes pratiques de scripting}
 %  Pour écrire des scripts robustes et lisibles (et avoir une bonne note !) :
 %
@@ -543,88 +535,6 @@ done
 %    \end{enumerate}
 %    $\rightarrow$ \textbf{Résultat :} Affiche le nombre de fichiers texte.
 %  \end{exampleblock}
-%\end{frame}
-
-% ---
-
-%\begin{frame}{Le Globbing (Jokers de fichiers)}
-%  Le \textbf{Globbing} est un mécanisme du Shell pour sélectionner rapidement des fichiers par leurs noms.
-%
-%  \begin{alertblock}{Important}
-%    C'est le Shell qui "développe" (remplace) le joker par la liste des fichiers correspondants \textbf{avant} de lancer la commande.
-%  \end{alertblock}
-%
-%  \vspace{0.2cm}
-%  \textbf{Les motifs principaux :}
-%  \begin{itemize}
-%    \item \texttt{\textbf{*}} : Remplace n'importe quelle chaîne (vide ou longue).
-%    \item \texttt{\textbf{?}} : Remplace exactement \textbf{un} caractère.
-%    \item \texttt{\textbf{[abc]}} : Remplace un seul caractère parmi la liste (a, b ou c).
-%  \end{itemize}
-%
-%  \vspace{0.3cm}
-%  \begin{exampleblock}{Exemples}
-%    \begin{itemize}
-%        \item \texttt{ls *.txt} $\rightarrow$ Liste tous les fichiers finissant par .txt
-%        \item \texttt{rm TP?.c} $\rightarrow$ Supprime \texttt{TP1.c}, \texttt{TP2.c}, mais PAS \texttt{TP10.c}
-%    \end{itemize}
-%  \end{exampleblock}
-%\end{frame}
-
-% ---
-
-%\begin{frame}{Les Expressions Régulières (Regex)}
-%  Une Regex est un motif pour décrire une chaîne de caractères. Elle est utilisée par des outils comme \texttt{grep} pour chercher \textbf{dans le contenu} des fichiers.
-%
-%  \vspace{0.2cm}
-%  \textbf{Les métacaractères de base :}
-%  \begin{itemize}
-%    \item \texttt{\textbf{\textasciicircum}} (accent circonflexe) : Début de ligne.
-%    \item \texttt{\textbf{\$}} : Fin de ligne.
-%    \item \texttt{\textbf{.}} (point) : N'importe quel caractère unique.
-%    \item \texttt{\textbf{*}} : Répétition (0 ou plusieurs fois) du caractère \textit{précédent}.
-%  \end{itemize}
-%
-%  \vspace{0.3cm}
-%  \begin{exampleblock}{Exemples avec grep}
-%    \texttt{grep "\textasciicircum int" main.c} \\
-%    $\rightarrow$ Trouve les lignes qui \textbf{commencent} par "int".
-%
-%    \texttt{grep "error\$" log.txt} \\
-%    $\rightarrow$ Trouve les lignes qui \textbf{finissent} par "error".
-%  \end{exampleblock}
-%\end{frame}
-
-% ---
-
-%\begin{frame}{Attention à la confusion !}
-%  Le même symbole n'a pas le même sens selon le contexte !
-%
-%  \vspace{0.2cm}
-%  \renewcommand{\arraystretch}{1.4}
-%  \begin{table}
-%    \centering
-%    \begin{tabular}{|c|l|l|}
-%      \hline
-%      \rowcolor{gray!20}
-%      \textbf{Symbole} & \textbf{En Globbing (Fichiers)} & \textbf{En Regex (Texte/Grep)} \\
-%      \hline
-%      \textbf{\texttt{*}} & N'importe quoi & Répétition du précédent \\
-%      \hline
-%      \textbf{\texttt{.}} & Un vrai point (littéral) & N'importe quel caractère \\
-%      \hline
-%      \textbf{\texttt{?}} & Un seul caractère & 0 ou 1 fois le précédent (optionnel) \\
-%      \hline
-%    \end{tabular}
-%  \end{table}
-%
-%  \vspace{0.3cm}
-%  \textbf{Basique vs Étendue (Extended Regex) :}
-%  \begin{itemize}
-%    \item Par défaut, \texttt{grep} utilise les regex basiques (vieux standard).
-%    \item Pour utiliser des symboles modernes comme \texttt{+} (au moins 1 fois), \texttt{?} (0 ou 1 fois) ou \texttt{|} (OU logique), il faut utiliser :
-%    \par\centering\fbox{\texttt{grep -E} \quad ou \quad \texttt{egrep}}
-%  \end{itemize}
 %\end{frame}
 
 % ---
