@@ -571,63 +571,52 @@ echo "Age: $1 ans"
 
 % ---
 
-\begin{frame}[fragile]{Les Fonctions : Structurer le code}
-  Comme en C ou Python, les fonctions permettent de regrouper des commandes pour éviter les répétitions.
-  \par \textit{Imaginez-les comme des "mini-scripts" à l'intérieur du script.}
+\begin{frame}[fragile]{Fonctions}
 
-  \vspace{0.2cm}
-  \begin{block}{Déclaration et Appel}
+  \begin{itemize}
+
+    \item Déclaration et Appel
     \begin{itemize}
-        \item On définit la fonction avec des parenthèses vides \texttt{()}.
-        \item On l'appelle simplement par son nom (sans parenthèses !).
+      \footnotesize
+      \item on définit la fonction avec des parenthèses vides \texttt{()}
+      \item on l'appelle simplement par son nom (sans parenthèses)
     \end{itemize}
-  \end{block}
 
-  \begin{exampleblock}{Exemple simple}
 \begin{minted}{bash}
-# 1. Définition
-dire_bonjour() {
-    echo "--------------------"
-    echo "Bienvenue utilisateur"
-    echo "--------------------"
+# Définition
+ma_fonction() {
+    echo "Hello!"
 }
 
-# 2. Appel (plus loin dans le code)
-dire_bonjour
+# Appel
+ma_fonction
 \end{minted}
-  \end{exampleblock}
+  \end{itemize}
+
 \end{frame}
 
 % ---
 
-\begin{frame}[fragile]{Arguments et Portée des variables}
-  Les fonctions Bash fonctionnent différemment du C ou de Python sur deux points majeurs.
+\begin{frame}[fragile]{Fonctions}
 
-  \vspace{0.2cm}
-  \begin{columns}[t]
-    \column{0.5\textwidth}
-    \begin{block}{1. Les Arguments}
-      Pas d'arguments entre parenthèses !
-      \begin{itemize}
-        \item On passe les valeurs à l'appel : \\ \texttt{ma\_fonc \textcolor{blue}{arg1} \textcolor{orange}{arg2}}
-        \item On les récupère \textbf{dans} la fonction avec \texttt{\$1}, \texttt{\$2}...
-      \end{itemize}
-    \end{block}
+  \begin{itemize}
 
-    \column{0.5\textwidth}
-    \begin{block}{2. Variables Locales}
-      Par défaut, toute variable est \textbf{globale} (visible partout).
-      \begin{itemize}
-        \item Utilisez le mot-clé \texttt{\textbf{local}} pour confiner une variable à la fonction.
-      \end{itemize}
-    \end{block}
-  \end{columns}
+    \item arguments
+    \begin{itemize}
+      \footnotesize
+      \item on passe les valeurs à l'appel : \\ \texttt{ma\_fonc \textcolor{blue}{arg1} \textcolor{orange}{arg2}}
+      \item on les récupère dans la fonction avec \texttt{\$1}, \texttt{\$2} \ldots
+    \end{itemize}
 
-  \vspace{0.3cm}
-  \begin{exampleblock}{Exemple complet}
+    \item variables locales
+    \begin{itemize}
+      \footnotesize
+      \item par défaut, toute variable est globale
+      \item on utilise \texttt{local} pour confiner une variable à la fonction
+    \end{itemize}
+
 \begin{minted}{bash}
 additionner() {
-    # $1 et $2 sont les arguments passés à la fonction
     local resultat=$(( $1 + $2 ))
     echo "La somme est : $resultat"
 }
@@ -635,27 +624,26 @@ additionner() {
 additionner 10 5  # Affiche : La somme est : 15
 # echo $resultat  # Erreur car la variable est locale
 \end{minted}
-  \end{exampleblock}
+
+  \end{itemize}
+
 \end{frame}
 
 % ---
 
 \begin{frame}[fragile]{Résultat d'une commande}
 
-  Souvent, on ne veut pas afficher le résultat d'une commande à l'écran, 
-  mais le \textbf{stocker} dans une variable pour l'utiliser plus tard.
+  \begin{itemize}
 
-  \vspace{0.2cm}
-  \begin{block}{La Substitution de Commande}
-    Syntaxe : \texttt{\textbf{\$(commande)}}
+    \item Substitution de commande
     \begin{itemize}
-        \item Bash exécute la commande entre parenthèses.
-        \item Il remplace l'expression par la sortie (texte) de cette commande.
+      \footnotesize
+      \item syntaxe : \texttt{\$(commande)}
+      \item Bash exécute la commande entre parenthèses
+      \item il remplace l'expression par la sortie (texte) de cette commande
+      \item les \textit{backticks} \texttt{`commande`} sont obsolètes
     \end{itemize}
-  \end{block}
 
-  \vspace{0.3cm}
-  \begin{exampleblock}{Comparaison immédiate}
 \begin{minted}{bash}
 # 1. Affectation simple (Texte brut)
 prog="date"
@@ -665,69 +653,54 @@ echo $prog      # Affiche : date
 aujourdhui=$(date)
 echo $aujourdhui  # Affiche : Jeu 24 Oct 2024
 \end{minted}
-  \end{exampleblock}
 
-  \vspace{0.2cm}
-  \begin{columns}[t]
-    \column{0.55\textwidth}
-    \textbf{Exemple concret :}
-\begin{minted}{bash}
-# Compter les fichiers
-nb=$(ls | wc -l)
-echo "Il y a $nb fichiers ici."
-\end{minted}
+  \end{itemize}
 
-    \column{0.4\textwidth}
-    \begin{alertblock}{\emoji{warning} Obsolète}
-      Évitez les \textit{backticks} : \\
-      \texttt{date} \\
-      C'est l'ancienne syntaxe (moins lisible).
-    \end{alertblock}
-  \end{columns}
 \end{frame}
 
 % ---
 
-\begin{frame}{Les Flux Standards (Entrées / Sorties)}
-  Sous UNIX, chaque programme lancé est automatiquement connecté à 3 "canaux" de données (File Descriptors).
+\begin{frame}{Flux standards (Entrées / Sorties)}
+
+  Sous UNIX, chaque programme lancé est automatiquement connecté à 
+  3 "canaux" de données (File Descriptors)
 
   \vspace{0.3cm}
   \begin{itemize}
-    \item \textbf{0 : Entrée Standard (stdin)}
+    \item 0 : Entrée Standard (stdin)
     \begin{itemize}
-        \item \emoji{keyboard} Par défaut : Le Clavier.
-        \item C'est ce que le programme lit.
+      \footnotesize
+      \item par défaut : Le clavier
+      \item c'est ce que le programme lit
     \end{itemize}
 
-    \item \textbf{1 : Sortie Standard (stdout)}
+    \item 1 : Sortie Standard (stdout)
     \begin{itemize}
-        \item \emoji{desktop-computer} Par défaut : L'Écran (Terminal).
-        \item C'est là que le programme envoie ses résultats normaux.
+      \footnotesize
+      \item par défaut : L'écran (Terminal)
+      \item c'est là que le programme envoie ses résultats normaux
     \end{itemize}
 
-    \item \textbf{2 : Sortie d'Erreur (stderr)}
+    \item 2 : Sortie d'Erreur (stderr)
     \begin{itemize}
-        \item \emoji{warning} Par défaut : L'Écran (aussi !).
-        \item C'est là que le programme envoie les messages d'erreur.
+      \footnotesize
+      \item par défaut : L'écran
+      \item c'est là que le programme envoie les messages d'erreur
     \end{itemize}
+
+    \item Pourquoi séparer 1 et 2 ? \\
+          pour pouvoir enregistrer les résultats dans un fichier (données propres) tout 
+          en continuant à voir les erreurs s'afficher à l'écran
   \end{itemize}
 
-  \vspace{0.3cm}
-  \begin{alertblock}{Pourquoi séparer 1 et 2 ?}
-    Pour pouvoir enregistrer les résultats dans un fichier (données propres) tout en continuant à voir les erreurs s'afficher à l'écran.
-  \end{alertblock}
 \end{frame}
 
 % ---
 
 \begin{frame}[fragile]{Rediriger les sorties vers des fichiers}
-  On peut détourner le flux standard (1) ou d'erreur (2) vers un fichier avec des opérateurs spécifiques.
 
-  \vspace{0.2cm}
-  \begin{columns}[t]
-    \column{0.5\textwidth}
-    \begin{block}{Redirection Simple \texttt{>}}
-      \textbf{Écrase} le contenu du fichier (remise à zéro).
+  \begin{itemize}
+    \item Redirection simple (\texttt{>}) : Écrase le contenu du fichier (remise à zéro)
 \begin{minted}{bash}
 # Sauver la liste dans un fichier
 ls > liste.txt
@@ -735,60 +708,52 @@ ls > liste.txt
 # Le fichier est vidé avant !
 echo "Nouveau" > liste.txt
 \end{minted}
-    \end{block}
 
-    \column{0.5\textwidth}
-    \begin{block}{Redirection Double \texttt{>>}}
-      \textbf{Ajoute} à la fin du fichier (Append).
+    \item Redirection double (\texttt{>>}) : Ajoute à la fin du fichier
 \begin{minted}{bash}
 # Ajoute une ligne à la fin
 echo "Fin" >> liste.txt
-
-# Log (historique)
-date >> journal.log
 \end{minted}
-    \end{block}
-  \end{columns}
 
-  \vspace{0.3cm}
-  \textbf{Et les erreurs (Canal 2) ?}
-  \begin{itemize}
-    \item Il faut préciser le numéro \texttt{2} avant le chevron.
-    \item \texttt{gcc main.c \textbf{2>} erreurs.log} (Seules les erreurs vont dans le fichier).
+    \item Et les erreurs (Canal 2) ?
+    \begin{itemize}
+      \footnotesize
+      \item Il faut préciser le numéro \texttt{2} avant le chevron
+      \item \texttt{gcc main.c \textbf{2>} erreurs.log} (Seules les erreurs vont dans le fichier)
+    \end{itemize}
+
   \end{itemize}
+
 \end{frame}
 
 % ---
 
-%\begin{frame}{Redirections et Pipes (Tuyaux)}
-%  En UNIX, la philosophie est de créer de petits outils qui font une seule chose, et de les connecter entre eux.
-%
-%  \vspace{0.2cm}
-%  \textbf{1. Les Redirections vers des fichiers :}
-%  \begin{itemize}
-%    \item \texttt{\textbf{>}} : Redirige la sortie (écrase le fichier).
-%    \item \texttt{\textbf{>>}} : Redirige la sortie (ajoute à la fin du fichier).
-%    \item \textit{Exemple :} \texttt{echo "Log fini" >> rapport.txt}
-%  \end{itemize}
-%
-%  \vspace{0.3cm}
-%  \textbf{2. Le Pipe (Le tuyau \texttt{|}) :}
-%  \begin{itemize}
-%    \item Connecte la sortie d'une commande à l'entrée de la suivante.
-%    \item C'est de la plomberie logicielle !
-%  \end{itemize}
-%
-%  \begin{exampleblock}{Exemple puissant}
-%    \texttt{ls -l | grep ".txt" | wc -l}
-%    \begin{enumerate}
-%        \footnotesize
-%        \item \texttt{ls -l} : Liste tout le contenu.
-%        \item \texttt{grep ".txt"} : Ne garde que les lignes contenant ".txt".
-%        \item \texttt{wc -l} : Compte le nombre de lignes restantes.
-%    \end{enumerate}
-%    $\rightarrow$ \textbf{Résultat :} Affiche le nombre de fichiers texte.
-%  \end{exampleblock}
-%\end{frame}
+\begin{frame}[fragile]{Le Pipe (tuyau) \texttt{|}}
+
+  \begin{itemize}
+    \item Philosophie UNIX : Créer de petits outils qui font une 
+          seule chose et les combiner
+
+    \item Le Pipe \texttt{|} prend la sortie standard de la commande de gauche 
+          et l'injecte directement comme entrée de la commande de droite \\
+          \texttt{\textbf{Commande\_A} \quad \textcolor{blue}{1 (Sortie)} 
+          \quad $\xrightarrow{\text{\Large |}}$ \quad 
+          \textcolor{blue}{0 (Entrée)} \quad \textbf{Commande\_B}}
+
+    \begin{minted}{bash}
+# sans tuyau
+ls -l > temp.txt
+grep ".txt" temp.txt > selection.txt
+wc -l selection.txt
+rm temp.txt selection.txt
+
+# avec tuyau
+ls -l | grep ".txt" | wc -l
+    \end{minted}
+
+  \end{itemize}
+
+\end{frame}
 
 % ---
 
