@@ -345,6 +345,10 @@ fi
     \prompt\ \tcomment{condition1 ou condition2 :}
 
     \prompt\ condition1 || condition2
+
+    \prompt\ \tcomment{négation :}
+
+    \prompt\ ! condition
   \end{terminal}
 
 \end{frame}
@@ -402,108 +406,357 @@ done
 
 % ---
 
-%\begin{frame}{Structure d'un script Bash}
-%
-%  Un script Bash est un simple fichier texte. Par convention, on lui donne l'extension \texttt{.sh}.
-%
-%  \vspace{0.3cm}
-%  \begin{exampleblock}{Exemple : \texttt{bonjour.sh}}
-%    \texttt{\#!/bin/bash} \\
-%    \texttt{\# Ceci est un commentaire} \\
-%    \texttt{echo "Bonjour tout le monde !"}
-%  \end{exampleblock}
-%
-%  \vspace{0.3cm}
-%  \begin{itemize}
-%    \item \textbf{Le Shebang (\texttt{\#!})} :
-%    \begin{itemize}
-%        \footnotesize
-%        \item C'est obligatoirement la 1\textsuperscript{ère} ligne.
-%        \item \texttt{\#!/bin/bash} indique au système : "Utilise le programme \textit{bash} situé dans \textit{/bin} pour exécuter ce fichier".
-%    \end{itemize}
-%    \item \textbf{\texttt{echo}} : Commande pour afficher du texte à l'écran.
-%    \item \textbf{\texttt{\#}} : Tout ce qui suit est ignoré (commentaire).
-%  \end{itemize}
-%\end{frame}
+\begin{frame}[fragile]{Les Choix Multiples (Case)}
+  Quand on a beaucoup de conditions à tester sur une seule variable, \texttt{case} 
+  est plus propre qu'une suite de \texttt{if / elif / elif}.
+
+  \begin{block}{Syntaxe Générale}
+\begin{minted}{bash}
+case $variable in
+    motif1)
+        commandes ;;
+    motif2 | motif3)    # Le tuyau | signifie OU
+        commandes ;;
+    *)                  # * capte tout le reste (Default)
+        commandes_par_defaut ;;
+esac
+\end{minted}
+  \end{block}
+
+  \vspace{0.1cm}
+  \footnotesize
+  \textbf{Attention :} Ne pas oublier le double point-virgule \texttt{;;} à la fin de chaque bloc !
+\end{frame}
 
 % ---
 
-%\begin{frame}{Rendre le script exécutable}
-%  Par défaut, pour des raisons de sécurité, un fichier texte n'est pas exécutable.
-%
-%  \begin{alertblock}{Le piège du débutant}
-%    Si vous tapez juste \texttt{./bonjour.sh}, vous aurez l'erreur : \\
-%    \texttt{Permission denied (Permission non accordée)}
-%  \end{alertblock}
-%
-%  \vspace{0.3cm}
-%  \textbf{La solution : changer les droits (permissions)}
-%
-%  \begin{enumerate}
-%    \item Rendre exécutable (une seule fois) :
-%    \par\centering\fbox{\texttt{chmod +x bonjour.sh}}
-%
-%    \item Exécuter le script :
-%    \par\centering\fbox{\texttt{./bonjour.sh}}
-%  \end{enumerate}
-%
-%  \vspace{0.2cm}
-%  \footnotesize
-%  \textit{Note : Le \texttt{./} signifie "dans le dossier courant". Sans cela, le shell cherche la commande dans les dossiers système.}
-%\end{frame}
+\begin{frame}[fragile]{Exemple}
+
+  \begin{exampleblock}{Exemple : Gestion d'une réponse utilisateur}
+\begin{minted}{bash}
+read -p "Voulez-vous continuer ? (oui/non) " rep
+
+case $rep in
+    # Accepte "o", "O", "oui", "Oui", "OUI"...
+    [oO] | [oO][uU][iI])
+        echo "C'est parti !" ;;
+    [nN]*)
+        echo "Arrêt du script."
+    *)
+        echo "Je n'ai pas compris..." ;;
+esac
+\end{minted}
+  \end{exampleblock}
+
+\end{frame}
 
 % ---
 
-%\begin{frame}{Les Arguments du script}
-%  On veut souvent passer des informations au script dès son lancement, sans modifier le code.
-%  \vspace{0.2cm}
-%
-%  \textbf{Commande :} \texttt{./salut.sh \textcolor{blue}{Pierre} \textcolor{orange}{Paul}}
-%
-%  \vspace{0.3cm}
-%  Bash stocke ces mots automatiquement dans des variables numérotées :
-%
-%  \begin{itemize}
-%    \setlength\itemsep{1em}
-%    \item \texttt{\$0} : Le nom du script (\texttt{./salut.sh})
-%    \item \texttt{\textcolor{blue}{\$1}} : Le premier argument (\texttt{Pierre})
-%    \item \texttt{\textcolor{orange}{\$2}} : Le deuxième argument (\texttt{Paul})
-%    \item \texttt{\$\#} : Le nombre total d'arguments (ici \texttt{2})
-%    \item \texttt{\$@} : La liste de tous les arguments
-%  \end{itemize}
-%
-%  \vspace{0.3cm}
-%  \begin{exampleblock}{Exemple pratique}
-%    \texttt{echo "Bonjour \$1, comment va \$2 ?"} \\
-%    $\rightarrow$ Affiche : Bonjour Pierre, comment va Paul ?
-%  \end{exampleblock}
-%\end{frame}
+\begin{frame}[fragile]{Script Bash}
+
+  \begin{itemize}
+
+    \item Nommage du fichier :
+    \begin{itemize}
+      \footnotesize
+      \item [\emoji{check-mark-button}] Lettres (a-z), chiffres (0-9), tirets (\texttt{-}, \texttt{\_}) et point (\texttt{.})
+      \item [\emoji{cross-mark}] Espaces et caractères accentués (é, à, \ldots)
+      \item Extension : \texttt{.sh} : pour aider l'éditeur de texte
+    \end{itemize}
+
+    \item fichier \texttt{hello.sh}
+\begin{minted}{bash}
+# Ceci est un commentaire
+echo "Hello World!"
+\end{minted}
+
+    pour lancer
+    \begin{terminal}
+      \prompt\ \shcmd{bash} hello.sh
+
+      \prompt\ Hello World!
+    \end{terminal}
+  \end{itemize}
+
+\end{frame}
 
 % ---
 
-%\begin{frame}{Bonnes pratiques de scripting}
-%  Pour écrire des scripts robustes et lisibles (et avoir une bonne note !) :
-%
-%  \vspace{0.3cm}
-%  \begin{enumerate}
-%    \setlength\itemsep{1em}
-%    \item \textbf{Toujours le Shebang} :
-%    La 1\textsuperscript{ère} ligne doit être \texttt{\#!/bin/bash}.
-%
-%    \item \textbf{Indentation} :
-%    Décalez le code à l'intérieur des \texttt{if} et des \texttt{for} (comme en Python ou C).
-%
-%    \item \textbf{Guillemets} :
-%    Protégez vos variables avec des guillemets doubles si elles peuvent contenir des espaces.
-%    \\ \texttt{rm "\$nom\_fichier"} (au cas où le fichier s'appelle "TP 1.txt").
-%
-%    \item \textbf{Noms parlants} :
-%    \texttt{\$cpt} est mieux que \texttt{\$x}, mais \texttt{\$compteur} est idéal.
-%
-%    \item \textbf{Commentaires} :
-%    Utilisez \texttt{\#} pour expliquer les parties complexes.
-%  \end{enumerate}
-%\end{frame}
+\begin{frame}[fragile]{Script Bash}
+
+  \begin{itemize}
+
+    \item Shebang  (1\textsuperscript{ère} ligne) : indique quel interpréteur utiliser
+\begin{minted}{bash}
+#!/usr/bin/env bash
+echo "Hello World!"
+\end{minted}
+
+    \item alternative (moins portable)
+\begin{minted}{bash}
+#!/bin/bash
+\end{minted}
+
+    \begin{terminal}
+      \prompt\ \shcmd{./hello.sh}
+
+      \prompt\ bash: ./hello.sh: Permission denied
+
+      \prompt\ \tcomment{changer les permissions}
+
+      \prompt\ \shcmd{chmod} +x hello.sh
+
+      \prompt\ \shcmd{./hello.sh}
+
+      \prompt\ Hello World!
+    \end{terminal}
+  \end{itemize}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Arguments du script}
+
+  \begin{itemize}
+    \item \texttt{\$0} : Le nom du script (avec le chemin)
+
+    \item \texttt{\$1} : Le premier argument
+
+    \item \texttt{\$2} : Le deuxième argument
+
+    \item \texttt{\$\#} : Le nombre total d'arguments
+
+    \item \texttt{\$@} : La liste de tous les arguments
+  \end{itemize}
+ 
+\end{frame}
+% ---
+
+\begin{frame}[fragile]{Exemple}
+
+  \begin{itemize}
+ 
+    \item script \texttt{hello.sh}
+\begin{minted}{bash}
+#!/usr/bin/env bash
+echo "Prenom: $0"
+echo "Age: $1 ans"
+\end{minted}
+
+    \begin{terminal}
+      \footnotesize
+      \prompt\ \shcmd{./hello.sh} Toto 20
+
+      \prompt\ Prenom: Toto
+
+      \prompt\ Age: 20 ans
+
+      \prompt\ \shcmd{./hello.sh} Jean Christophe 20
+
+      \prompt\ Prenom: Jean
+
+      \prompt\ Age: Christophe ans
+
+      \prompt\ \shcmd{./hello.sh} "Jean Christophe" 20
+
+      \prompt\ Prenom: Jean Christophe
+
+      \prompt\ Age: 20 ans
+    \end{terminal}
+
+  \end{itemize}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Les Fonctions : Structurer le code}
+  Comme en C ou Python, les fonctions permettent de regrouper des commandes pour éviter les répétitions.
+  \par \textit{Imaginez-les comme des "mini-scripts" à l'intérieur du script.}
+
+  \vspace{0.2cm}
+  \begin{block}{Déclaration et Appel}
+    \begin{itemize}
+        \item On définit la fonction avec des parenthèses vides \texttt{()}.
+        \item On l'appelle simplement par son nom (sans parenthèses !).
+    \end{itemize}
+  \end{block}
+
+  \begin{exampleblock}{Exemple simple}
+\begin{minted}{bash}
+# 1. Définition
+dire_bonjour() {
+    echo "--------------------"
+    echo "Bienvenue utilisateur"
+    echo "--------------------"
+}
+
+# 2. Appel (plus loin dans le code)
+dire_bonjour
+\end{minted}
+  \end{exampleblock}
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Arguments et Portée des variables}
+  Les fonctions Bash fonctionnent différemment du C ou de Python sur deux points majeurs.
+
+  \vspace{0.2cm}
+  \begin{columns}[t]
+    \column{0.5\textwidth}
+    \begin{block}{1. Les Arguments}
+      Pas d'arguments entre parenthèses !
+      \begin{itemize}
+        \item On passe les valeurs à l'appel : \\ \texttt{ma\_fonc \textcolor{blue}{arg1} \textcolor{orange}{arg2}}
+        \item On les récupère \textbf{dans} la fonction avec \texttt{\$1}, \texttt{\$2}...
+      \end{itemize}
+    \end{block}
+
+    \column{0.5\textwidth}
+    \begin{block}{2. Variables Locales}
+      Par défaut, toute variable est \textbf{globale} (visible partout).
+      \begin{itemize}
+        \item Utilisez le mot-clé \texttt{\textbf{local}} pour confiner une variable à la fonction.
+      \end{itemize}
+    \end{block}
+  \end{columns}
+
+  \vspace{0.3cm}
+  \begin{exampleblock}{Exemple complet}
+\begin{minted}{bash}
+additionner() {
+    # $1 et $2 sont les arguments passés à la fonction
+    local resultat=$(( $1 + $2 ))
+    echo "La somme est : $resultat"
+}
+
+additionner 10 5  # Affiche : La somme est : 15
+# echo $resultat  # Erreur car la variable est locale
+\end{minted}
+  \end{exampleblock}
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Résultat d'une commande}
+
+  Souvent, on ne veut pas afficher le résultat d'une commande à l'écran, 
+  mais le \textbf{stocker} dans une variable pour l'utiliser plus tard.
+
+  \vspace{0.2cm}
+  \begin{block}{La Substitution de Commande}
+    Syntaxe : \texttt{\textbf{\$(commande)}}
+    \begin{itemize}
+        \item Bash exécute la commande entre parenthèses.
+        \item Il remplace l'expression par la sortie (texte) de cette commande.
+    \end{itemize}
+  \end{block}
+
+  \vspace{0.3cm}
+  \begin{exampleblock}{Comparaison immédiate}
+\begin{minted}{bash}
+# 1. Affectation simple (Texte brut)
+prog="date"
+echo $prog      # Affiche : date
+
+# 2. Substitution (Exécution)
+aujourdhui=$(date)
+echo $aujourdhui  # Affiche : Jeu 24 Oct 2024
+\end{minted}
+  \end{exampleblock}
+
+  \vspace{0.2cm}
+  \begin{columns}[t]
+    \column{0.55\textwidth}
+    \textbf{Exemple concret :}
+\begin{minted}{bash}
+# Compter les fichiers
+nb=$(ls | wc -l)
+echo "Il y a $nb fichiers ici."
+\end{minted}
+
+    \column{0.4\textwidth}
+    \begin{alertblock}{\emoji{warning} Obsolète}
+      Évitez les \textit{backticks} : \\
+      \texttt{date} \\
+      C'est l'ancienne syntaxe (moins lisible).
+    \end{alertblock}
+  \end{columns}
+\end{frame}
+
+% ---
+
+\begin{frame}{Les Flux Standards (Entrées / Sorties)}
+  Sous UNIX, chaque programme lancé est automatiquement connecté à 3 "canaux" de données (File Descriptors).
+
+  \vspace{0.3cm}
+  \begin{itemize}
+    \item \textbf{0 : Entrée Standard (stdin)}
+    \begin{itemize}
+        \item \emoji{keyboard} Par défaut : Le Clavier.
+        \item C'est ce que le programme lit.
+    \end{itemize}
+
+    \item \textbf{1 : Sortie Standard (stdout)}
+    \begin{itemize}
+        \item \emoji{desktop-computer} Par défaut : L'Écran (Terminal).
+        \item C'est là que le programme envoie ses résultats normaux.
+    \end{itemize}
+
+    \item \textbf{2 : Sortie d'Erreur (stderr)}
+    \begin{itemize}
+        \item \emoji{warning} Par défaut : L'Écran (aussi !).
+        \item C'est là que le programme envoie les messages d'erreur.
+    \end{itemize}
+  \end{itemize}
+
+  \vspace{0.3cm}
+  \begin{alertblock}{Pourquoi séparer 1 et 2 ?}
+    Pour pouvoir enregistrer les résultats dans un fichier (données propres) tout en continuant à voir les erreurs s'afficher à l'écran.
+  \end{alertblock}
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Rediriger les sorties vers des fichiers}
+  On peut détourner le flux standard (1) ou d'erreur (2) vers un fichier avec des opérateurs spécifiques.
+
+  \vspace{0.2cm}
+  \begin{columns}[t]
+    \column{0.5\textwidth}
+    \begin{block}{Redirection Simple \texttt{>}}
+      \textbf{Écrase} le contenu du fichier (remise à zéro).
+\begin{minted}{bash}
+# Sauver la liste dans un fichier
+ls > liste.txt
+
+# Le fichier est vidé avant !
+echo "Nouveau" > liste.txt
+\end{minted}
+    \end{block}
+
+    \column{0.5\textwidth}
+    \begin{block}{Redirection Double \texttt{>>}}
+      \textbf{Ajoute} à la fin du fichier (Append).
+\begin{minted}{bash}
+# Ajoute une ligne à la fin
+echo "Fin" >> liste.txt
+
+# Log (historique)
+date >> journal.log
+\end{minted}
+    \end{block}
+  \end{columns}
+
+  \vspace{0.3cm}
+  \textbf{Et les erreurs (Canal 2) ?}
+  \begin{itemize}
+    \item Il faut préciser le numéro \texttt{2} avant le chevron.
+    \item \texttt{gcc main.c \textbf{2>} erreurs.log} (Seules les erreurs vont dans le fichier).
+  \end{itemize}
+\end{frame}
 
 % ---
 

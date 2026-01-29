@@ -33,7 +33,8 @@
 
 L'objectif de cette question est de découvrir la création et l'exécution d'un script Bash simple.
 
-\begin{itemize}
+\begin{enumerate}
+
     \item Créez un répertoire nommé \texttt{TD3} dans votre répertoire personnel (\texttt{\$HOME}).
     \begin{terminal}
     \prompt\ \tcomment{d'abord, placez-vous dans votre répertoire personnel}
@@ -242,14 +243,13 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)"
 
     % ---
 
-    \item Modifiez le script pour définir une variable nommée \texttt{prenom}
+    \item Modifiez le script pour définir une variable nommée \texttt{PRENOM}
     contenant votre prénom, et affichez le message :
 \begin{minted}{bash}
 #!/usr/bin/env bash
 
-prenom="Toto"
-
-echo "Coucou ${prenom}"
+PRENOM="Toto"
+echo "Coucou ${PRENOM}"
 \end{minted}
 
     \begin{infobox}
@@ -258,20 +258,90 @@ echo "Coucou ${prenom}"
     \end{infobox}
 
     % ---
+
+    \item Ajoutez une dernière ligne au script afin de terminer son exécution avec 
+          un code de retour indiquant que tout s'est bien déroulé.
+          Testez ensuite le script, puis affichez son code de retour (\texttt{echo \$?}).
+\begin{minted}{bash}
+exit 0
+\end{minted}
+
+    \begin{infobox}
+    La commande \texttt{exit} permet de terminer l'exécution du script.
+    Un code de retour différent de \texttt{0} (par exemple, \texttt{exit 1}) indique une erreur.
+    \end{infobox}
+
+    % ---
     
     \item Modifiez le script afin de lire le prénom lors de l'exécution à l'aide de la commande \texttt{read}.
 \begin{minted}{bash}
 #!/usr/bin/env bash
 
-read -p "Entrez votre prénom : " prenom
-
-echo "Coucou ${prenom}"
+read -p "Entrez votre prénom : " PRENOM
+echo "Coucou ${PRENOM}"
 \end{minted}
 
     \begin{infobox}
     La commande \texttt{read} peut afficher un message à l'utilisateur avant de lire l'entrée 
     grâce à l'option \texttt{-p}.
     Cela permet de rendre le script plus interactif et plus lisible.
+    \end{infobox}
+
+    % ---
+
+    % ---
+
+    \item Modifiez le script afin d'afficher le prénom saisi entièrement en majuscules.
+\begin{minted}{bash}
+echo "Coucou ${PRENOM^^}"
+\end{minted}
+
+    \begin{infobox}
+    Bash permet de modifier la casse d'une chaîne de caractères.
+    La syntaxe \texttt{\$\{VAR\^{}\^{}\}} convertit le contenu de \texttt{VAR} en majuscules,
+    tandis que \texttt{\$\{VAR,,\}} le convertit en minuscules.
+    \end{infobox}
+
+    % ---
+
+    \item Modifiez le script afin d'afficher le nombre de lettres contenues dans la variable \texttt{PRENOM}.
+\begin{minted}{bash}
+#!/usr/bin/env bash
+
+read -p "Entrez votre prénom : " PRENOM
+echo "Coucou ${PRENOM}"
+
+NB_LETTRES=${#PRENOM}
+echo "Votre prénom est composé de ${NB_LETTRES} lettres"
+\end{minted}
+
+    \begin{infobox}
+    En bash, la syntaxe \texttt{\$\{\#VAR\}} permet d'obtenir la longueur de la chaîne de caractères
+    contenue dans la variable \texttt{VAR}.
+    \end{infobox}
+
+    % ---
+
+    \item Modifiez le script pour afficher certaines lettres du prénom à l'aide de la manipulation de chaînes :
+    \begin{itemize}
+        \item la première lettre de \texttt{PRENOM}
+        \item la deuxième lettre de \texttt{PRENOM}
+        \item la troisième lettre de \texttt{PRENOM}
+        \item les trois premières lettres de \texttt{PRENOM}
+        \item la dernière lettre de \texttt{PRENOM}
+    \end{itemize}
+\begin{minted}{bash}
+echo "la première lettre de ${PRENOM} est ${PRENOM:0:1}"
+echo "la deuxième lettre de ${PRENOM} est ${PRENOM:1:1}"
+echo "la troisième lettre de ${PRENOM} est ${PRENOM:2:1}"
+echo "les trois premières lettres de ${PRENOM} sont ${PRENOM:0:3}"
+echo "la dernière lettre de ${PRENOM} est ${PRENOM:(-1):1}"
+\end{minted}
+
+    \begin{infobox}
+    En bash, la syntaxe \texttt{\$\{VAR:position:longueur\}} permet d'extraire une sous-chaîne.
+    La position commence à \texttt{0}. Si \texttt{longueur} n'est pas spécifiée, sa valeur par 
+    défaut est \texttt{1}.
     \end{infobox}
 
     % ---
@@ -285,9 +355,8 @@ echo "Coucou ${prenom}"
 \begin{minted}{bash}
 #!/usr/bin/env bash
 
-prenom=$1
-
-echo "Coucou ${prenom}"
+PRENOM=$1
+echo "Coucou ${PRENOM}"
 \end{minted}
 
     \begin{infobox}
@@ -307,47 +376,42 @@ echo "Coucou ${prenom}"
 \begin{minted}{bash}
 #!/usr/bin/env bash
 
-prenom=$1
-age=$2
-
-echo "Coucou ${prenom}"
-echo "J'espère que ton ${age}e anniversaire s'est bien passé !"
+AGE=$2
+echo "J'espère que ton ${AGE}e anniversaire s'est bien passé !"
 \end{minted}
+
+    % ---
+
+    \item Modifiez le script afin de vérifier que le nombre de paramètres passés en ligne de commande
+         est exactement égal à \texttt{2}.
+         Si ce n'est pas le cas, affichez un message d'erreur puis quittez le script.
+\begin{minted}{bash}
+if [[ $# -ne 2 ]]; then
+    echo "Erreur : le script attend exactement 2 paramètres."
+    exit 1
+fi
+\end{minted}
+
+    \begin{infobox}
+    La variable spéciale \texttt{\$\#} contient le nombre de paramètres passés au script.
+    \end{infobox}
 
     % ---
 
     \item Modifiez le script afin d'afficher une phrase indiquant que le prochain anniversaire
     sera encore meilleur, en utilisant un calcul sur l'âge.
 \begin{minted}{bash}
-#!/usr/bin/env bash
-
-prenom=$1
-age=$2
-
-echo "Coucou ${prenom}"
-echo "J'espère que ton ${age}e anniversaire s'est bien passé !"
-
-prochain_age=$((age + 1))
-echo "Le ${prochain_age}e sera encore meilleur :)"
+PROCHAIN_AGE=$((AGE + 1))
+echo "Le ${PROCHAIN_AGE}e sera encore meilleur :)"
 \end{minted}
 
     % ---
 
-    \item Modifiez le script afin de réaliser l'affichage à l'aide d'un stégosaure
-    (en utilisant \texttt{cowsay}).
-\begin{minted}{bash}
-#!/usr/bin/env bash
+    \item Modifiez le script afin d'afficher le résultat à l'aide d'un stégosaure.
+          Pour cela, utilisez la commande \texttt{cowsay -f stegosaurus} à la place de \texttt{echo}.
+          Testez votre script pour vérifier que l'affichage est correct.
 
-prenom=$1
-age=$2
-
-cowsay -f stegosaurus "Coucou ${prenom}"
-cowsay -f stegosaurus "J'espère que ton ${age}e anniversaire s'est bien passé !"
-
-prochain_age=$((age + 1))
-cowsay -f stegosaurus "Le ${prochain_age}e sera encore meilleur :)"
-\end{minted}
-\end{itemize}
+\end{enumerate}
 
 
 
@@ -421,9 +485,10 @@ done
 
     % ---
 
-    \item Modifiez la boucle précédente pour afficher les entiers de \texttt{10} à \texttt{-10}.
+    \item Modifiez la boucle précédente pour afficher les entiers de \texttt{10} à \texttt{-10} 
+          avec un pas de \texttt{-2}.
 \begin{minted}{bash}
-for i in {10..-10}; do
+for i in {10..-10..-2}; do
     echo $i
 done
 \end{minted}
