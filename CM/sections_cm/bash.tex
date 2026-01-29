@@ -324,7 +324,7 @@ done
 
 % ---
 
-\begin{frame}[fragile]{if / elif / else}
+\begin{frame}[fragile]{Conditions (\texttt{if / elif / else})}
 
   \begin{minted}{bash}
 if [[ condition ]]; then
@@ -336,47 +336,101 @@ else
 fi
   \end{minted}
 
+  \pause
+
+  \begin{itemize}
+    \setlength\itemsep{1em}
+
+    \item négation : \texttt{! condition}
+
+    \pause
+    \item ``ET'' : condition1 \&\& condition2
+
+    \pause
+    \item ``OU'' : condition1 || condition2
+  \end{itemize}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Exemple}
+
   \begin{terminal}
     \footnotesize
-    \prompt\ \tcomment{condition1 et condition2 :}
+    \onslide<1->{
+    \prompt\ a=5; b=1
 
-    \prompt\ condition1 \&\& condition2
+    \prompt\ \shcmd{[[} a > b \shcmd{]]} \&\& \shcmd{echo} "a > b"
+    }
 
-    \prompt\ \tcomment{condition1 ou condition2 :}
+    \onslide<2->{
+    \prompt\
+    }
 
-    \prompt\ condition1 || condition2
+    \onslide<3->{
+    \prompt\ \shcmd{[[} a < b \shcmd{]]} \&\& \shcmd{echo} "a < b"
 
-    \prompt\ \tcomment{négation :}
+    \prompt\ a < b
+    }
 
-    \prompt\ ! condition
+    \onslide<4->{
+    \prompt\ \shcmd{[[} a -gt b \shcmd{]]} \&\& \shcmd{echo} "a > b"
+
+    \prompt\ a > b
+    }
+
+    \onslide<5->{
+    \prompt\ ((a > b)) \&\& \shcmd{echo} "a > b"
+
+    \prompt\ a > b
+    }
   \end{terminal}
 
 \end{frame}
 
 % ---
 
-\begin{frame}[fragile]{Exemples}
+\begin{frame}[fragile]{Choix multiples \texttt{case}}
 
-  \begin{terminal}
-    \footnotesize
-    \prompt\ a=5; b=1
+  Quand on a beaucoup de conditions à tester sur une seule variable, \texttt{case} 
+  est plus propre qu'une suite de \texttt{if / elif / elif}
 
-    \prompt\ \shcmd{[[} a > b \shcmd{]]} \&\& \shcmd{echo} "a > b"
+\begin{minted}{bash}
+case $variable in
+    motif1)
+        commandes_1 ;;
+    motif2)
+        commandes_2 ;;
+    *)                  # capte tout le reste (Default)
+        commandes_par_defaut ;;
+esac
+\end{minted}
 
-    \prompt\
+\end{frame}
 
-    \prompt\ \shcmd{[[} a < b \shcmd{]]} \&\& \shcmd{echo} "a < b"
+% ---
 
-    \prompt\ a < b
+\begin{frame}[fragile]{Exemple}
 
-    \prompt\ \shcmd{[[} a -gt b \shcmd{]]} \&\& \shcmd{echo} "a > b"
+\begin{minted}{bash}
+read -p "Voulez-vous continuer ? (oui/non) " rep
 
-    \prompt\ a > b
+case $rep in
 
-    \prompt\ ((a > b)) \&\& \shcmd{echo} "a > b"
+    # "o", "O", "oui", "Oui", "OUI"...
+    [oO] | [oO][uU][iI])
+        echo "C'est parti !" ;;
 
-    \prompt\ a > b
-  \end{terminal}
+    # "n", "N", "non", "Non", "NON"...
+    [nN] | [nN][oO][nN])
+        echo "Arrêt du script."
+        exit 0 ;;
+
+    *)
+        echo "Je n'ai pas compris..." ;;
+esac
+\end{minted}
 
 \end{frame}
 
@@ -390,6 +444,8 @@ while [[ condition ]]; do
 done
 \end{minted}
 
+  \pause
+
 \begin{minted}{bash}
 while true; do
     # Commandes à répéter
@@ -399,54 +455,6 @@ while true; do
 done
 \end{minted}
 
-  \begin{itemize}
-    \item[\emoji{warning}] Attention aux boucles infinies
-  \end{itemize}
-\end{frame}
-
-% ---
-
-\begin{frame}[fragile]{Choix multiples (Case)}
-
-  Quand on a beaucoup de conditions à tester sur une seule variable, \texttt{case} 
-  est plus propre qu'une suite de \texttt{if / elif / elif}
-
-\begin{minted}{bash}
-case $variable in
-    motif1)
-        commandes ;;
-    motif2 | motif3)    # Le tuyau | signifie OU
-        commandes ;;
-    *)                  # * capte tout le reste (Default)
-        commandes_par_defaut ;;
-esac
-\end{minted}
-
-  \vspace{0.1cm}
-  \footnotesize
-  \textbf{Attention :} Ne pas oublier le double point-virgule \texttt{;;} à la fin de chaque bloc !
-\end{frame}
-
-% ---
-
-\begin{frame}[fragile]{Exemple}
-
-  Gestion d'une réponse utilisateur
-
-\begin{minted}{bash}
-read -p "Voulez-vous continuer ? (oui/non) " rep
-
-case $rep in
-    # Accepte "o", "O", "oui", "Oui", "OUI"...
-    [oO] | [oO][uU][iI])
-        echo "C'est parti !" ;;
-    [nN]*)
-        echo "Arrêt du script."
-    *)
-        echo "Je n'ai pas compris..." ;;
-esac
-\end{minted}
-
 \end{frame}
 
 % ---
@@ -454,22 +462,24 @@ esac
 \begin{frame}[fragile]{Script Bash}
 
   \begin{itemize}
+  \setlength\itemsep{1em}
 
     \item nommage du fichier :
     \begin{itemize}
       \footnotesize
       \item [\emoji{check-mark-button}] lettres (a-z), chiffres (0-9), tirets (\texttt{-}, \texttt{\_}) et point (\texttt{.})
       \item [\emoji{cross-mark}] espaces et caractères accentués (é, à, \ldots)
-      \item extension : \texttt{.sh} : pour aider l'éditeur de texte
+      \item extension (\texttt{.sh}) : pour aider l'éditeur de texte
     \end{itemize}
 
-    \item fichier \texttt{hello.sh}
+    \pause
+
+    \item Exemple : fichier \texttt{hello.sh}
 \begin{minted}{bash}
 # Ceci est un commentaire
 echo "Hello World!"
 \end{minted}
 
-    \item pour exécuter
     \begin{terminal}
       \prompt\ \shcmd{bash} hello.sh
 
@@ -484,29 +494,46 @@ echo "Hello World!"
 \begin{frame}[fragile]{Shebang}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
 
     \item \texttt{Shebang} : indique quel interpréteur utiliser (1\textsuperscript{ère} ligne)
 \begin{minted}{bash}
 #!/usr/bin/env bash
 \end{minted}
 
+    \pause
+
     \item alternative (moins portable) : \texttt{\#!/bin/bash}
 
-    \item[\emoji{warning}] chemin obligatoire (sauf si \texttt{PATH} est ajusté)
+    \pause
 
     \begin{terminal}
       \footnotesize
+      \onslide<3->{
+      \prompt\ \shcmd{hello.sh}
+
+      \prompt\ hello.sh: command not found
+      }
+
+      \onslide<4->{
       \prompt\ \shcmd{./hello.sh}
 
       \prompt\ bash: ./hello.sh: Permission denied
+      }
 
+      \onslide<5->{
       \prompt\ \tcomment{changer les permissions}
+      }
 
+      \onslide<6->{
       \prompt\ \shcmd{chmod} +x hello.sh
+      }
 
+      \onslide<7->{
       \prompt\ \shcmd{./hello.sh}
 
       \prompt\ Hello World!
+      }
     \end{terminal}
   \end{itemize}
 
@@ -517,11 +544,15 @@ echo "Hello World!"
 \begin{frame}[fragile]{Permissions UNIX}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
+
     \item chaque fichier/dossier possède des droits d'accès (\texttt{ls -l})
     \begin{center}
       \large
       \texttt{\textcolor{gray}{-} \textcolor{blue}{rwx} \textcolor{orange}{r-x} \textcolor{red}{r--}}
     \end{center}
+
+    \pause
 
     \begin{itemize}
       \footnotesize
@@ -530,6 +561,8 @@ echo "Hello World!"
       \item \textcolor{gray}{l} : lien symbolique
     \end{itemize}
 
+    \pause
+
     \begin{itemize}
       \footnotesize
       \item \textcolor{blue}{\textbf{u} (\texttt{user})} : le propriétaire du fichier
@@ -537,12 +570,16 @@ echo "Hello World!"
       \item \textcolor{red}{\textbf{o} (\texttt{other})} : le reste du monde
     \end{itemize}
 
+    \pause
+
     \begin{itemize}
       \footnotesize
       \item \texttt{\textbf{r}} (\textit{read}) : lecture
       \item \texttt{\textbf{w}} (\textit{write}) : écriture
       \item \texttt{\textbf{x}} (\textit{execute}) : exécution
     \end{itemize}
+
+    \pause
 
     \item modifier les droits : \texttt{chmod [qui][+/-][quoi] script.sh}
     \begin{terminal}
@@ -566,6 +603,8 @@ echo "Hello World!"
   \end{terminal}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
+
     \item \texttt{\$\#} : nombre total d'arguments
 
     \item \texttt{\$@} : liste de tous les arguments
@@ -585,6 +624,7 @@ echo "Hello World!"
 \begin{frame}[fragile]{Exemple}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
  
     \item script \texttt{hello.sh}
 \begin{minted}{bash}
@@ -593,25 +633,36 @@ echo "Prenom: $0"
 echo "Age: $1 ans"
 \end{minted}
 
+    \pause
+
     \begin{terminal}
       \footnotesize
+
+      \onslide<2->{
       \prompt\ \shcmd{./hello.sh} Toto 20
 
       \prompt\ Prenom: Toto
 
       \prompt\ Age: 20 ans
+      }
 
+      \onslide<3->{
       \prompt\ \shcmd{./hello.sh} Jean Christophe 20
+      }
 
+      \onslide<4->{
       \prompt\ Prenom: Jean
 
       \prompt\ Age: Christophe ans
+      }
 
+      \onslide<5->{
       \prompt\ \shcmd{./hello.sh} "Jean Christophe" 20
 
       \prompt\ Prenom: Jean Christophe
 
       \prompt\ Age: 20 ans
+      }
     \end{terminal}
 
   \end{itemize}
@@ -623,6 +674,7 @@ echo "Age: $1 ans"
 \begin{frame}[fragile]{Fonctions}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
 
     \item déclaration et appel
     \begin{itemize}
@@ -641,6 +693,8 @@ ma_fonction() {
 ma_fonction
 \end{minted}
 
+    \pause
+
     \item arguments
     \begin{itemize}
       \footnotesize
@@ -656,6 +710,7 @@ ma_fonction
 \begin{frame}[fragile]{Fonctions}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
 
     \item portée des variables dans une fonction
     \begin{itemize}
@@ -669,10 +724,19 @@ additionner() {
     local resultat=$(($1 + $2))
     echo "La somme est : $resultat"
 }
-
-additionner 10 5  # Affiche : La somme est : 15
-# echo $resultat  # Erreur car la variable est locale
 \end{minted}
+
+    \pause
+
+    \begin{terminal}
+      \prompt\ \shcmd{additionner} 10 5
+
+      \prompt\ La somme est : 15
+
+      \prompt\ \shcmd{echo} \$resultat
+
+      \prompt\
+    \end{terminal}
 
   \end{itemize}
 
@@ -682,27 +746,33 @@ additionner 10 5  # Affiche : La somme est : 15
 
 \begin{frame}{Flux standards (Entrées / Sorties)}
 
-  chaque programme est connecté à 3 "canaux" (File Descriptors)
+  Chaque programme est connecté à 3 "canaux" (File Descriptors)
 
   \begin{itemize}
-    \item 0 : Entrée Standard (stdin)
+    \setlength\itemsep{1em}
+
+    \item 0 : entrée standard (stdin)
     \begin{itemize}
       \footnotesize
-      \item par défaut : Le clavier
+      \item par défaut : le clavier
       \item c'est ce que le programme lit
     \end{itemize}
+
+    \pause
 
     \item 1 : Sortie Standard (stdout)
     \begin{itemize}
       \footnotesize
-      \item par défaut : L'écran (Terminal)
+      \item par défaut : l'écran
       \item c'est là que le programme envoie ses résultats normaux
     \end{itemize}
 
-    \item 2 : Sortie d'Erreur (stderr)
+    \pause
+
+    \item 2 : sortie d'erreur (stderr)
     \begin{itemize}
       \footnotesize
-      \item par défaut : L'écran
+      \item par défaut : l'écran
       \item c'est là que le programme envoie les messages d'erreur
     \end{itemize}
 
@@ -715,6 +785,8 @@ additionner 10 5  # Affiche : La somme est : 15
 \begin{frame}[fragile]{Rediriger le flux standard}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
+
     \item on peut détourner le flux vers un fichier
     \begin{itemize}
       \footnotesize
@@ -722,27 +794,42 @@ additionner 10 5  # Affiche : La somme est : 15
       \item redirection double (\texttt{>>}) : ajoute à la fin du fichier (append)
     \end{itemize}
 
+    \pause
+
     \begin{terminal}
       \footnotesize
-      \prompt\ \shcmd{echo} "Coucou" > liste.txt
 
+      \onslide<2->{
+      \prompt\ \shcmd{echo} "Coucou" > liste.txt
+      }
+
+      \onslide<3->{
       \prompt\ \shcmd{cat} liste.txt
 
       \prompt\ Coucou
+      }
 
+      \onslide<4->{
       \prompt\ \shcmd{echo} "Nouveau" > liste.txt
+      }
 
+      \onslide<5->{
       \prompt\ \shcmd{cat} liste.txt
 
       \prompt\ Nouveau
+      }
 
+      \onslide<6->{
       \prompt\ \shcmd{echo} "Fin" >> liste.txt
+      }
 
+      \onslide<7->{
       \prompt\ \shcmd{cat} liste.txt
 
       \prompt\ Nouveau
 
       \prompt\ Fin
+      }
     \end{terminal}
 
   \end{itemize}
@@ -751,40 +838,57 @@ additionner 10 5  # Affiche : La somme est : 15
 
 % ---
 
-\begin{frame}[fragile]{Rediriger le flux d'erreur }
+\begin{frame}[fragile]{Rediriger le flux d'erreur}
 
   \begin{itemize}
-    \item pour les erreurs, il faut ajouter \texttt{2} avant le chevron
+    \setlength\itemsep{1em}
+
+    \item pour les erreurs, il faut ajouter \texttt{2} avant le chevron \texttt{>}
 
     \begin{terminal}
       \footnotesize
+
+      \onslide<1->{
       \prompt\ \shcmd{ls} fichier
 
       \prompt\ ls: cannot access 'fichier': No such file or directory
+      }
 
+      \onslide<2->{
       \prompt\ \shcmd{ls} fichier > liste.txt
 
       \prompt\ ls: cannot access 'fichier': No such file or directory
+      }
 
+      \onslide<3->{
       \prompt\ \shcmd{cat} liste.txt
 
       \prompt\
+      }
 
+      \onslide<4->{
       \prompt\ \shcmd{ls} fichier > liste.txt 2>erreurs.txt
 
       \prompt\ ls: cannot access 'fichier': No such file or directory
+      }
 
+      \onslide<5->{
       \prompt\ \shcmd{cat} erreurs.txt
 
       \prompt\ ls: cannot access 'fichier': No such file or directory
+      }
 
+      \onslide<6->{
       \prompt\ \shcmd{ls} fichier > liste.txt 2>\&1
 
       \prompt\ ls: cannot access 'fichier': No such file or directory
+      }
 
+      \onslide<7->{
       \prompt\ \shcmd{cat} liste.txt
 
       \prompt\ ls: cannot access 'fichier': No such file or directory
+      }
     \end{terminal}
 
   \end{itemize}
@@ -796,28 +900,45 @@ additionner 10 5  # Affiche : La somme est : 15
 \begin{frame}[fragile]{Le Pipe (tuyau) \texttt{|}}
 
   \begin{itemize}
-    \item Philosophie UNIX : créer de petits outils qui font une 
+    \setlength\itemsep{1em}
+
+    \item philosophie UNIX : créer de petits outils qui font une 
           seule chose et les combiner
 
-    \item Le Pipe \texttt{|} prend la sortie standard de la commande de gauche 
+    \pause
+
+    \item le Pipe \texttt{|} prend la sortie standard de la commande de gauche 
           et l'injecte directement comme entrée de la commande de droite \\
 
           \texttt{\textbf{Commande\_A} \quad \textcolor{blue}{1 (Sortie)} 
           \quad $\xrightarrow{\text{\Large |}}$ \quad 
           \textcolor{blue}{0 (Entrée)} \quad \textbf{Commande\_B}}
 
+    \pause
+
     \item Exemple : compter les fichiers \texttt{.txt}
     \begin{terminal}
       \footnotesize
+
+      \onslide<3->{
       \prompt\ \shcmd{ls} > tmp1.txt
+      }
 
+      \onslide<4->{
       \prompt\ \shcmd{grep} '\textbackslash.txt' tmp1.txt > tmp2.txt
+      }
 
+      \onslide<5->{
       \prompt\ \shcmd{wc} -l tmp2.txt
+      }
 
+      \onslide<6->{
       \prompt\ \shcmd{rm} tmp1.txt tmp2.txt
+      }
 
+      \onslide<7->{
       \prompt\ \shcmd{ls} | \shcmd{grep} '\textbackslash.txt' | \shcmd{wc} -l
+      }
     \end{terminal}
 
   \end{itemize}
@@ -829,6 +950,7 @@ additionner 10 5  # Affiche : La somme est : 15
 \begin{frame}[fragile]{Résultat d'un programme}
 
   \begin{itemize}
+    \setlength\itemsep{1em}
 
     \item substitution de commande
     \begin{itemize}
@@ -839,18 +961,34 @@ additionner 10 5  # Affiche : La somme est : 15
       \item les \textit{backticks} \texttt{`commande`} sont obsolètes
     \end{itemize}
 
+    \pause
+
     \begin{terminal}
-    \prompt\ aujourdhui=date
+      \onslide<2->{
+      \prompt\ \shcmd{date}
 
-    \prompt\ \shcmd{echo} \$aujourdhui
+      \prompt\ Thu Jan 29 11:24:20 AM CET 2026
+      }
 
-    \prompt\ date
-    
-    \prompt\  aujourdhui=\$(date)
+      \onslide<3->{
+      \prompt\ aujourdhui=date
+      }
 
-    \prompt\ \shcmd{echo} \$aujourdhui
+      \onslide<4->{
+      \prompt\ \shcmd{echo} \$aujourdhui
 
-    \prompt\ Thu Jan 29 11:24:20 AM CET 2026
+      \prompt\ date
+      }
+      
+      \onslide<5->{
+      \prompt\  aujourdhui=\$(date)
+      }
+
+      \onslide<6->{
+      \prompt\ \shcmd{echo} \$aujourdhui
+
+      \prompt\ Thu Jan 29 11:24:20 AM CET 2026
+      }
     \end{terminal}
 
   \end{itemize}
