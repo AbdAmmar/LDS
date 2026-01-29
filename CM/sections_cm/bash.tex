@@ -406,11 +406,11 @@ done
 
 % ---
 
-\begin{frame}[fragile]{Les Choix Multiples (Case)}
-  Quand on a beaucoup de conditions à tester sur une seule variable, \texttt{case} 
-  est plus propre qu'une suite de \texttt{if / elif / elif}.
+\begin{frame}[fragile]{Choix multiples (Case)}
 
-  \begin{block}{Syntaxe Générale}
+  Quand on a beaucoup de conditions à tester sur une seule variable, \texttt{case} 
+  est plus propre qu'une suite de \texttt{if / elif / elif}
+
 \begin{minted}{bash}
 case $variable in
     motif1)
@@ -421,7 +421,6 @@ case $variable in
         commandes_par_defaut ;;
 esac
 \end{minted}
-  \end{block}
 
   \vspace{0.1cm}
   \footnotesize
@@ -432,7 +431,8 @@ esac
 
 \begin{frame}[fragile]{Exemple}
 
-  \begin{exampleblock}{Exemple : Gestion d'une réponse utilisateur}
+  Gestion d'une réponse utilisateur
+
 \begin{minted}{bash}
 read -p "Voulez-vous continuer ? (oui/non) " rep
 
@@ -446,7 +446,6 @@ case $rep in
         echo "Je n'ai pas compris..." ;;
 esac
 \end{minted}
-  \end{exampleblock}
 
 \end{frame}
 
@@ -456,12 +455,12 @@ esac
 
   \begin{itemize}
 
-    \item Nommage du fichier :
+    \item nommage du fichier :
     \begin{itemize}
       \footnotesize
-      \item [\emoji{check-mark-button}] Lettres (a-z), chiffres (0-9), tirets (\texttt{-}, \texttt{\_}) et point (\texttt{.})
-      \item [\emoji{cross-mark}] Espaces et caractères accentués (é, à, \ldots)
-      \item Extension : \texttt{.sh} : pour aider l'éditeur de texte
+      \item [\emoji{check-mark-button}] lettres (a-z), chiffres (0-9), tirets (\texttt{-}, \texttt{\_}) et point (\texttt{.})
+      \item [\emoji{cross-mark}] espaces et caractères accentués (é, à, \ldots)
+      \item extension : \texttt{.sh} : pour aider l'éditeur de texte
     \end{itemize}
 
     \item fichier \texttt{hello.sh}
@@ -470,7 +469,7 @@ esac
 echo "Hello World!"
 \end{minted}
 
-    pour lancer
+    \item pour exécuter
     \begin{terminal}
       \prompt\ \shcmd{bash} hello.sh
 
@@ -482,22 +481,21 @@ echo "Hello World!"
 
 % ---
 
-\begin{frame}[fragile]{Script Bash}
+\begin{frame}[fragile]{Shebang}
 
   \begin{itemize}
 
-    \item Shebang  (1\textsuperscript{ère} ligne) : indique quel interpréteur utiliser
+    \item \texttt{Shebang} : indique quel interpréteur utiliser (1\textsuperscript{ère} ligne)
 \begin{minted}{bash}
 #!/usr/bin/env bash
-echo "Hello World!"
 \end{minted}
 
-    \item alternative (moins portable)
-\begin{minted}{bash}
-#!/bin/bash
-\end{minted}
+    \item alternative (moins portable) : \texttt{\#!/bin/bash}
+
+    \item[\emoji{warning}] chemin obligatoire (sauf si \texttt{PATH} est ajusté)
 
     \begin{terminal}
+      \footnotesize
       \prompt\ \shcmd{./hello.sh}
 
       \prompt\ bash: ./hello.sh: Permission denied
@@ -516,18 +514,69 @@ echo "Hello World!"
 
 % ---
 
-\begin{frame}[fragile]{Arguments du script}
+\begin{frame}[fragile]{Permissions UNIX}
 
   \begin{itemize}
-    \item \texttt{\$0} : Le nom du script (avec le chemin)
+    \item chaque fichier/dossier possède des droits d'accès (\texttt{ls -l})
+    \begin{center}
+      \large
+      \texttt{\textcolor{gray}{-} \textcolor{blue}{rwx} \textcolor{orange}{r-x} \textcolor{red}{r--}}
+    \end{center}
 
-    \item \texttt{\$1} : Le premier argument
+    \begin{itemize}
+      \footnotesize
+      \item \textcolor{gray}{-} : fichier régulier
+      \item \textcolor{gray}{d} : dossier
+      \item \textcolor{gray}{l} : lien symbolique
+    \end{itemize}
 
-    \item \texttt{\$2} : Le deuxième argument
+    \begin{itemize}
+      \footnotesize
+      \item \textcolor{blue}{\textbf{u} (\texttt{user})} : le propriétaire du fichier
+      \item \textcolor{orange}{\textbf{g} (\texttt{group})} : le groupe
+      \item \textcolor{red}{\textbf{o} (\texttt{other})} : le reste du monde
+    \end{itemize}
 
-    \item \texttt{\$\#} : Le nombre total d'arguments
+    \begin{itemize}
+      \footnotesize
+      \item \texttt{\textbf{r}} (\textit{read}) : lecture
+      \item \texttt{\textbf{w}} (\textit{write}) : écriture
+      \item \texttt{\textbf{x}} (\textit{execute}) : exécution
+    \end{itemize}
 
-    \item \texttt{\$@} : La liste de tous les arguments
+    \item modifier les droits : \texttt{chmod [qui][+/-][quoi] script.sh}
+    \begin{terminal}
+      \footnotesize
+      \prompt\ \shcmd{chmod} u+x hello.sh \tcomment{ajoute x pour le propriétaire}
+
+      \prompt\ \shcmd{chmod} go-w hello.sh \tcomment{enlève w au groupe et aux autres}
+
+      \prompt\ \shcmd{chmod} +x hello.sh \tcomment{ajoute x pour tout le monde}
+    \end{terminal}
+  \end{itemize}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Arguments du script}
+
+  \begin{terminal}
+    \prompt\ \shcmd{./script.sh} arg1 arg2 arg3
+  \end{terminal}
+
+  \begin{itemize}
+    \item \texttt{\$\#} : nombre total d'arguments
+
+    \item \texttt{\$@} : liste de tous les arguments
+
+    \item \texttt{\$0} : nom du script (avec le chemin)
+
+    \item \texttt{\$1} : premier argument
+
+    \item \texttt{\$2} : deuxième argument
+
+    \item \texttt{\$3} : troisième argument
   \end{itemize}
  
 \end{frame}
@@ -575,7 +624,7 @@ echo "Age: $1 ans"
 
   \begin{itemize}
 
-    \item Déclaration et Appel
+    \item déclaration et appel
     \begin{itemize}
       \footnotesize
       \item on définit la fonction avec des parenthèses vides \texttt{()}
@@ -583,14 +632,21 @@ echo "Age: $1 ans"
     \end{itemize}
 
 \begin{minted}{bash}
-# Définition
+# définition
 ma_fonction() {
     echo "Hello!"
 }
 
-# Appel
+# appel
 ma_fonction
 \end{minted}
+
+    \item arguments
+    \begin{itemize}
+      \footnotesize
+      \item on passe les valeurs à l'appel : \texttt{ma\_fonction \textcolor{blue}{arg1} \textcolor{orange}{arg2}}
+      \item on les récupère dans la fonction avec \texttt{\$1}, \texttt{\$2} \ldots
+    \end{itemize}
   \end{itemize}
 
 \end{frame}
@@ -601,23 +657,16 @@ ma_fonction
 
   \begin{itemize}
 
-    \item arguments
-    \begin{itemize}
-      \footnotesize
-      \item on passe les valeurs à l'appel : \\ \texttt{ma\_fonc \textcolor{blue}{arg1} \textcolor{orange}{arg2}}
-      \item on les récupère dans la fonction avec \texttt{\$1}, \texttt{\$2} \ldots
-    \end{itemize}
-
-    \item variables locales
+    \item portée des variables dans une fonction
     \begin{itemize}
       \footnotesize
       \item par défaut, toute variable est globale
-      \item on utilise \texttt{local} pour confiner une variable à la fonction
+      \item on utilise ``\texttt{local}'' pour confiner une variable à la fonction
     \end{itemize}
 
 \begin{minted}{bash}
 additionner() {
-    local resultat=$(( $1 + $2 ))
+    local resultat=$(($1 + $2))
     echo "La somme est : $resultat"
 }
 
@@ -631,41 +680,10 @@ additionner 10 5  # Affiche : La somme est : 15
 
 % ---
 
-\begin{frame}[fragile]{Résultat d'une commande}
-
-  \begin{itemize}
-
-    \item Substitution de commande
-    \begin{itemize}
-      \footnotesize
-      \item syntaxe : \texttt{\$(commande)}
-      \item Bash exécute la commande entre parenthèses
-      \item il remplace l'expression par la sortie (texte) de cette commande
-      \item les \textit{backticks} \texttt{`commande`} sont obsolètes
-    \end{itemize}
-
-\begin{minted}{bash}
-# 1. Affectation simple (Texte brut)
-prog="date"
-echo $prog      # Affiche : date
-
-# 2. Substitution (Exécution)
-aujourdhui=$(date)
-echo $aujourdhui  # Affiche : Jeu 24 Oct 2024
-\end{minted}
-
-  \end{itemize}
-
-\end{frame}
-
-% ---
-
 \begin{frame}{Flux standards (Entrées / Sorties)}
 
-  Sous UNIX, chaque programme lancé est automatiquement connecté à 
-  3 "canaux" de données (File Descriptors)
+  chaque programme est connecté à 3 "canaux" (File Descriptors)
 
-  \vspace{0.3cm}
   \begin{itemize}
     \item 0 : Entrée Standard (stdin)
     \begin{itemize}
@@ -688,39 +706,86 @@ echo $aujourdhui  # Affiche : Jeu 24 Oct 2024
       \item c'est là que le programme envoie les messages d'erreur
     \end{itemize}
 
-    \item Pourquoi séparer 1 et 2 ? \\
-          pour pouvoir enregistrer les résultats dans un fichier (données propres) tout 
-          en continuant à voir les erreurs s'afficher à l'écran
   \end{itemize}
 
 \end{frame}
 
 % ---
 
-\begin{frame}[fragile]{Rediriger les sorties vers des fichiers}
+\begin{frame}[fragile]{Rediriger le flux standard}
 
   \begin{itemize}
-    \item Redirection simple (\texttt{>}) : Écrase le contenu du fichier (remise à zéro)
-\begin{minted}{bash}
-# Sauver la liste dans un fichier
-ls > liste.txt
-
-# Le fichier est vidé avant !
-echo "Nouveau" > liste.txt
-\end{minted}
-
-    \item Redirection double (\texttt{>>}) : Ajoute à la fin du fichier
-\begin{minted}{bash}
-# Ajoute une ligne à la fin
-echo "Fin" >> liste.txt
-\end{minted}
-
-    \item Et les erreurs (Canal 2) ?
+    \item on peut détourner le flux vers un fichier
     \begin{itemize}
       \footnotesize
-      \item Il faut préciser le numéro \texttt{2} avant le chevron
-      \item \texttt{gcc main.c \textbf{2>} erreurs.log} (Seules les erreurs vont dans le fichier)
+      \item redirection simple (\texttt{>}) : écrase le contenu du fichier (remise à zéro)
+      \item redirection double (\texttt{>>}) : ajoute à la fin du fichier (append)
     \end{itemize}
+
+    \begin{terminal}
+      \footnotesize
+      \prompt\ \shcmd{echo} "Coucou" > liste.txt
+
+      \prompt\ \shcmd{cat} liste.txt
+
+      \prompt\ Coucou
+
+      \prompt\ \shcmd{echo} "Nouveau" > liste.txt
+
+      \prompt\ \shcmd{cat} liste.txt
+
+      \prompt\ Nouveau
+
+      \prompt\ \shcmd{echo} "Fin" >> liste.txt
+
+      \prompt\ \shcmd{cat} liste.txt
+
+      \prompt\ Nouveau
+
+      \prompt\ Fin
+    \end{terminal}
+
+  \end{itemize}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Rediriger le flux d'erreur }
+
+  \begin{itemize}
+    \item pour les erreurs, il faut ajouter \texttt{2} avant le chevron
+
+    \begin{terminal}
+      \footnotesize
+      \prompt\ \shcmd{ls} fichier
+
+      \prompt\ ls: cannot access 'fichier': No such file or directory
+
+      \prompt\ \shcmd{ls} fichier > liste.txt
+
+      \prompt\ ls: cannot access 'fichier': No such file or directory
+
+      \prompt\ \shcmd{cat} liste.txt
+
+      \prompt\
+
+      \prompt\ \shcmd{ls} fichier > liste.txt 2>erreurs.txt
+
+      \prompt\ ls: cannot access 'fichier': No such file or directory
+
+      \prompt\ \shcmd{cat} erreurs.txt
+
+      \prompt\ ls: cannot access 'fichier': No such file or directory
+
+      \prompt\ \shcmd{ls} fichier > liste.txt 2>\&1
+
+      \prompt\ ls: cannot access 'fichier': No such file or directory
+
+      \prompt\ \shcmd{cat} liste.txt
+
+      \prompt\ ls: cannot access 'fichier': No such file or directory
+    \end{terminal}
 
   \end{itemize}
 
@@ -731,25 +796,62 @@ echo "Fin" >> liste.txt
 \begin{frame}[fragile]{Le Pipe (tuyau) \texttt{|}}
 
   \begin{itemize}
-    \item Philosophie UNIX : Créer de petits outils qui font une 
+    \item Philosophie UNIX : créer de petits outils qui font une 
           seule chose et les combiner
 
     \item Le Pipe \texttt{|} prend la sortie standard de la commande de gauche 
           et l'injecte directement comme entrée de la commande de droite \\
+
           \texttt{\textbf{Commande\_A} \quad \textcolor{blue}{1 (Sortie)} 
           \quad $\xrightarrow{\text{\Large |}}$ \quad 
           \textcolor{blue}{0 (Entrée)} \quad \textbf{Commande\_B}}
 
-    \begin{minted}{bash}
-# sans tuyau
-ls -l > temp.txt
-grep ".txt" temp.txt > selection.txt
-wc -l selection.txt
-rm temp.txt selection.txt
+    \item Exemple : compter les fichiers \texttt{.txt}
+    \begin{terminal}
+      \footnotesize
+      \prompt\ \shcmd{ls} > tmp1.txt
 
-# avec tuyau
-ls -l | grep ".txt" | wc -l
-    \end{minted}
+      \prompt\ \shcmd{grep} '\textbackslash.txt' tmp1.txt > tmp2.txt
+
+      \prompt\ \shcmd{wc} -l tmp2.txt
+
+      \prompt\ \shcmd{rm} tmp1.txt tmp2.txt
+
+      \prompt\ \shcmd{ls} | \shcmd{grep} '\textbackslash.txt' | \shcmd{wc} -l
+    \end{terminal}
+
+  \end{itemize}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Résultat d'un programme}
+
+  \begin{itemize}
+
+    \item substitution de commande
+    \begin{itemize}
+      \footnotesize
+      \item syntaxe : \texttt{\$(commande)}
+      \item Bash exécute la commande entre parenthèses
+      \item il remplace l'expression par la sortie (texte) de cette commande
+      \item les \textit{backticks} \texttt{`commande`} sont obsolètes
+    \end{itemize}
+
+    \begin{terminal}
+    \prompt\ aujourdhui=date
+
+    \prompt\ \shcmd{echo} \$aujourdhui
+
+    \prompt\ date
+    
+    \prompt\  aujourdhui=\$(date)
+
+    \prompt\ \shcmd{echo} \$aujourdhui
+
+    \prompt\ Thu Jan 29 11:24:20 AM CET 2026
+    \end{terminal}
 
   \end{itemize}
 
