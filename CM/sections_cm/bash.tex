@@ -281,49 +281,6 @@
 
 % ---
 
-\begin{frame}[fragile]{Boucle FOR}
-
-\begin{minted}{bash}
-for variable in liste
-do
-  # commandes...
-done
-\end{minted}
-
-  \pause
-
-  \begin{terminal}
-    \onslide<2->{
-    \prompt\ \shcmd{for} i \shcmd{in} rouge vert bleu{\color{red};} \shcmd{do} \shcmd{echo} \$i{\color{red};} \shcmd{done}
-    }
-
-    \onslide<3->{
-    \prompt\ rouge
-  
-    \prompt\ vert
-  
-    \prompt\ bleu
-    }
-  
-    \onslide<4->{
-    \prompt\ 
-  
-    \prompt\ \shcmd{for} i \shcmd{in} \{1..3\}; \shcmd{do} \shcmd{echo} \$i; \shcmd{done}
-    }
-  
-    \onslide<5->{
-    \prompt\ 1
-  
-    \prompt\ 2
-  
-    \prompt\ 3
-    }
-  \end{terminal}
-
-\end{frame}
-
-% ---
-
 \begin{frame}[fragile]{Conditions (\texttt{if / elif / else})}
 
   \begin{minted}{bash}
@@ -431,6 +388,49 @@ case $rep in
         echo "Je n'ai pas compris..." ;;
 esac
 \end{minted}
+
+\end{frame}
+
+% ---
+
+\begin{frame}[fragile]{Boucle FOR}
+
+\begin{minted}{bash}
+for variable in liste
+do
+  # commandes...
+done
+\end{minted}
+
+  \pause
+
+  \begin{terminal}
+    \onslide<2->{
+    \prompt\ \shcmd{for} i \shcmd{in} rouge vert bleu{\color{red};} \shcmd{do} \shcmd{echo} \$i{\color{red};} \shcmd{done}
+    }
+
+    \onslide<3->{
+    \prompt\ rouge
+  
+    \prompt\ vert
+  
+    \prompt\ bleu
+    }
+  
+    \onslide<4->{
+    \prompt\ 
+  
+    \prompt\ \shcmd{for} i \shcmd{in} \{1..3\}; \shcmd{do} \shcmd{echo} \$i; \shcmd{done}
+    }
+  
+    \onslide<5->{
+    \prompt\ 1
+  
+    \prompt\ 2
+  
+    \prompt\ 3
+    }
+  \end{terminal}
 
 \end{frame}
 
@@ -549,7 +549,7 @@ echo "Hello World!"
     \item chaque fichier/dossier possède des droits d'accès (\texttt{ls -l})
     \begin{center}
       \large
-      \texttt{\textcolor{gray}{-} \textcolor{blue}{rwx} \textcolor{orange}{r-x} \textcolor{red}{r--}}
+      \texttt{\textcolor{gray}{-} \textcolor{blue}{rwx} \textcolor{orange}{rw-} \textcolor{red}{r--}}
     \end{center}
 
     \pause
@@ -629,8 +629,8 @@ echo "Hello World!"
     \item script \texttt{hello.sh}
 \begin{minted}{bash}
 #!/usr/bin/env bash
-echo "Prenom: $0"
-echo "Age: $1 ans"
+echo "Prenom: $1"
+echo "Age: $2 ans"
 \end{minted}
 
     \pause

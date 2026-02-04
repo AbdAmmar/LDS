@@ -222,36 +222,11 @@
 
       \prompt\ \shcmd{grep} '3 \textbackslash* 4' \tcomment{"3 * 4"}
 
-        \prompt\ \shcmd{grep} -E 'colou\textbackslash?r' \tcomment{"colou\textbackslash r"}
+        \prompt\ \shcmd{grep} -E 'colou\textbackslash?r' \tcomment{"colou?r"}
     \end{terminal}
   \end{itemize}
 
 \end{frame}
-
-% ---
-
-%\begin{frame}
-%  \frametitle{Récapitulatif : Globbing vs Regex}
-%  
-%  \begin{center}
-%  \renewcommand{\arraystretch}{1.5}
-%  \begin{tabular}{|c|c|c|}
-%    \hline
-%    \textbf{Symbole} & \textbf{Globbing (Fichiers)} & \textbf{Regex (Texte)} \\
-%    \hline
-%    \texttt{*} & N'importe quelle chaîne & Répétition (0 à N) \\
-%    \hline
-%    \texttt{?} & Un seul caractère & Optionnel (0 ou 1) \\
-%    \hline
-%    \texttt{.} & Un point littéral & N'importe quel caractère \\
-%    \hline
-%    Négation & \texttt{[!abc]} & \texttt{[\^{}abc]} \\
-%    \hline
-%    Début/Fin & (Automatique) & \texttt{\^{}} et \texttt{\$} \\
-%    \hline
-%  \end{tabular}
-%  \end{center}
-%\end{frame}
 
 % ---
 
