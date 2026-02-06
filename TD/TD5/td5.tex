@@ -1,0 +1,2524 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+
+\usepackage{../../ldsstyle}
+
+\geometry{margin=2.5cm}
+
+\title{TD5 -- Langages de script}
+\author{Abdallah Ammar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+
+
+
+
+
+
+
+
+
+
+
+% --------------------------------------------------
+\section{Lire un fichier ligne par ligne}
+
+Il est possible de lire un fichier texte ligne par ligne à l'aide d'une boucle \texttt{while}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Écrivez un script qui lit le fichier \texttt{users.txt} ligne par ligne.
+    \item Affichez chaque ligne précédée du texte \texttt{"Utilisateur :"}.
+\end{enumerate}
+
+\subsection*{Structure générale}
+
+\begin{terminal}
+\shcmd{while} \shcmd{read} line; \shcmd{do}
+  \shcmd{echo} "Utilisateur : \$line"
+\shcmd{done} \texttt{<} users.txt
+\end{terminal}
+
+
+
+% --------------------------------------------------
+\section{Extensions (optionnelles)}
+
+Pour aller plus loin :
+\begin{itemize}
+    \item ajouter une option \texttt{-h} affichant une aide ;
+    \item gérer plusieurs fichiers de citations ;
+    \item afficher le nombre total de citations ;
+    \item utiliser une vache différente avec \texttt{cowsay -l}.
+\end{itemize}
+
+
+% --------------------------------------------------
+\section{Ajouter une aide au script}
+
+Un script bien écrit doit expliquer comment il s'utilise.
+
+\subsection*{Travail à faire}
+
+Ajoutez une option \texttt{-h} ou \texttt{--help} à votre script.
+Lorsque cette option est fournie, le script doit afficher :
+\begin{itemize}
+    \item une description du script ;
+    \item les paramètres attendus ;
+    \item un exemple d'utilisation.
+\end{itemize}
+
+\subsection*{Indication}
+
+Vous pouvez utiliser une structure conditionnelle du type :
+
+\begin{terminal}
+\shcmd{if} [ "\$1" = "\texttt{-h}" ]; \shcmd{then}
+  \shcmd{echo} "Aide du script"
+  \shcmd{exit} 0
+\shcmd{fi}
+\end{terminal}
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+\section{Introduction à \texttt{sed} pour de simples remplacements}
+
+\begin{infobox}
+\texttt{sed} est un éditeur de flux, très puissant. \\
+Commande de base pour un remplacement :
+\begin{itemize}
+  \item \texttt{sed 's/ancien/nouveau/'} remplace la première occurrence de \texttt{ancien}
+        par \texttt{nouveau} sur chaque ligne.
+  \item \texttt{sed 's/ancien/nouveau/g'} remplace toutes les occurrences sur chaque ligne.
+\end{itemize}
+Par défaut, \texttt{sed} écrit le résultat sur la sortie standard (n'écrase pas le fichier original).
+\end{infobox}
+
+\begin{itemize}
+    \item Affichez le fichier \texttt{donnees.txt} en remplaçant \texttt{ERROR} par \texttt{ERREUR}
+          dans les lignes de logs.
+    \begin{terminal}
+    \prompt\ \shcmd{sed} 's/ERROR/ERREUR/g' donnees.txt
+    \end{terminal}
+
+    \item Affichez seulement les lignes d'e-mails, en supprimant le préfixe \texttt{email: } au début de la ligne.
+          (Nous utilisons ici l'option \texttt{-n} et la commande \texttt{p} (\emph{print}) pour n'afficher
+          que les lignes modifiées.)
+    \begin{terminal}
+    \prompt\ \shcmd{sed} -n 's/\^{}email: //p' donnees.txt
+    \end{terminal}
+
+    \item Affichez les lignes de code postal en mettant le texte \texttt{code postal: } en majuscules
+          (\texttt{CODE POSTAL:}), sans modifier le reste.
+    \begin{terminal}
+    \prompt\ \shcmd{sed} 's/\^{}code postal:/CODE POSTAL:/' donnees.txt
+    \end{terminal}
+\end{itemize}
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Substitutions, pipes et filtres}
+
+Dans cet exercice, nous allons pratiquer plusieurs fonctionnalités importantes du shell :
+\textit{brace expansion}, substitution de commande, variables, pipes, tests, opérateurs
+logiques, et quelques commandes classiques de traitement de texte.
+
+\subsection{Préparation}
+
+\begin{itemize}
+  \item Créez un répertoire \texttt{TD3} dans votre répertoire personnel et placez-vous dedans.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME
+
+  \prompt\ \shcmd{mkdir} TD3
+
+  \prompt\ \shcmd{cd} TD3
+  \end{terminal}
+\end{itemize}
+
+\subsection{Brace expansion \texttt{\{start..end\}} et substitution de commande \texttt{\$(...)}}
+
+\begin{infobox}
+\textbf{Brace expansion} : \texttt{fichier\_\{1..5\}.txt} est développé par le shell en
+\texttt{fichier\_1.txt fichier\_2.txt fichier\_3.txt fichier\_4.txt fichier\_5.txt} \\
+\textbf{Substitution de commande} : \texttt{\$(commande)} est remplacé par la sortie
+de \texttt{commande}. Exemple : \texttt{AUJ=\$(date)}.
+\end{infobox}
+
+\begin{itemize}
+  \item Créez un sous-répertoire \texttt{Q1} et placez-vous dedans.
+  \begin{terminal}
+  \prompt\ \shcmd{mkdir} Q1
+
+  \prompt\ \shcmd{cd} Q1
+  \end{terminal}
+
+  \item Utilisez la \textit{brace expansion} pour créer d'un seul coup 12 fichiers
+        \texttt{rapport\_01.txt} à \texttt{rapport\_12.txt}.
+  \begin{terminal}
+  \prompt\ \shcmd{touch} rapport\_{01..12}.txt
+  \end{terminal}
+
+  \item Vérifiez qu'ils ont bien été créés :
+  \begin{terminal}
+  \prompt\ \shcmd{ls}
+  \end{terminal}
+
+  \item Utilisez maintenant la substitution de commande pour stocker la date du jour dans une variable.
+  \begin{terminal}
+  \prompt\ AUJOURDHUI=\$(date +\%F)
+
+  \prompt\ \shcmd{echo} \$AUJOURDHUI
+  \end{terminal}
+
+  \item À partir de cette variable, créez un fichier de log nommé \texttt{log-\$AUJOURDHUI.txt}.
+  \begin{terminal}
+  \prompt\ \shcmd{touch} log-\$AUJOURDHUI.txt
+
+  \prompt\ \shcmd{ls}
+  \end{terminal}
+
+  \item Stockez dans une variable le nombre de fichiers \texttt{rapport\_*.txt} présents dans le répertoire,
+        en utilisant \texttt{ls} et \texttt{wc -l} avec une substitution de commande.
+  \begin{terminal}
+  \prompt\ N\_RAPPORTS=\$(ls rapport\_*.txt | wc -l)
+
+  \prompt\ \shcmd{echo} \$N\_RAPPORTS
+  \end{terminal}
+\end{itemize}
+
+\subsection{Pipes (\texttt{|})}
+
+\begin{infobox}
+L'opérateur de pipe \texttt{|} envoie la sortie standard de la commande de gauche
+comme entrée standard de la commande de droite. \\
+Exemple : \texttt{ls | wc -l} compte le nombre de fichiers listés par \texttt{ls}.
+\end{infobox}
+
+\begin{itemize}
+  \item Assurez-vous d'être dans \texttt{\$HOME/TD3/Q1}.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+
+  \prompt\ \shcmd{ls}
+  \end{terminal}
+
+  \item Comptez le nombre de fichiers \texttt{rapport\_*.txt} en une seule commande
+        en utilisant \texttt{ls}, le pipe \texttt{|} et \texttt{wc -l}.
+  \begin{terminal}
+  \prompt\ \shcmd{ls} rapport\_*.txt \textbar{} wc -l
+  \end{terminal}
+
+  \item Stockez ce nombre dans une variable \texttt{N\_RAPPORTS} en combinant
+        le pipe et la substitution de commande \texttt{\$(...)}.
+  \begin{terminal}
+  \prompt\ N\_RAPPORTS=\$(ls rapport\_*.txt \textbar{} wc -l)
+
+  \prompt\ \shcmd{echo} \$N\_RAPPORTS
+  \end{terminal}
+
+  \item Créez un petit fichier texte \texttt{noms.txt} contenant quelques prénoms
+        (un par ligne), puis utilisez un pipe pour compter le nombre de lignes.
+  \begin{terminal}
+  \prompt\ cat > noms.txt
+  alice
+  bob
+  charlie
+  diane
+  \^{}D
+
+  \prompt\ \shcmd{cat} noms.txt \textbar{} wc -l
+  \end{terminal}
+
+  \item Affichez le contenu de \texttt{noms.txt} en remplaçant toutes les lettres
+        minuscules par des majuscules, en utilisant \texttt{tr} via un pipe.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} noms.txt \textbar{} tr 'a-z' 'A-Z'
+  \end{terminal}
+\end{itemize}
+
+\subsection{Variables, tests \texttt{[ ]} / \texttt{[[ ]]}, \texttt{\&\&} et \texttt{||}}
+
+\begin{infobox}
+\textbf{Variables} : \texttt{X=valeur}, utilisation avec \texttt{\$X}. \\
+\textbf{Test simple} : \texttt{[ condition ]} est une commande qui réussit ou échoue. \\
+Exemples : \texttt{[ -f fichier ]} (fichier existe), \texttt{[ "\$A" -eq 3 ]} (entiers), 
+\texttt{[ "\$S" = "abc" ]} (chaînes). \\
+\textbf{Test avancé} : \texttt{[[ ... ]]} supporte \texttt{<}, \texttt{>} sur les chaînes. \\
+\textbf{\&\& et ||} : \texttt{cmd1 \&\& cmd2} exécute \texttt{cmd2} seulement si \texttt{cmd1} réussit.
+\texttt{cmd1 || cmd2} exécute \texttt{cmd2} seulement si \texttt{cmd1} échoue.
+\end{infobox}
+
+\begin{itemize}
+  \item Créez une variable contenant une commande, par exemple une variante de \texttt{ls}.
+  \begin{terminal}
+  \prompt\ LSCMD="ls -1 rapport\_*.txt"
+
+  \prompt\ \shcmd{echo} "\$LSCMD"
+  \end{terminal}
+
+  \item Exécutez la commande contenue dans la variable (en la faisant précéder par \texttt{\$}).
+  \begin{terminal}
+  \prompt\ \$LSCMD
+  \end{terminal}
+
+  \item Utilisez la commande \texttt{test} ou les crochets \texttt{[ ]} pour vérifier 
+        que le fichier \texttt{rapport\_01.txt} existe.
+  \begin{terminal}
+  \prompt\ [ -f rapport\_01.txt ] \&\& echo "rapport\_01.txt existe"
+  \end{terminal}
+
+  \item Testez maintenant si le nombre de rapports (\texttt{\$N\_RAPPORTS}) est égal à 12, 
+        en utilisant une comparaison d'entiers (\texttt{-eq}) et \texttt{\&\&}.
+  \begin{terminal}
+  \prompt\ [ "\$N\_RAPPORTS" -eq 12 ] \&\& echo "Tous les 12 rapports sont là"
+  \end{terminal}
+
+  \item Testez si l'utilisateur courant n'est pas \texttt{root}, en utilisant une comparaison de chaînes.
+  \begin{terminal}
+  \prompt\ [ "\$USER" != "root" ] \&\& echo "Vous n'êtes pas root"
+  \end{terminal}
+
+  \item Utilisez \texttt{[[ ]]} pour faire une comparaison lexicographique entre deux chaînes,
+        par exemple vérifier si \texttt{"alice"} est « plus petite » que \texttt{"bob"}.
+  \begin{terminal}
+  \prompt\ [[ "alice" < "bob" ]] \&\& echo "alice < bob"
+  \end{terminal}
+
+  \item Utilisez \texttt{\&\&} et \texttt{||} ensemble pour afficher :
+        \texttt{"OK"} si \texttt{\$N\_RAPPORTS} est égal à 12, et \texttt{"ERREUR"} sinon.
+  \begin{terminal}
+  \prompt\ [ "\$N\_RAPPORTS" -eq 12 ] \&\& echo "OK" || echo "ERREUR"
+  \end{terminal}
+\end{itemize}
+
+\subsection{\texttt{grep}, \texttt{sort}, \texttt{uniq}, \texttt{wc -l}, \texttt{tr}}
+
+\begin{infobox}
+\texttt{grep motif} : affiche les lignes contenant \texttt{motif}. \\
+\texttt{sort} : trie les lignes. \\
+\texttt{uniq} : supprime les doublons consécutifs (souvent après \texttt{sort}). \\
+\texttt{wc -l} : compte le nombre de lignes. \\
+\texttt{tr} : transforme des caractères (par ex. minuscules \textrightarrow{} majuscules).
+\end{infobox}
+
+\begin{itemize}
+  \item Revenez dans \texttt{TD3} et créez un sous-répertoire \texttt{Q2}.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3
+
+  \prompt\
+
+  \prompt\ \shcmd{mkdir} Q2
+
+  \prompt\
+
+  \prompt\ \shcmd{cd} Q2
+  \end{terminal}
+
+  \item Créez un fichier de logs simulant des connexions à un système :
+  \begin{terminal}
+  \prompt\ cat > logins.log << EOF
+  2023-03-01 09:01:03 user01 SUCCESS
+  2023-03-01 09:05:10 user02 FAIL
+  2023-03-01 09:10:22 user01 SUCCESS
+  2023-03-01 09:15:47 user03 SUCCESS
+  2023-03-01 09:20:03 user02 FAIL
+  2023-03-01 09:25:30 user04 SUCCESS
+  2023-03-01 09:30:00 user01 FAIL
+  2023-03-01 09:35:42 user03 SUCCESS
+  2023-03-01 09:40:11 user02 SUCCESS
+  2023-03-01 09:45:55 user04 FAIL
+  EOF
+  \end{terminal}
+
+  \item Affichez le contenu du fichier :
+  \begin{terminal}
+  \prompt\ \shcmd{cat} logins.log
+  \end{terminal}
+
+  \item Comptez, avec une seule ligne de commande utilisant un pipe, 
+        le nombre de lignes contenant le mot \texttt{SUCCESS}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} SUCCESS logins.log \textbar{} wc -l
+  \end{terminal}
+
+  \item Comptez le nombre de lignes contenant le mot \texttt{FAIL}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} FAIL logins.log \textbar{} wc -l
+  \end{terminal}
+
+  \item Affichez toutes les lignes contenant \texttt{user01}, triées par ordre alphabétique.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} user01 logins.log \textbar{} sort
+  \end{terminal}
+
+  \item Affichez toutes les lignes du fichier \texttt{logins.log}, triées et sans doublons.
+  \begin{terminal}
+  \prompt\ \shcmd{sort} logins.log \textbar{} uniq
+  \end{terminal}
+
+  \item Comptez le nombre de lignes distinctes dans le fichier, en utilisant \texttt{sort}, \texttt{uniq} et \texttt{wc -l}.
+  \begin{terminal}
+  \prompt\ \shcmd{sort} logins.log \textbar{} uniq \textbar{} wc -l
+  \end{terminal}
+
+  \item Affichez le contenu de \texttt{logins.log} en transformant toutes les lettres 
+        majuscules en minuscules, à l'aide de \texttt{tr}.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} logins.log \textbar{} tr 'A-Z' 'a-z'
+  \end{terminal}
+\end{itemize}
+
+\subsection{Extension : expansion arithmétique \texttt{\$(( ... ))}, \texttt{head}, \texttt{tail}, \texttt{cut}, \texttt{xargs}}
+
+\subsubsection{Expansion arithmétique \texttt{\$(( ... ))}}
+
+\begin{infobox}
+\texttt{\$(( ... ))} permet de faire des calculs sur des entiers. \\
+Exemples : \texttt{X=\$((2 + 3))}, \texttt{Y=\$((X * 10))}.
+\end{infobox}
+
+\begin{itemize}
+  \item Dans le répertoire \texttt{Q1}, définissez deux variables
+        \texttt{A} et \texttt{B} puis calculez leur somme.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+  \prompt\ A=5
+  \prompt\ B=3
+  \prompt\ SOMME=\$((A + B))
+  \prompt\ \shcmd{echo} \$SOMME
+  \end{terminal}
+
+  \item Calculez le nombre de secondes dans une journée (24 heures).
+  \begin{terminal}
+  \prompt\ SECONDES\_PAR\_JOUR=\$((24 * 60 * 60))
+  \prompt\ \shcmd{echo} \$SECONDES\_PAR\_JOUR
+  \end{terminal}
+
+  \item En une seule ligne de commande, incrémentez une variable \texttt{N}
+        de 1 et affichez sa nouvelle valeur.
+  \begin{terminal}
+  \prompt\ N=10
+  \prompt\ N=\$((N + 1)) \&\& echo \$N
+  \end{terminal}
+\end{itemize}
+
+\subsubsection{\texttt{head} et \texttt{tail}}
+
+\begin{infobox}
+\texttt{head -n N fichier} : affiche les N premières lignes. \\
+\texttt{tail -n N fichier} : affiche les N dernières lignes. \\
+\texttt{tail -n +K fichier} : affiche à partir de la ligne K.
+\end{infobox}
+
+\begin{itemize}
+  \item Placez-vous dans le répertoire \texttt{Q2}.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q2
+  \end{terminal}
+
+  \item Affichez les 3 premières lignes de \texttt{logins.log}.
+  \begin{terminal}
+  \prompt\ \shcmd{head} -n 3 logins.log
+  \end{terminal}
+
+  \item Affichez les 2 dernières lignes de \texttt{logins.log}.
+  \begin{terminal}
+  \prompt\ \shcmd{tail} -n 2 logins.log
+  \end{terminal}
+
+  \item Affichez les 5 premières lignes contenant le mot \texttt{FAIL}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} FAIL logins.log \textbar{} head -n 5
+  \end{terminal}
+
+  \item Affichez les 3 dernières lignes contenant \texttt{SUCCESS}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} SUCCESS logins.log \textbar{} tail -n 3
+  \end{terminal}
+\end{itemize}
+
+\subsubsection{\texttt{cut} : extraction de colonnes}
+
+\begin{infobox}
+\texttt{cut} permet d'extraire des colonnes d'un texte. \\
+Exemple : \texttt{cut -d ';' -f2 fichier} : deuxième colonne, séparateur \texttt{;}.
+\end{infobox}
+
+\begin{itemize}
+  \item Créez un fichier \texttt{ventes.csv} :
+  \begin{terminal}
+  \prompt\ cat > ventes.csv << EOF
+  date;client;montant
+  2023-03-01;CLIENTA;1200
+  2023-03-01;CLIENTB;800
+  2023-03-02;CLIENTA;500
+  2023-03-02;CLIENTC;2300
+  2023-03-03;CLIENTB;1500
+  EOF
+  \end{terminal}
+
+  \item Affichez tout le fichier pour vérifier son contenu.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} ventes.csv
+  \end{terminal}
+
+  \item Affichez uniquement la colonne des clients (deuxième colonne).
+  \begin{terminal}
+  \prompt\ \shcmd{cut} -d ';' -f2 ventes.csv
+  \end{terminal}
+
+  \item Affichez uniquement la colonne des montants (troisième colonne).
+  \begin{terminal}
+  \prompt\ \shcmd{cut} -d ';' -f3 ventes.csv
+  \end{terminal}
+
+  \item Affichez la liste des clients sans doublons, triée par ordre alphabétique.
+  \begin{terminal}
+  \prompt\ \shcmd{cut} -d ';' -f2 ventes.csv \textbar{} tail -n +2 \textbar{} sort \textbar{} uniq
+  \end{terminal}
+
+  \item Comptez le nombre total de ventes (lignes de données, en excluant l'en-tête).
+  \begin{terminal}
+  \prompt\ \shcmd{tail} -n +2 ventes.csv \textbar{} wc -l
+  \end{terminal}
+\end{itemize}
+
+\subsubsection*{Bonus : \texttt{xargs}}
+
+\begin{infobox}
+\texttt{xargs} lit des mots sur l'entrée standard et les utilise comme arguments
+d'une commande. \\
+Exemple : \texttt{echo fichier1 fichier2 \textbar{} xargs cat} = \texttt{cat fichier1 fichier2}.
+\end{infobox}
+
+\begin{itemize}
+  \item Dans \texttt{Q1}, créez un fichier \texttt{liste\_rapports.txt} contenant
+        la liste des fichiers \texttt{rapport\_*.txt} (un par ligne).
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+  \prompt\ ls rapport\_*.txt > liste\_rapports.txt
+  \prompt\ \shcmd{cat} liste\_rapports.txt
+  \end{terminal}
+
+  \item Affichez le contenu de tous les fichiers listés dans \texttt{liste\_rapports.txt}
+        en une seule commande utilisant \texttt{xargs} et \texttt{cat}.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} liste\_rapports.txt \textbar{} xargs cat
+  \end{terminal}
+
+  \item Dans \texttt{Q2}, affichez uniquement les lignes contenant \texttt{user01}
+        pour tous les fichiers dont la liste est fournie sur l'entrée standard,
+        en utilisant \texttt{xargs} et \texttt{grep}. (Par exemple avec \texttt{echo logins.log}.)
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q2
+  \prompt\ echo logins.log \textbar{} xargs grep user01
+  \end{terminal}
+\end{itemize}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+\section{Mise en pratique : navigation dans un dépôt d'entreprise}
+
+Dans cet exercice, vous allez télécharger un petit jeu de données qui simule
+les fichiers d'une entreprise (rapports, factures, logs, sauvegardes, etc.),
+puis utiliser le globbing pour retrouver certaines informations.
+
+\begin{itemize}
+    \item
+    Téléchargez l'archive suivante dans votre répertoire \texttt{TD3} :
+    \begin{terminal}
+    \prompt\ \shcmd{cd} \$HOME/TD3
+
+    \prompt\
+
+    \prompt\ \tcomment{Je définis le lien sur plusieurs lignes car il est trop long}
+
+    \prompt\ UrlGit="https://github.com/AbdAmmar/LDS/blob"
+
+    \prompt\ Commit="03eff847f0b55cdf2cc8558b6654b5cd7b2cf282"
+
+    \prompt\ Rep="TD/TD3/data/globbing/entreprise\_data.tar.gz"
+
+    \prompt\
+
+    \prompt\ \tcomment{On télécharge maintenant}
+    
+    \prompt\ \shcmd{wget} "\$\{UrlGit\}/\$\{Commit\}/\$\{Rep\}"
+    \end{terminal}
+
+    Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
+    \begin{terminal}
+    \prompt\ \tcomment{pour Linux :}
+
+    \prompt\ \shcmd{sudo apt} update
+
+    \prompt\ \shcmd{sudo apt} install wget
+
+    \prompt\
+    
+    \prompt\ \tcomment{pour macOS :}
+    
+    \prompt\ \shcmd{brew} install wget
+    \end{terminal}
+
+    % ---
+
+    \item Décompressez l'archive et placez-vous dans le répertoire \texttt{entreprise\_data} :
+    \begin{terminal}
+    \prompt\ \shcmd{tar} xf entreprise\_data.tar.gz
+  
+    \prompt\ \shcmd{cd} entreprise\_data
+  
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+  
+    \item Le répertoire contient plusieurs sous-répertoires (par exemple \texttt{finances},
+          \texttt{rh}, \texttt{ventes}, \texttt{it/logs}, \texttt{backups}), chacun avec de
+          nombreux fichiers aux noms structurés.
+\end{itemize}
+
+\begin{infobox}
+Dans toutes les questions suivantes, utilisez uniquement le globbing 
+(\texttt{*}, \texttt{?}, \texttt{[...]}).
+
+Vous pouvez bien sûr combiner le globbing avec des commandes comme \texttt{ls}, 
+\texttt{echo}, voire \texttt{ls | wc -l} pour compter des fichiers.
+\end{infobox}
+
+\begin{enumerate}
+    \item Lister tous les fichiers PDF du service \texttt{finances}.
+          (Rapports trimestriels et factures.)
+    \item Lister uniquement les rapports trimestriels de 2023 dans \texttt{finances}
+          (les fichiers dont le nom contient \texttt{rapport-finances} et commence par \texttt{2023-}).
+    \item Parmi ces rapports de 2023, lister uniquement les versions \texttt{v1} 
+          (les fichiers dont le nom se termine par \texttt{-v1.pdf}).
+    \item Lister toutes les factures 2023 pour le client \texttt{CLIENTA}
+          dans le répertoire \texttt{finances}.
+    \item Lister tous les fichiers de salaires (fichiers contenant \texttt{salaires} dans leur nom)
+          dans le répertoire \texttt{rh}.
+    \item Toujours dans \texttt{rh}, lister uniquement les fichiers de salaires
+          marqués comme \texttt{confidentiel} (nom contenant \texttt{salaires-confidentiel}).
+    \item Lister tous les fichiers CSV de chiffres d'affaires (se terminant par \texttt{.csv})
+          dans le répertoire \texttt{ventes}, tous mois et toutes régions confondus.
+    \item Lister uniquement les fichiers de \texttt{ventes} correspondant au mois de mars 2023
+          (nom contenant \texttt{2023-03-}).
+    \item Dans \texttt{it/logs}, lister tous les logs de production non compressés
+          (fichiers \texttt{app-prod-...} se terminant par \texttt{.log}, mais pas \texttt{.log.gz}).
+    \item Dans \texttt{it/logs}, lister les logs de production du 15 au 19 janvier 2023
+          (jours \texttt{15}, \texttt{16}, \texttt{17}, \texttt{18}, \texttt{19} dans le nom de fichier).
+    \item Dans \texttt{backups}, lister toutes les sauvegardes complètes (\texttt{full})
+          de la base de données pour mars 2023 (fichiers contenant \texttt{backup-db-2023-03-}
+          et \texttt{-full.tar.gz}).
+    \item Lister tous les fichiers cachés à la racine du dépôt \texttt{entreprise\_data}
+          (fichiers dont le nom commence par un point).
+    \item Lister tous les fichiers qui ne sont \emph{pas} des fichiers texte PDF
+          (c'est-à-dire tous les fichiers dont l'extension n'est pas \texttt{.pdf}).
+          Vous pouvez ici utiliser un motif avec négation dans les crochets,
+          par exemple \texttt{.[!p][!d][!f]} ou similaire.
+\end{enumerate}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Récupération des fichiers de données}
+Dans ce TD, vous allez travailler sur des fichiers texte fournis par l'enseignant.
+Ces fichiers contiennent des données fictives destinées à l'apprentissage
+des commandes de filtrage et d'analyse de texte.
+
+Commencez par créer un répertoire \texttt{data}, puis téléchargez les fichiers
+à l'aide des commandes suivantes :
+
+\begin{terminal}
+\prompt\ \shcmd{mkdir} data
+
+\prompt\ \shcmd{cd} data
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD3/data/users.txt
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD3/data/logs.txt
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD3/data/notes.txt
+\end{terminal}
+
+Vérifiez que les fichiers ont bien été téléchargés.
+Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} apt update
+
+\prompt\ \shcmd{sudo} apt install wget
+\end{terminal}
+
+% --------------------------------------------------
+\section{Lire et compter}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez le contenu du fichier \texttt{users.txt}.
+    \item Comptez le nombre de lignes du fichier.
+    \item Affichez le contenu du fichier \texttt{logs.txt}.
+    \item Comptez le nombre de lignes du fichier \texttt{notes.txt}.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} users.txt
+
+\prompt\ \shcmd{wc} \texttt{-l} users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Introduction aux pipes}
+
+Un \textit{pipe} permet d'envoyer la sortie d'une commande en entrée d'une autre.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Comptez le nombre de lignes de \texttt{users.txt} sans afficher le contenu du fichier.
+    \item Expliquez le rôle du symbole \texttt{|}.
+\end{enumerate}
+
+\subsection*{Commande clé}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} users.txt \texttt{|} \shcmd{wc} \texttt{-l}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Rechercher des informations avec \texttt{grep}}
+
+\subsection*{Travail à faire}
+
+À partir du fichier \texttt{users.txt} :
+
+\begin{enumerate}
+    \item Affichez les lignes contenant \texttt{bash}.
+    \item Comptez le nombre d'utilisateurs utilisant \texttt{bash}.
+    \item Affichez les lignes ne contenant pas \texttt{bash}.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{grep} bash users.txt
+
+\prompt\ \shcmd{grep} \texttt{-c} bash users.txt
+
+\prompt\ \shcmd{grep} \texttt{-v} bash users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Extraire des informations}
+
+Le fichier \texttt{users.txt} est structuré : les champs sont séparés par le caractère \texttt{:}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez uniquement la colonne des noms d'utilisateurs.
+    \item Affichez uniquement la colonne des shells.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{cut} \texttt{-d: -f1} users.txt
+
+\prompt\ \shcmd{cut} \texttt{-d: -f2} users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Trier et compter}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez la liste des shells utilisés.
+    \item Triez cette liste.
+    \item Comptez combien de fois chaque shell apparaît.
+\end{enumerate}
+
+\subsection*{Pipeline attendu}
+
+\begin{terminal}
+\prompt\ \shcmd{cut} \texttt{-d: -f2} users.txt \texttt{|} \shcmd{sort} \texttt{|} \shcmd{uniq} \texttt{-c}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Analyse de fichiers de logs}
+
+\subsection*{Travail à faire}
+
+À partir du fichier \texttt{logs.txt} :
+
+\begin{enumerate}
+    \item Affichez uniquement les lignes contenant \texttt{ERROR}.
+    \item Comptez le nombre d'erreurs.
+    \item Affichez les noms des utilisateurs ayant généré une erreur.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{grep} ERROR logs.txt
+
+\prompt\ \shcmd{grep} \texttt{-c} ERROR logs.txt
+
+\prompt\ \shcmd{grep} ERROR logs.txt \texttt{|} \shcmd{cut} \texttt{-d= -f2}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Mini-analyse}
+
+\subsection*{Travail à faire}
+
+Sans utiliser d'éditeur de texte :
+
+\begin{itemize}
+    \item Quel est le shell le plus utilisé ?
+    \item Quel utilisateur apparaît le plus souvent dans les logs ?
+\end{itemize}
+
+Justifiez vos réponses à l'aide de commandes Linux.
+
+
+
+
+% --------------------------------------------------
+\section{Les flux standards}
+
+Ce TD a pour objectif d'introduire la gestion des sorties et des erreurs
+sous Linux.
+Sous Linux, un programme communique avec l'extérieur à l'aide de flux :
+\begin{itemize}
+    \item l'entrée standard (stdin) ;
+    \item la sortie standard (stdout) ;
+    \item la sortie d'erreur (stderr).
+\end{itemize}
+
+Par défaut, la sortie standard et la sortie d'erreur sont affichées à l'écran.
+
+% --------------------------------------------------
+\section{Rediriger la sortie standard}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Listez le contenu de votre répertoire personnel.
+    \item Redirigez cette sortie dans un fichier \texttt{liste.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\subsection*{Commandes}
+
+\begin{terminal}
+\prompt\ \shcmd{ls}
+
+\prompt\ \shcmd{ls} \texttt{>} liste.txt
+
+\prompt\ \shcmd{cat} liste.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Générer et observer une erreur}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Essayez d'afficher un fichier qui n'existe pas.
+    \item Observez le message affiché.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt
+\end{terminal}
+
+Expliquez pourquoi le message n'est pas redirigé avec \texttt{>}.
+
+% --------------------------------------------------
+\section{Rediriger la sortie d'erreur}
+
+La sortie d'erreur peut être redirigée séparément.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Redirigez l'erreur précédente dans un fichier \texttt{erreur.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt \texttt{2>} erreur.txt
+
+\prompt\ \shcmd{cat} erreur.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Rediriger sortie et erreur}
+
+Il est possible de rediriger à la fois la sortie standard et la sortie d'erreur.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Lancez une commande produisant à la fois une sortie et une erreur.
+    \item Redirigez les deux flux dans un même fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} sortie.txt \texttt{2>} erreur.txt
+\end{terminal}
+
+Ou en une seule commande :
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} tout.txt \texttt{2>\&1}
+\end{terminal}
+
+
+
+
+
+
+
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+\section{Séquences simples}
+
+\begin{itemize}
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{echo} \{1..5\}
+
+    \prompt\ \shcmd{echo} \{5..1\}
+
+    \prompt\ \shcmd{echo} \{15..-10\}
+
+    \prompt\ \shcmd{echo} \{a..z\}
+
+    \prompt\ \shcmd{echo} \{h..c\}
+    \end{terminal}
+
+    \begin{infobox}
+    La syntaxe \texttt{\{début..fin\}} permet de générer une séquence de 
+    nombres ou de caractères, selon l'ordre croissant ou décroissant.
+    \end{infobox}
+
+    % ---
+
+    \item Créez un répertoire nommé \texttt{TD2} dans votre répertoire personnel (\texttt{\$HOME}).
+    \begin{terminal}
+    \prompt\ \tcomment{d'abord, placez-vous dans votre répertoire personnel}
+
+    \prompt\ \shcmd{cd} \$HOME
+
+    \prompt\
+
+    \prompt\ \tcomment{ensuite, on crée le répertoire TD2}
+
+    \prompt\ \shcmd{mkdir} TD2
+
+    \prompt\
+
+    \prompt\ \tcomment{optionnel :}
+
+    \prompt\ \shcmd{pwd}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    % ---
+
+    \item Placez-vous dans le répertoire \texttt{TD2} et créez un sous-répertoire nommé \texttt{Q1}.
+    \begin{terminal}
+    \prompt\ \tcomment{pour aller dans TD2}
+
+    \prompt\ \shcmd{cd} TD2
+
+    \prompt\ \tcomment{ou bien :}
+
+    \prompt\ \shcmd{cd} \$HOME/TD2
+
+    \prompt\
+
+    \prompt\ \shcmd{mkdir} Q1
+
+    \prompt\
+
+    \prompt\ \tcomment{optionnel :}
+
+    \prompt\ \shcmd{pwd}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    % ---
+
+    \item Placez-vous dans le répertoire \texttt{Q1} et créez 12 répertoires nommés 
+    \texttt{moi\_1}, \texttt{moi\_2}, \ldots, \texttt{moi\_12} en 
+    utilisant une seule commande.
+    \begin{terminal}
+    \prompt\ \shcmd{cd} Q1
+
+    \prompt\
+
+    \prompt\ \shcmd{mkdir} moi\_\{1..12\}
+
+    \prompt\ \tcomment{pour vérifier}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    % ---
+
+    \item Sans changer de répertoire, créez 30 fichiers nommés \texttt{jour\_1.txt}, \texttt{jour\_2.txt}, 
+    \ldots, \texttt{jour\_30.txt} dans chacun des répertoires \texttt{moi\_1} à \texttt{moi\_12},
+    toujours avec une seule commande.
+    \begin{terminal}
+    \prompt\ \shcmd{touch} moi\_\{1..12\}/jour\_\{1..30\}.txt
+
+    \prompt\ \tcomment{pour vérifier}
+
+    \prompt\ \shcmd{ls *}
+    \end{terminal}
+\end{itemize}
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Globbing}
+
+Le \textit{globbing} est un mécanisme du shell permettant de faire correspondre
+des motifs (\textit{patterns}) à des noms de fichiers.
+
+\begin{infobox}
+Le globbing est effectué par le shell avant l'exécution de la commande.
+Les caractères \texttt{*}, \texttt{?} et \texttt{[...]} ont une signification
+particulière et peuvent être désactivés à l'aide de guillemets ou d'un antislash (\texttt{\textbackslash}).
+\end{infobox}
+
+\begin{itemize}
+    \item Placez-vous dans le répertoire \texttt{TD2} et créez un sous-répertoire nommé \texttt{Q2}.
+    \begin{terminal}
+    \prompt\ \shcmd{cd} \$HOME/TD2
+
+    \prompt\
+
+    \prompt\ \shcmd{mkdir} Q2
+
+    \prompt\
+
+    \prompt\ \tcomment{optionnel :}
+
+    \prompt\ \shcmd{pwd}
+
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+
+    % ---
+
+    \item Placez-vous dans le répertoire \texttt{Q2} et créez les fichiers suivants :
+    \begin{terminal}
+    \prompt\ \tcomment{pour aller dans Q2}
+
+    \prompt\ \shcmd{cd} Q2
+
+    \prompt\
+
+    \prompt\ \shcmd{touch} a.txt b.txt c.txt aa.txt bb.txt cc.txt
+
+    \prompt\ \shcmd{touch} a.java b.java c.java
+
+    \prompt\ \shcmd{touch} ba.txt ab.txt ca.txt ac.txt
+
+    \prompt\ \shcmd{touch} f1.txt f2.txt f3.txt f12.txt f21.txt f13.txt f31.txt
+
+    \prompt\ \shcmd{touch} note.pdf image.png report.doc index.html
+    \end{terminal}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls}
+
+    \prompt\ \shcmd{ls} *
+
+    \prompt\ \shcmd{echo} *
+
+    \prompt\ \shcmd{echo} * *
+
+    \prompt\ \shcmd{echo} * * *
+
+    \prompt\ \shcmd{ls} *.txt
+
+    \prompt\ \shcmd{ls} *.java
+
+    \prompt\ \shcmd{ls} *.doc
+
+    \prompt\ \shcmd{ls} *.*
+
+    \prompt\ \shcmd{ls} *.TXT
+    \end{terminal}
+
+    \begin{infobox}
+    Le caractère \texttt{*} correspond à n'importe quelle suite de caractères
+    (dans un nom de fichier).
+    \end{infobox}
+
+    \begin{dangerbox}
+    La commande \texttt{rm *} supprime tous les fichiers (non cachés) du répertoire courant.
+    Elle n'affiche pas de confirmation par défaut et il n'y a pas de "corbeille".
+    \texttt{rm -r *} supprimerait en plus les sous-répertoires de manière récursive.
+    Vérifiez toujours votre motif avant d'utiliser \texttt{rm}.
+    \end{dangerbox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} *.txt
+
+    \prompt\ \shcmd{ls} "*.txt"
+
+    \prompt\ \shcmd{ls} '*.txt'
+    \end{terminal}
+    
+    \begin{infobox}
+    Lorsque le motif est entouré de guillemets, le globbing n'est pas interprété par le shell.
+    \begin{itemize}
+        \item Les guillemets simples \texttt{' '} désactivent l'interprétation de tous les caractères spéciaux.
+        \item Les guillemets doubles \texttt{" "} désactivent le globbing, mais permettent toujours
+              l'expansion des variables (avec \texttt{\$}) et la substitution de commande
+              (avec guillemets inversés \verb|`...`| ou \texttt{\$(...)}).
+    \end{itemize}
+    \end{infobox}
+
+    % ---
+
+    \item Exécutez les commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} *
+
+    \prompt\ \shcmd{ls} .*
+    \end{terminal}
+
+    \begin{infobox}
+    Par défaut, le globbing ne correspond pas aux fichiers cachés
+    (commençant par un point).
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} ?.txt
+
+    \prompt\ \shcmd{ls} a?.txt
+
+    \prompt\ \shcmd{ls} A?.txt
+
+    \prompt\ \shcmd{ls} ?c.txt
+
+    \prompt\ \shcmd{ls} ??.txt
+
+    \prompt\ \shcmd{ls} ???.txt
+    \end{terminal}
+    
+    \begin{infobox}
+    Le caractère \texttt{?} correspond à exactement un caractère (ni plus, ni moins).
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{ls} [ab].txt
+
+    \prompt\ \shcmd{ls} [ba].txt
+
+    \prompt\ \shcmd{ls} [bc].txt
+
+    \prompt\ \shcmd{ls} [a-z].txt
+
+    \prompt\ \shcmd{ls} [b-e].txt
+
+    \prompt\ \shcmd{ls} a[a-z].txt
+
+    \prompt\ \shcmd{ls} [a-z]a.txt
+
+    \prompt\ \shcmd{ls} f[0-9].txt
+
+    \prompt\ \shcmd{ls} [a-z][0-9].txt
+
+    \prompt\ \shcmd{ls} [a-z][!0-9].txt
+
+    \prompt\ \shcmd{ls} [a-z][a-z].txt
+
+    \prompt\ \shcmd{ls} *.[!t][!x][!t]
+    \end{terminal}
+    
+    \begin{infobox}
+    Les crochets \texttt{[ ]} permettent de rechercher un caractère parmi plusieurs possibilités.
+    Par exemple, \texttt{[ab]} correspond soit à \texttt{a} soit à \texttt{b}.
+    On peut aussi utiliser des intervalles, comme \texttt{[0-9]} ou \texttt{[a-z]}, et la négation,
+    par exemple \texttt{[!0-9]} (tout caractère qui n'est pas un chiffre) ou \texttt{[\^{}0-9]}.
+    \end{infobox}
+\end{itemize}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Expressions régulières (regex) avec \texttt{grep}}
+
+Dans cette exercice, nous allons utiliser des expressions régulières (\emph{regex})
+avec la commande \texttt{grep} pour rechercher des motifs dans des fichiers texte.
+
+\begin{infobox}
+Globbing vs Regex
+\begin{itemize}
+    \item Le globbing sert à faire correspondre des motifs à des noms de fichiers.
+    \item Les expressions régulières décrivent des motifs à l'intérieur du
+          contenu des fichiers (les lignes de texte).
+\end{itemize}
+\end{infobox}
+
+\begin{itemize}
+    \item Créez un sous-répertoire \texttt{Q3} dans \texttt{TD2} et placez-vous dedans.
+    \begin{terminal}
+    \prompt\ \shcmd{cd} \$HOME/TD2
+  
+    \prompt\ \shcmd{mkdir} Q3
+  
+    \prompt\ \shcmd{cd} Q3
+    \end{terminal}
+
+    % ---
+
+    \item
+    Téléchargez le fichier \texttt{donnees.txt} pour amalyser des commandes \texttt{grep}.
+    \begin{terminal}
+    \prompt\ \tcomment{Je définis le lien sur plusieurs lignes car il est trop long}
+
+    \prompt\ UrlGit="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
+
+    \prompt\ Rep="TD/TD2/data/regex/donnees.txt"
+
+    \prompt\
+
+    \prompt\ \tcomment{On télécharge maintenant}
+    
+    \prompt\ \shcmd{wget} "\$\{UrlGit\}/\$\{Rep\}"
+
+    \prompt\
+
+    \prompt\ \tcomment{Vérifiez le téléchargement}
+
+    \prompt\ \shcmd{ls} donnees.txt
+    \end{terminal}
+
+    Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
+    \begin{terminal}
+    \prompt\ \shcmd{sudo} \shcmd{apt} update
+    
+    \prompt\ \shcmd{sudo} \shcmd{apt} install wget
+    \end{terminal}
+\end{itemize}
+
+% ---
+
+\subsection{Commande \texttt{grep}} 
+
+\begin{itemize}
+    \item Affichez toutes les lignes contenant le mot \texttt{user}.
+    \begin{terminal}
+    \prompt\ \shcmd{grep} 'user' donnees.txt
+    \end{terminal}
+
+    % ---
+
+    \item Affichez toutes les lignes contenant des codes postaux avec le numéro des lignes.
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -n 'code postal' donnees.txt
+    \end{terminal}
+
+    % ---
+
+    \item Affichez toutes les lignes contenant une adresse e-mail quelconque (celles qui contiennent le caractère \texttt{@}).
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '@' donnees.txt
+    \end{terminal}
+  
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} 'info' donnees.txt
+
+    \prompt\ \shcmd{grep} -i 'info' donnees.txt
+
+    \prompt\ \shcmd{grep} -in 'info' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Par défaut, \texttt{grep} distingue les majuscules et les minuscules.
+    Avec l'option \texttt{-i} (\emph{ignore case}), la recherche devient
+    insensible à la casse.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '1' donnees.txt
+
+    \prompt\ \shcmd{grep} -v '1' donnees.txt
+
+    \prompt\ \shcmd{grep} '11' donnees.txt
+
+    \prompt\ \shcmd{grep} -v '11' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    \texttt{grep -v motif} affiche les lignes qui ne correspondent pas au motif.
+    C'est l'inverse de \texttt{grep motif}.
+    \end{infobox}
+\end{itemize}
+
+% ---
+
+\subsection{Ancrages \texttt{\^{}} (début de ligne) et \texttt{\$} (fin de ligne)}
+
+\begin{itemize}
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '\$' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash \$' donnees.txt
+
+    \prompt\ \shcmd{grep} 'H\$' donnees.txt
+
+    \prompt\ \shcmd{grep} 'HH\$' donnees.txt
+
+    \prompt\ \shcmd{grep} '000\$' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans une expression régulière, le symbole \texttt{\$} ne signifie pas ``caractère dollar'' :
+    il signifie ``fin de ligne''.
+    Pour chercher un vrai \texttt{\$} dans le texte, il faut utiliser \texttt{\textbackslash\$}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '\^{}' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash \^{}' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}e' donnees.txt
+
+    \prompt\ \shcmd{grep} -i '\^{}e' donnees.txt
+
+    \prompt\ \shcmd{grep} -i '\^{}er' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    En expression régulière, le symbole \texttt{\^{}} ne signifie pas ``caractère \texttt{\^{}} littéral'' :
+    il signifie ``début de ligne''.
+    Pour chercher un vrai \texttt{\^{}} dans le texte, il faut utiliser \texttt{\textbackslash\^{}}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '[\textbackslash \$]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\$]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\^{}]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\textbackslash \^{}]' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}M' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}[M]' donnees.txt
+
+    \prompt\ \shcmd{grep} '\^{}[\^{}M]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[\^{}Z]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[Z\^{}]' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    \texttt{\^{}} et \texttt{\$} servent d'ancres (début/fin de ligne) uniquement \emph{en dehors}
+    des crochets \texttt{[ ]}. À l'intérieur, ils sont soit de la syntaxe de classe négative
+    (\texttt{[\^{}...]}) soit de simples caractères normaux.
+    \end{infobox}
+\end{itemize}
+
+% ---
+
+\subsection{Regex de base (\texttt{.}, \texttt{[ ]}, \texttt{*})}
+
+\begin{itemize}
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '.' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash.' donnees.txt
+
+    \prompt\ \shcmd{grep}  'se.' donnees.txt
+    
+    \prompt\ \shcmd{grep} 'se\textbackslash.' donnees.txt
+
+    \prompt\ \shcmd{grep} '2.:' donnees.txt
+
+    \prompt\ \shcmd{grep} '.2.1.w' donnees.txt
+
+    \prompt\ \shcmd{grep} ':..:' donnees.txt
+
+    \prompt\ \shcmd{grep} ':...:' donnees.txt
+
+    \prompt\ \shcmd{grep} 'com' donnees.txt
+
+    \prompt\ \shcmd{grep} 'com.' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans une expression régulière, le caractère \texttt{.} signifie ``un caractère quelconque''.
+    Pour chercher un \emph{vrai} point, on l'échappe avec un antislash \texttt{\textbackslash}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '*' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash*' donnees.txt
+
+    \prompt\ \shcmd{grep} 'K*' donnees.txt
+
+    \prompt\ \shcmd{grep} '*K' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash*K' donnees.txt
+
+    \prompt\ \shcmd{grep} 'V*' donnees.txt
+
+    \prompt\ \shcmd{grep} 'V\textbackslash*' donnees.txt
+
+    \prompt\ \shcmd{grep} 'V*V' donnees.txt
+
+    \prompt\ \shcmd{grep} 'V*VV' donnees.txt
+
+    \prompt\ \shcmd{grep} 'tel: 01*' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans une expression régulière, le caractère \texttt{*} n'est pas un caractère
+    normal : c'est un ``quantificateur'' qui signifie ``zéro ou plusieurs
+    occurrences de l'élément précédent''.
+    Pour chercher un \emph{vrai} caractère \texttt{*}, on l'échappe avec un antislash \texttt{\textbackslash} 
+    (si \texttt{*} est precede par un autre character).
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '[' donnees.txt
+
+    \prompt\ \shcmd{grep} '\textbackslash [' donnees.txt
+
+    \prompt\ \shcmd{grep} '[[]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[aeiou]' donnees.txt
+    
+    \prompt\ \shcmd{grep} '[x-z]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[xz-]' donnees.txt
+    
+    \prompt\ \shcmd{grep} '[x-zX-Z]' donnees.txt
+    
+    \prompt\ \shcmd{grep} '[0-3]' donnees.txt
+    
+    \prompt\ \shcmd{grep} '[\^{}a-zA-Z0-9]' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans une expression régulière, \texttt{[...]} définit une ``classe de caractères'' :
+    la regex correspond à \emph{un seul caractère} parmi ceux listés entre les crochets.
+    \begin{itemize}
+        \item \texttt{[aeiou]} : une lettre parmi \texttt{a}, \texttt{e}, \texttt{i}, \texttt{o}, \texttt{u}.
+        \item \texttt{[0-9]} : un chiffre (de 0 à 9).
+        \item \texttt{[A-Z]} : une lettre majuscule.
+        \item \texttt{[A-Za-z0-9\_]} : lettre majuscule, ou minuscule, ou chiffre, ou \texttt{\_}.
+    \end{itemize}
+    On peut aussi utiliser une ``classe négative'' avec \texttt{\^{}} en premier caractère :
+    \begin{itemize}
+        \item \texttt{[\^{}0-9]} : un caractère qui n'est pas un chiffre.
+    \end{itemize}
+    \end{infobox}
+\end{itemize}
+
+% ---
+
+\subsection{Quantificateurs : \texttt{+}, \texttt{?}, \texttt{\{m,n\}}}
+
+\begin{itemize}
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} 'a*' donnees.txt
+
+    \prompt\ \shcmd{grep} 'a\textbackslash+' donnees.txt
+
+    \prompt\ \shcmd{grep} 'a+' donnees.txt
+
+    \prompt\ \shcmd{grep} -E 'a\textbackslash+' donnees.txt
+
+    \prompt\ \shcmd{grep} -E 'a+' donnees.txt
+
+    \prompt\ \shcmd{grep} -E 's+s+' donnees.txt
+    
+    \prompt\ \shcmd{grep} -E 'ss+' donnees.txt
+    
+    \prompt\ \shcmd{grep} -E '1+2+3+' donnees.txt
+    
+    \prompt\ \shcmd{grep} -E '123+' donnees.txt 
+
+    \prompt\ \shcmd{grep} -E 'a+t' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans les regex, \texttt{+} désigne ``une ou plusieurs occurrences'' du motif précédent. \\
+    Avec \texttt{grep} (regex basiques), il faut l'écrire \texttt{\textbackslash+}.  
+    Avec \texttt{grep -E} (regex étendues), on écrit simplement \texttt{+}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '4' donnees.txt
+
+    \prompt\ \shcmd{grep} '4\textbackslash?' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '4?' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '4\textbackslash?' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Dans les regex, \texttt{?} signifie ``zéro ou une occurrence'' du motif précédent. \\
+    Avec \texttt{grep} (regex basiques), il faut l'écrire \texttt{\textbackslash?}.  
+    Avec \texttt{grep -E} (regex étendues), on écrit simplement \texttt{?}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} '[0-9]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[0-9][0-9][0-9][0-9][0-9]' donnees.txt
+
+    \prompt\ \shcmd{grep} '[0-9]\{5\}' donnees.txt
+
+    \prompt\ \shcmd{grep} '[0-9]\textbackslash\{5\textbackslash\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{5\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\textbackslash\{5\textbackslash\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{3,6\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\$' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[A-Z]\{6,8\}: \textbackslash\$[0-9]\{4\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -E '[0-9]\{2\}/[0-9]\{2\}/[0-9]\{4\}' donnees.txt
+
+    \prompt\ \shcmd{grep} -Ev '[0-9]' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Avec \texttt{grep} \emph{(sans \texttt{-E})}, on utilise les ``regex basiques''.
+    La répétition se fait avec \texttt{\textbackslash\{m\textbackslash\}} ou 
+    \texttt{\textbackslash\{m,n\textbackslash\}}.
+
+    Avec \texttt{grep -E},  on active les ``regex étendues''. Ici, \texttt{\{ \}}
+    sont directement des quantificateurs, \emph{sans antislash}.
+    \begin{itemize}
+        \item \texttt{\{m\}} = exactement \texttt{m} répétitions.
+        \item \texttt{\{m,n\}} = entre \texttt{m} et \texttt{n} répétitions.
+    \end{itemize}
+    \end{infobox}
+
+    % ---
+
+    \item Affichez toutes les lignes qui ne contiennent pas des lettres majuscules.
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -Ev '[A-Z]' donnees.txt
+    \end{terminal}
+
+    % ---
+
+    \item Affichez toutes les lignes qui ne contiennent pas des lettres (majuscules ou minusclues) entre
+    \texttt{A} et \texttt{D}.
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -Ev '[A-Da-d]' donnees.txt
+    \end{terminal}
+\end{itemize}
+
+% ---
+
+\subsection{Alternatives \texttt{|} et groupes \texttt{( )}}
+
+\begin{itemize}
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} 'com' donnees.txt 
+
+    \prompt\ \shcmd{grep} 'org' donnees.txt 
+
+    \prompt\ \shcmd{grep} 'com\textbackslash|org' donnees.txt 
+
+    \prompt\ \shcmd{grep} -E 'com|org' donnees.txt 
+
+    \prompt\ \shcmd{grep} -E 'com|org|fr' donnees.txt 
+    \end{terminal}
+
+    \begin{infobox}
+    Avec \texttt{grep} (regex basiques), l'alternative (signifie ``ou'') s'écrit \texttt{\textbackslash|}.
+    Avec \texttt{grep -E} (regex étendues), on écrit directement \texttt{|}.
+    \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+    \begin{terminal}
+    \prompt\ \shcmd{grep} -E 'date: 2021|2022' donnees.txt
+
+    \prompt\ \shcmd{grep} -E 'date: (2021|2022)' donnees.txt
+
+    \prompt\ \shcmd{grep} 'date: \textbackslash(2021\textbackslash|2022\textbackslash)' donnees.txt
+
+    \prompt\ \shcmd{grep} -E 'date: (2021|2022|2023)' donnees.txt
+    \end{terminal}
+
+    \begin{infobox}
+    Avec \texttt{grep -E}, \texttt{( )} servent à regrouper les alternatives.
+    Avec \texttt{grep} (sans \texttt{-E}), il faut échapper ces symboles : 
+    \texttt{\textbackslash( \texttt{\textbackslash|} \textbackslash)}.
+    \end{infobox}
+\end{itemize}
+
+
+
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+\section{Introduction à \texttt{sed} pour de simples remplacements}
+
+\begin{infobox}
+\texttt{sed} est un éditeur de flux, très puissant. \\
+Commande de base pour un remplacement :
+\begin{itemize}
+  \item \texttt{sed 's/ancien/nouveau/'} remplace la première occurrence de \texttt{ancien}
+        par \texttt{nouveau} sur chaque ligne.
+  \item \texttt{sed 's/ancien/nouveau/g'} remplace toutes les occurrences sur chaque ligne.
+\end{itemize}
+Par défaut, \texttt{sed} écrit le résultat sur la sortie standard (n'écrase pas le fichier original).
+\end{infobox}
+
+\begin{itemize}
+    \item Affichez le fichier \texttt{donnees.txt} en remplaçant \texttt{ERROR} par \texttt{ERREUR}
+          dans les lignes de logs.
+    \begin{terminal}
+    \prompt\ \shcmd{sed} 's/ERROR/ERREUR/g' donnees.txt
+    \end{terminal}
+
+    \item Affichez seulement les lignes d'e-mails, en supprimant le préfixe \texttt{email: } au début de la ligne.
+          (Nous utilisons ici l'option \texttt{-n} et la commande \texttt{p} (\emph{print}) pour n'afficher
+          que les lignes modifiées.)
+    \begin{terminal}
+    \prompt\ \shcmd{sed} -n 's/\^{}email: //p' donnees.txt
+    \end{terminal}
+
+    \item Affichez les lignes de code postal en mettant le texte \texttt{code postal: } en majuscules
+          (\texttt{CODE POSTAL:}), sans modifier le reste.
+    \begin{terminal}
+    \prompt\ \shcmd{sed} 's/\^{}code postal:/CODE POSTAL:/' donnees.txt
+    \end{terminal}
+\end{itemize}
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Substitutions, pipes et filtres}
+
+Dans cet exercice, nous allons pratiquer plusieurs fonctionnalités importantes du shell :
+\textit{brace expansion}, substitution de commande, variables, pipes, tests, opérateurs
+logiques, et quelques commandes classiques de traitement de texte.
+
+\subsection{Préparation}
+
+\begin{itemize}
+  \item Créez un répertoire \texttt{TD3} dans votre répertoire personnel et placez-vous dedans.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME
+
+  \prompt\ \shcmd{mkdir} TD3
+
+  \prompt\ \shcmd{cd} TD3
+  \end{terminal}
+\end{itemize}
+
+\subsection{Brace expansion \texttt{\{start..end\}} et substitution de commande \texttt{\$(...)}}
+
+\begin{infobox}
+\textbf{Brace expansion} : \texttt{fichier\_\{1..5\}.txt} est développé par le shell en
+\texttt{fichier\_1.txt fichier\_2.txt fichier\_3.txt fichier\_4.txt fichier\_5.txt} \\
+\textbf{Substitution de commande} : \texttt{\$(commande)} est remplacé par la sortie
+de \texttt{commande}. Exemple : \texttt{AUJ=\$(date)}.
+\end{infobox}
+
+\begin{itemize}
+  \item Créez un sous-répertoire \texttt{Q1} et placez-vous dedans.
+  \begin{terminal}
+  \prompt\ \shcmd{mkdir} Q1
+
+  \prompt\ \shcmd{cd} Q1
+  \end{terminal}
+
+  \item Utilisez la \textit{brace expansion} pour créer d'un seul coup 12 fichiers
+        \texttt{rapport\_01.txt} à \texttt{rapport\_12.txt}.
+  \begin{terminal}
+  \prompt\ \shcmd{touch} rapport\_{01..12}.txt
+  \end{terminal}
+
+  \item Vérifiez qu'ils ont bien été créés :
+  \begin{terminal}
+  \prompt\ \shcmd{ls}
+  \end{terminal}
+
+  \item Utilisez maintenant la substitution de commande pour stocker la date du jour dans une variable.
+  \begin{terminal}
+  \prompt\ AUJOURDHUI=\$(date +\%F)
+
+  \prompt\ \shcmd{echo} \$AUJOURDHUI
+  \end{terminal}
+
+  \item À partir de cette variable, créez un fichier de log nommé \texttt{log-\$AUJOURDHUI.txt}.
+  \begin{terminal}
+  \prompt\ \shcmd{touch} log-\$AUJOURDHUI.txt
+
+  \prompt\ \shcmd{ls}
+  \end{terminal}
+
+  \item Stockez dans une variable le nombre de fichiers \texttt{rapport\_*.txt} présents dans le répertoire,
+        en utilisant \texttt{ls} et \texttt{wc -l} avec une substitution de commande.
+  \begin{terminal}
+  \prompt\ N\_RAPPORTS=\$(ls rapport\_*.txt | wc -l)
+
+  \prompt\ \shcmd{echo} \$N\_RAPPORTS
+  \end{terminal}
+\end{itemize}
+
+\subsection{Pipes (\texttt{|})}
+
+\begin{infobox}
+L'opérateur de pipe \texttt{|} envoie la sortie standard de la commande de gauche
+comme entrée standard de la commande de droite. \\
+Exemple : \texttt{ls | wc -l} compte le nombre de fichiers listés par \texttt{ls}.
+\end{infobox}
+
+\begin{itemize}
+  \item Assurez-vous d'être dans \texttt{\$HOME/TD3/Q1}.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+
+  \prompt\ \shcmd{ls}
+  \end{terminal}
+
+  \item Comptez le nombre de fichiers \texttt{rapport\_*.txt} en une seule commande
+        en utilisant \texttt{ls}, le pipe \texttt{|} et \texttt{wc -l}.
+  \begin{terminal}
+  \prompt\ \shcmd{ls} rapport\_*.txt \textbar{} wc -l
+  \end{terminal}
+
+  \item Stockez ce nombre dans une variable \texttt{N\_RAPPORTS} en combinant
+        le pipe et la substitution de commande \texttt{\$(...)}.
+  \begin{terminal}
+  \prompt\ N\_RAPPORTS=\$(ls rapport\_*.txt \textbar{} wc -l)
+
+  \prompt\ \shcmd{echo} \$N\_RAPPORTS
+  \end{terminal}
+
+  \item Créez un petit fichier texte \texttt{noms.txt} contenant quelques prénoms
+        (un par ligne), puis utilisez un pipe pour compter le nombre de lignes.
+  \begin{terminal}
+  \prompt\ cat > noms.txt
+  alice
+  bob
+  charlie
+  diane
+  \^{}D
+
+  \prompt\ \shcmd{cat} noms.txt \textbar{} wc -l
+  \end{terminal}
+
+  \item Affichez le contenu de \texttt{noms.txt} en remplaçant toutes les lettres
+        minuscules par des majuscules, en utilisant \texttt{tr} via un pipe.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} noms.txt \textbar{} tr 'a-z' 'A-Z'
+  \end{terminal}
+\end{itemize}
+
+\subsection{Variables, tests \texttt{[ ]} / \texttt{[[ ]]}, \texttt{\&\&} et \texttt{||}}
+
+\begin{infobox}
+\textbf{Variables} : \texttt{X=valeur}, utilisation avec \texttt{\$X}. \\
+\textbf{Test simple} : \texttt{[ condition ]} est une commande qui réussit ou échoue. \\
+Exemples : \texttt{[ -f fichier ]} (fichier existe), \texttt{[ "\$A" -eq 3 ]} (entiers), 
+\texttt{[ "\$S" = "abc" ]} (chaînes). \\
+\textbf{Test avancé} : \texttt{[[ ... ]]} supporte \texttt{<}, \texttt{>} sur les chaînes. \\
+\textbf{\&\& et ||} : \texttt{cmd1 \&\& cmd2} exécute \texttt{cmd2} seulement si \texttt{cmd1} réussit.
+\texttt{cmd1 || cmd2} exécute \texttt{cmd2} seulement si \texttt{cmd1} échoue.
+\end{infobox}
+
+\begin{itemize}
+  \item Créez une variable contenant une commande, par exemple une variante de \texttt{ls}.
+  \begin{terminal}
+  \prompt\ LSCMD="ls -1 rapport\_*.txt"
+
+  \prompt\ \shcmd{echo} "\$LSCMD"
+  \end{terminal}
+
+  \item Exécutez la commande contenue dans la variable (en la faisant précéder par \texttt{\$}).
+  \begin{terminal}
+  \prompt\ \$LSCMD
+  \end{terminal}
+
+  \item Utilisez la commande \texttt{test} ou les crochets \texttt{[ ]} pour vérifier 
+        que le fichier \texttt{rapport\_01.txt} existe.
+  \begin{terminal}
+  \prompt\ [ -f rapport\_01.txt ] \&\& echo "rapport\_01.txt existe"
+  \end{terminal}
+
+  \item Testez maintenant si le nombre de rapports (\texttt{\$N\_RAPPORTS}) est égal à 12, 
+        en utilisant une comparaison d'entiers (\texttt{-eq}) et \texttt{\&\&}.
+  \begin{terminal}
+  \prompt\ [ "\$N\_RAPPORTS" -eq 12 ] \&\& echo "Tous les 12 rapports sont là"
+  \end{terminal}
+
+  \item Testez si l'utilisateur courant n'est pas \texttt{root}, en utilisant une comparaison de chaînes.
+  \begin{terminal}
+  \prompt\ [ "\$USER" != "root" ] \&\& echo "Vous n'êtes pas root"
+  \end{terminal}
+
+  \item Utilisez \texttt{[[ ]]} pour faire une comparaison lexicographique entre deux chaînes,
+        par exemple vérifier si \texttt{"alice"} est « plus petite » que \texttt{"bob"}.
+  \begin{terminal}
+  \prompt\ [[ "alice" < "bob" ]] \&\& echo "alice < bob"
+  \end{terminal}
+
+  \item Utilisez \texttt{\&\&} et \texttt{||} ensemble pour afficher :
+        \texttt{"OK"} si \texttt{\$N\_RAPPORTS} est égal à 12, et \texttt{"ERREUR"} sinon.
+  \begin{terminal}
+  \prompt\ [ "\$N\_RAPPORTS" -eq 12 ] \&\& echo "OK" || echo "ERREUR"
+  \end{terminal}
+\end{itemize}
+
+\subsection{\texttt{grep}, \texttt{sort}, \texttt{uniq}, \texttt{wc -l}, \texttt{tr}}
+
+\begin{infobox}
+\texttt{grep motif} : affiche les lignes contenant \texttt{motif}. \\
+\texttt{sort} : trie les lignes. \\
+\texttt{uniq} : supprime les doublons consécutifs (souvent après \texttt{sort}). \\
+\texttt{wc -l} : compte le nombre de lignes. \\
+\texttt{tr} : transforme des caractères (par ex. minuscules \textrightarrow{} majuscules).
+\end{infobox}
+
+\begin{itemize}
+  \item Revenez dans \texttt{TD3} et créez un sous-répertoire \texttt{Q2}.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3
+
+  \prompt\
+
+  \prompt\ \shcmd{mkdir} Q2
+
+  \prompt\
+
+  \prompt\ \shcmd{cd} Q2
+  \end{terminal}
+
+  \item Créez un fichier de logs simulant des connexions à un système :
+  \begin{terminal}
+  \prompt\ cat > logins.log << EOF
+  2023-03-01 09:01:03 user01 SUCCESS
+  2023-03-01 09:05:10 user02 FAIL
+  2023-03-01 09:10:22 user01 SUCCESS
+  2023-03-01 09:15:47 user03 SUCCESS
+  2023-03-01 09:20:03 user02 FAIL
+  2023-03-01 09:25:30 user04 SUCCESS
+  2023-03-01 09:30:00 user01 FAIL
+  2023-03-01 09:35:42 user03 SUCCESS
+  2023-03-01 09:40:11 user02 SUCCESS
+  2023-03-01 09:45:55 user04 FAIL
+  EOF
+  \end{terminal}
+
+  \item Affichez le contenu du fichier :
+  \begin{terminal}
+  \prompt\ \shcmd{cat} logins.log
+  \end{terminal}
+
+  \item Comptez, avec une seule ligne de commande utilisant un pipe, 
+        le nombre de lignes contenant le mot \texttt{SUCCESS}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} SUCCESS logins.log \textbar{} wc -l
+  \end{terminal}
+
+  \item Comptez le nombre de lignes contenant le mot \texttt{FAIL}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} FAIL logins.log \textbar{} wc -l
+  \end{terminal}
+
+  \item Affichez toutes les lignes contenant \texttt{user01}, triées par ordre alphabétique.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} user01 logins.log \textbar{} sort
+  \end{terminal}
+
+  \item Affichez toutes les lignes du fichier \texttt{logins.log}, triées et sans doublons.
+  \begin{terminal}
+  \prompt\ \shcmd{sort} logins.log \textbar{} uniq
+  \end{terminal}
+
+  \item Comptez le nombre de lignes distinctes dans le fichier, en utilisant \texttt{sort}, \texttt{uniq} et \texttt{wc -l}.
+  \begin{terminal}
+  \prompt\ \shcmd{sort} logins.log \textbar{} uniq \textbar{} wc -l
+  \end{terminal}
+
+  \item Affichez le contenu de \texttt{logins.log} en transformant toutes les lettres 
+        majuscules en minuscules, à l'aide de \texttt{tr}.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} logins.log \textbar{} tr 'A-Z' 'a-z'
+  \end{terminal}
+\end{itemize}
+
+\subsection{Extension : expansion arithmétique \texttt{\$(( ... ))}, \texttt{head}, \texttt{tail}, \texttt{cut}, \texttt{xargs}}
+
+\subsubsection{Expansion arithmétique \texttt{\$(( ... ))}}
+
+\begin{infobox}
+\texttt{\$(( ... ))} permet de faire des calculs sur des entiers. \\
+Exemples : \texttt{X=\$((2 + 3))}, \texttt{Y=\$((X * 10))}.
+\end{infobox}
+
+\begin{itemize}
+  \item Dans le répertoire \texttt{Q1}, définissez deux variables
+        \texttt{A} et \texttt{B} puis calculez leur somme.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+  \prompt\ A=5
+  \prompt\ B=3
+  \prompt\ SOMME=\$((A + B))
+  \prompt\ \shcmd{echo} \$SOMME
+  \end{terminal}
+
+  \item Calculez le nombre de secondes dans une journée (24 heures).
+  \begin{terminal}
+  \prompt\ SECONDES\_PAR\_JOUR=\$((24 * 60 * 60))
+  \prompt\ \shcmd{echo} \$SECONDES\_PAR\_JOUR
+  \end{terminal}
+
+  \item En une seule ligne de commande, incrémentez une variable \texttt{N}
+        de 1 et affichez sa nouvelle valeur.
+  \begin{terminal}
+  \prompt\ N=10
+  \prompt\ N=\$((N + 1)) \&\& echo \$N
+  \end{terminal}
+\end{itemize}
+
+\subsubsection{\texttt{head} et \texttt{tail}}
+
+\begin{infobox}
+\texttt{head -n N fichier} : affiche les N premières lignes. \\
+\texttt{tail -n N fichier} : affiche les N dernières lignes. \\
+\texttt{tail -n +K fichier} : affiche à partir de la ligne K.
+\end{infobox}
+
+\begin{itemize}
+  \item Placez-vous dans le répertoire \texttt{Q2}.
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q2
+  \end{terminal}
+
+  \item Affichez les 3 premières lignes de \texttt{logins.log}.
+  \begin{terminal}
+  \prompt\ \shcmd{head} -n 3 logins.log
+  \end{terminal}
+
+  \item Affichez les 2 dernières lignes de \texttt{logins.log}.
+  \begin{terminal}
+  \prompt\ \shcmd{tail} -n 2 logins.log
+  \end{terminal}
+
+  \item Affichez les 5 premières lignes contenant le mot \texttt{FAIL}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} FAIL logins.log \textbar{} head -n 5
+  \end{terminal}
+
+  \item Affichez les 3 dernières lignes contenant \texttt{SUCCESS}.
+  \begin{terminal}
+  \prompt\ \shcmd{grep} SUCCESS logins.log \textbar{} tail -n 3
+  \end{terminal}
+\end{itemize}
+
+\subsubsection{\texttt{cut} : extraction de colonnes}
+
+\begin{infobox}
+\texttt{cut} permet d'extraire des colonnes d'un texte. \\
+Exemple : \texttt{cut -d ';' -f2 fichier} : deuxième colonne, séparateur \texttt{;}.
+\end{infobox}
+
+\begin{itemize}
+  \item Créez un fichier \texttt{ventes.csv} :
+  \begin{terminal}
+  \prompt\ cat > ventes.csv << EOF
+  date;client;montant
+  2023-03-01;CLIENTA;1200
+  2023-03-01;CLIENTB;800
+  2023-03-02;CLIENTA;500
+  2023-03-02;CLIENTC;2300
+  2023-03-03;CLIENTB;1500
+  EOF
+  \end{terminal}
+
+  \item Affichez tout le fichier pour vérifier son contenu.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} ventes.csv
+  \end{terminal}
+
+  \item Affichez uniquement la colonne des clients (deuxième colonne).
+  \begin{terminal}
+  \prompt\ \shcmd{cut} -d ';' -f2 ventes.csv
+  \end{terminal}
+
+  \item Affichez uniquement la colonne des montants (troisième colonne).
+  \begin{terminal}
+  \prompt\ \shcmd{cut} -d ';' -f3 ventes.csv
+  \end{terminal}
+
+  \item Affichez la liste des clients sans doublons, triée par ordre alphabétique.
+  \begin{terminal}
+  \prompt\ \shcmd{cut} -d ';' -f2 ventes.csv \textbar{} tail -n +2 \textbar{} sort \textbar{} uniq
+  \end{terminal}
+
+  \item Comptez le nombre total de ventes (lignes de données, en excluant l'en-tête).
+  \begin{terminal}
+  \prompt\ \shcmd{tail} -n +2 ventes.csv \textbar{} wc -l
+  \end{terminal}
+\end{itemize}
+
+\subsubsection*{Bonus : \texttt{xargs}}
+
+\begin{infobox}
+\texttt{xargs} lit des mots sur l'entrée standard et les utilise comme arguments
+d'une commande. \\
+Exemple : \texttt{echo fichier1 fichier2 \textbar{} xargs cat} = \texttt{cat fichier1 fichier2}.
+\end{infobox}
+
+\begin{itemize}
+  \item Dans \texttt{Q1}, créez un fichier \texttt{liste\_rapports.txt} contenant
+        la liste des fichiers \texttt{rapport\_*.txt} (un par ligne).
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q1
+  \prompt\ ls rapport\_*.txt > liste\_rapports.txt
+  \prompt\ \shcmd{cat} liste\_rapports.txt
+  \end{terminal}
+
+  \item Affichez le contenu de tous les fichiers listés dans \texttt{liste\_rapports.txt}
+        en une seule commande utilisant \texttt{xargs} et \texttt{cat}.
+  \begin{terminal}
+  \prompt\ \shcmd{cat} liste\_rapports.txt \textbar{} xargs cat
+  \end{terminal}
+
+  \item Dans \texttt{Q2}, affichez uniquement les lignes contenant \texttt{user01}
+        pour tous les fichiers dont la liste est fournie sur l'entrée standard,
+        en utilisant \texttt{xargs} et \texttt{grep}. (Par exemple avec \texttt{echo logins.log}.)
+  \begin{terminal}
+  \prompt\ \shcmd{cd} \$HOME/TD3/Q2
+  \prompt\ echo logins.log \textbar{} xargs grep user01
+  \end{terminal}
+\end{itemize}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+\section{Mise en pratique : navigation dans un dépôt d'entreprise}
+
+Dans cet exercice, vous allez télécharger un petit jeu de données qui simule
+les fichiers d'une entreprise (rapports, factures, logs, sauvegardes, etc.),
+puis utiliser le globbing pour retrouver certaines informations.
+
+\begin{itemize}
+    \item
+    Téléchargez l'archive suivante dans votre répertoire \texttt{TD2} :
+    \begin{terminal}
+    \prompt\ \shcmd{cd} \$HOME/TD2
+
+    \prompt\
+
+    \prompt\ \tcomment{Je définis le lien sur plusieurs lignes car il est trop long}
+
+    \prompt\ UrlGit="https://github.com/AbdAmmar/LDS/blob"
+
+    \prompt\ Commit="03eff847f0b55cdf2cc8558b6654b5cd7b2cf282"
+
+    \prompt\ Rep="TD/TD2/data/globbing/entreprise\_data.tar.gz"
+
+    \prompt\
+
+    \prompt\ \tcomment{On télécharge maintenant}
+    
+    \prompt\ \shcmd{wget} "\$\{UrlGit\}/\$\{Commit\}/\$\{Rep\}"
+    \end{terminal}
+
+    Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
+    \begin{terminal}
+    \prompt\ \tcomment{pour Linux :}
+
+    \prompt\ \shcmd{sudo apt} update
+
+    \prompt\ \shcmd{sudo apt} install wget
+
+    \prompt\
+    
+    \prompt\ \tcomment{pour macOS :}
+    
+    \prompt\ \shcmd{brew} install wget
+    \end{terminal}
+
+    % ---
+
+    \item Décompressez l'archive et placez-vous dans le répertoire \texttt{entreprise\_data} :
+    \begin{terminal}
+    \prompt\ \shcmd{tar} xf entreprise\_data.tar.gz
+  
+    \prompt\ \shcmd{cd} entreprise\_data
+  
+    \prompt\ \shcmd{ls}
+    \end{terminal}
+  
+    \item Le répertoire contient plusieurs sous-répertoires (par exemple \texttt{finances},
+          \texttt{rh}, \texttt{ventes}, \texttt{it/logs}, \texttt{backups}), chacun avec de
+          nombreux fichiers aux noms structurés.
+\end{itemize}
+
+\begin{infobox}
+Dans toutes les questions suivantes, utilisez uniquement le globbing 
+(\texttt{*}, \texttt{?}, \texttt{[...]}).
+
+Vous pouvez bien sûr combiner le globbing avec des commandes comme \texttt{ls}, 
+\texttt{echo}, voire \texttt{ls | wc -l} pour compter des fichiers.
+\end{infobox}
+
+\begin{enumerate}
+    \item Lister tous les fichiers PDF du service \texttt{finances}.
+          (Rapports trimestriels et factures.)
+    \item Lister uniquement les rapports trimestriels de 2023 dans \texttt{finances}
+          (les fichiers dont le nom contient \texttt{rapport-finances} et commence par \texttt{2023-}).
+    \item Parmi ces rapports de 2023, lister uniquement les versions \texttt{v1} 
+          (les fichiers dont le nom se termine par \texttt{-v1.pdf}).
+    \item Lister toutes les factures 2023 pour le client \texttt{CLIENTA}
+          dans le répertoire \texttt{finances}.
+    \item Lister tous les fichiers de salaires (fichiers contenant \texttt{salaires} dans leur nom)
+          dans le répertoire \texttt{rh}.
+    \item Toujours dans \texttt{rh}, lister uniquement les fichiers de salaires
+          marqués comme \texttt{confidentiel} (nom contenant \texttt{salaires-confidentiel}).
+    \item Lister tous les fichiers CSV de chiffres d'affaires (se terminant par \texttt{.csv})
+          dans le répertoire \texttt{ventes}, tous mois et toutes régions confondus.
+    \item Lister uniquement les fichiers de \texttt{ventes} correspondant au mois de mars 2023
+          (nom contenant \texttt{2023-03-}).
+    \item Dans \texttt{it/logs}, lister tous les logs de production non compressés
+          (fichiers \texttt{app-prod-...} se terminant par \texttt{.log}, mais pas \texttt{.log.gz}).
+    \item Dans \texttt{it/logs}, lister les logs de production du 15 au 19 janvier 2023
+          (jours \texttt{15}, \texttt{16}, \texttt{17}, \texttt{18}, \texttt{19} dans le nom de fichier).
+    \item Dans \texttt{backups}, lister toutes les sauvegardes complètes (\texttt{full})
+          de la base de données pour mars 2023 (fichiers contenant \texttt{backup-db-2023-03-}
+          et \texttt{-full.tar.gz}).
+    \item Lister tous les fichiers cachés à la racine du dépôt \texttt{entreprise\_data}
+          (fichiers dont le nom commence par un point).
+    \item Lister tous les fichiers qui ne sont \emph{pas} des fichiers texte PDF
+          (c'est-à-dire tous les fichiers dont l'extension n'est pas \texttt{.pdf}).
+          Vous pouvez ici utiliser un motif avec négation dans les crochets,
+          par exemple \texttt{.[!p][!d][!f]} ou similaire.
+\end{enumerate}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Récupération des fichiers de données}
+Dans ce TD, vous allez travailler sur des fichiers texte fournis par l'enseignant.
+Ces fichiers contiennent des données fictives destinées à l'apprentissage
+des commandes de filtrage et d'analyse de texte.
+
+Commencez par créer un répertoire \texttt{data}, puis téléchargez les fichiers
+à l'aide des commandes suivantes :
+
+\begin{terminal}
+\prompt\ \shcmd{mkdir} data
+
+\prompt\ \shcmd{cd} data
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD2/data/users.txt
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD2/data/logs.txt
+
+\prompt\ \shcmd{wget} https://raw.githubusercontent.com/AbdAmmar/LDS/main/TD/TD2/data/notes.txt
+\end{terminal}
+
+Vérifiez que les fichiers ont bien été téléchargés.
+Si la commande \texttt{wget} n'est pas disponible, installez-la avec :
+
+\begin{terminal}
+\prompt\ \shcmd{sudo} apt update
+
+\prompt\ \shcmd{sudo} apt install wget
+\end{terminal}
+
+% --------------------------------------------------
+\section{Lire et compter}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez le contenu du fichier \texttt{users.txt}.
+    \item Comptez le nombre de lignes du fichier.
+    \item Affichez le contenu du fichier \texttt{logs.txt}.
+    \item Comptez le nombre de lignes du fichier \texttt{notes.txt}.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} users.txt
+
+\prompt\ \shcmd{wc} \texttt{-l} users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Introduction aux pipes}
+
+Un \textit{pipe} permet d'envoyer la sortie d'une commande en entrée d'une autre.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Comptez le nombre de lignes de \texttt{users.txt} sans afficher le contenu du fichier.
+    \item Expliquez le rôle du symbole \texttt{|}.
+\end{enumerate}
+
+\subsection*{Commande clé}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} users.txt \texttt{|} \shcmd{wc} \texttt{-l}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Rechercher des informations avec \texttt{grep}}
+
+\subsection*{Travail à faire}
+
+À partir du fichier \texttt{users.txt} :
+
+\begin{enumerate}
+    \item Affichez les lignes contenant \texttt{bash}.
+    \item Comptez le nombre d'utilisateurs utilisant \texttt{bash}.
+    \item Affichez les lignes ne contenant pas \texttt{bash}.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{grep} bash users.txt
+
+\prompt\ \shcmd{grep} \texttt{-c} bash users.txt
+
+\prompt\ \shcmd{grep} \texttt{-v} bash users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Extraire des informations}
+
+Le fichier \texttt{users.txt} est structuré : les champs sont séparés par le caractère \texttt{:}.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez uniquement la colonne des noms d'utilisateurs.
+    \item Affichez uniquement la colonne des shells.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{cut} \texttt{-d: -f1} users.txt
+
+\prompt\ \shcmd{cut} \texttt{-d: -f2} users.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Trier et compter}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Affichez la liste des shells utilisés.
+    \item Triez cette liste.
+    \item Comptez combien de fois chaque shell apparaît.
+\end{enumerate}
+
+\subsection*{Pipeline attendu}
+
+\begin{terminal}
+\prompt\ \shcmd{cut} \texttt{-d: -f2} users.txt \texttt{|} \shcmd{sort} \texttt{|} \shcmd{uniq} \texttt{-c}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Analyse de fichiers de logs}
+
+\subsection*{Travail à faire}
+
+À partir du fichier \texttt{logs.txt} :
+
+\begin{enumerate}
+    \item Affichez uniquement les lignes contenant \texttt{ERROR}.
+    \item Comptez le nombre d'erreurs.
+    \item Affichez les noms des utilisateurs ayant généré une erreur.
+\end{enumerate}
+
+\subsection*{Commandes utiles}
+
+\begin{terminal}
+\prompt\ \shcmd{grep} ERROR logs.txt
+
+\prompt\ \shcmd{grep} \texttt{-c} ERROR logs.txt
+
+\prompt\ \shcmd{grep} ERROR logs.txt \texttt{|} \shcmd{cut} \texttt{-d= -f2}
+\end{terminal}
+
+% --------------------------------------------------
+\section{Mini-analyse}
+
+\subsection*{Travail à faire}
+
+Sans utiliser d'éditeur de texte :
+
+\begin{itemize}
+    \item Quel est le shell le plus utilisé ?
+    \item Quel utilisateur apparaît le plus souvent dans les logs ?
+\end{itemize}
+
+Justifiez vos réponses à l'aide de commandes Linux.
+
+
+
+
+% --------------------------------------------------
+\section{Les flux standards}
+
+Ce TD a pour objectif d'introduire la gestion des sorties et des erreurs
+sous Linux.
+Sous Linux, un programme communique avec l'extérieur à l'aide de flux :
+\begin{itemize}
+    \item l'entrée standard (stdin) ;
+    \item la sortie standard (stdout) ;
+    \item la sortie d'erreur (stderr).
+\end{itemize}
+
+Par défaut, la sortie standard et la sortie d'erreur sont affichées à l'écran.
+
+% --------------------------------------------------
+\section{Rediriger la sortie standard}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Listez le contenu de votre répertoire personnel.
+    \item Redirigez cette sortie dans un fichier \texttt{liste.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\subsection*{Commandes}
+
+\begin{terminal}
+\prompt\ \shcmd{ls}
+
+\prompt\ \shcmd{ls} \texttt{>} liste.txt
+
+\prompt\ \shcmd{cat} liste.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Générer et observer une erreur}
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Essayez d'afficher un fichier qui n'existe pas.
+    \item Observez le message affiché.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt
+\end{terminal}
+
+Expliquez pourquoi le message n'est pas redirigé avec \texttt{>}.
+
+% --------------------------------------------------
+\section{Rediriger la sortie d'erreur}
+
+La sortie d'erreur peut être redirigée séparément.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Redirigez l'erreur précédente dans un fichier \texttt{erreur.txt}.
+    \item Vérifiez le contenu du fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{cat} fichier\_inexistant.txt \texttt{2>} erreur.txt
+
+\prompt\ \shcmd{cat} erreur.txt
+\end{terminal}
+
+% --------------------------------------------------
+\section{Rediriger sortie et erreur}
+
+Il est possible de rediriger à la fois la sortie standard et la sortie d'erreur.
+
+\subsection*{Travail à faire}
+
+\begin{enumerate}
+    \item Lancez une commande produisant à la fois une sortie et une erreur.
+    \item Redirigez les deux flux dans un même fichier.
+\end{enumerate}
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} sortie.txt \texttt{2>} erreur.txt
+\end{terminal}
+
+Ou en une seule commande :
+
+\begin{terminal}
+\prompt\ \shcmd{ls} fichier\_inexistant \texttt{>} tout.txt \texttt{2>\&1}
+\end{terminal}
+
+\end{document}

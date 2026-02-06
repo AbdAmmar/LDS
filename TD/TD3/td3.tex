@@ -151,7 +151,7 @@ echo "Ceci est mon premier script, mais certainement pas le dernier ;)";
 
     \prompt\ \tcomment{pour utiliser nano :}
 
-    \prompt\ \shcmd{nano} hello.sh \&
+    \prompt\ \shcmd{nano} hello.sh
     \end{terminal}
 
     \begin{infobox}
@@ -300,6 +300,7 @@ echo "Coucou ${PRENOM^^}"
     Bash permet de modifier la casse d'une chaîne de caractères.
     La syntaxe \texttt{\$\{VAR\^{}\^{}\}} convertit le contenu de \texttt{VAR} en majuscules,
     tandis que \texttt{\$\{VAR,,\}} le convertit en minuscules.
+    cette syntaxe n'est disponible qu'à partir de \texttt{Bash 4.0}.
     \end{infobox}
 
     % ---

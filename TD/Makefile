@@ -2,7 +2,7 @@
 # Configuration
 # ========================
 LATEX = pdflatex -shell-escape
-TD_DIRS = TD0 TD1 TD2 TD3 TD4
+TD_DIRS = TD0 TD1 TD2 TD3 TD4 TD5
 
 # ========================
 # Cible par défaut
