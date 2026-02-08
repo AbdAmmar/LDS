@@ -132,11 +132,13 @@
 
     \prompt\ \shcmd{cut} -d';' -f1- employes.csv {-}{-}output-delimiter=','
 
+    \prompt\ \shcmd{cut} -d';' -f1- employes.csv {-}{-}output-delimiter=' '
+
     \prompt\ \shcmd{cut} -d';' -f1- employes.csv {-}{-}output-delimiter='-'
 
-    \prompt\ \shcmd{cut} -d';' -f1- employes.csv {-}{-}output-delimiter='*'
+    \prompt\ \shcmd{cut} -d';' -f1- employes.csv {-}{-}output-delimiter='{-}{-}'
 
-    \prompt\ \shcmd{cut} -d';' -f1- employes.csv {-}{-}output-delimiter=' '
+    \prompt\ \shcmd{cut} -d';' -f1- employes.csv {-}{-}output-delimiter='{-}{+}{-}'
     \end{terminal}
 
     \begin{infobox}
@@ -144,6 +146,45 @@
     pour l'affichage des champs en sortie.
     Elle ne modifie pas le fichier d'origine.
     \end{infobox}
+
+    % ---
+
+    \item Analysez les résultats des commandes suivantes :
+
+    \begin{terminal}
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} ';' ' '
+    
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} ';' ','
+    
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} ';' '-'
+    
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} ';' '--'
+    
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} '[:lower:]' '[:upper:]'
+    
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} '[:upper:]' '[:lower:]'
+    
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} -d ';'
+    
+    \prompt\ \shcmd{cat} employes.csv | \shcmd{tr} -d '\textbackslash n'
+    \end{terminal}
+
+    \begin{infobox}
+    La commande \texttt{tr} (translate) remplace ou supprime des caractères :
+    \begin{itemize}
+        \item \texttt{tr 'A' 'B'} : remplace chaque \texttt{A} par \texttt{B}.
+        \item \texttt{tr -d 'A'} : supprime chaque \texttt{A}.
+        \item \texttt{tr '[:lower:]' '[:upper:]'} : convertit les minuscules en majuscules.
+    \end{itemize}
+    \end{infobox}
+
+    % ---
+
+    \item Affichez uniquement le prénom et le nom des employés qui travaillent à \texttt{Paris}.
+
+    \begin{terminal}
+    \prompt\ \shcmd{grep} 'Paris' employes.csv | \shcmd{cut} -d';' -f2,3
+    \end{terminal}
 
     % ---
 
@@ -157,22 +198,35 @@
 
     % ---
 
-    \item Affichez uniquement le prénom et le nom des employés qui travaillent à \texttt{Paris}.
+    \item Générer un nouveau fichier \texttt{employes2.csv} contenant les données du 
+    fichier \texttt{employes.csv}, mais sans la ligne d'en-tête de ce dernier.
 
     \begin{terminal}
-    \prompt\ \shcmd{grep} 'Paris' employes.csv | \shcmd{cut} -d';' -f2,3
+    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv > employes2.csv
+
+    \prompt
+
+    \prompt\ \tcomment{Vérifiez le nouveau fichier}
+
+    \prompt\ \shcmd{cat} employes2.csv
     \end{terminal}
+
+    \begin{infobox}
+    L'opérateur \texttt{>} permet de rediriger la sortie standard d'une commande 
+    vers un fichier. Si le fichier cible existe déjà, son contenu sera écrasé. 
+    Pour ajouter le résultat à la fin du fichier sans l'écraser, utilisez l'opérateur \texttt{>>}.
+    \end{infobox}
 
     % ---
 
     \item Analysez les résultats des commandes suivantes :
 
     \begin{terminal}
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f3-
+    \prompt\ \shcmd{cut} -d';' -f3- employes2.csv
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f3- | \shcmd{sort}
+    \prompt\ \shcmd{cut} -d';' -f3- employes2.csv | \shcmd{sort}
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f3- | \shcmd{sort} -r
+    \prompt\ \shcmd{cut} -d';' -f3- employes2.csv | \shcmd{sort} -r
     \end{terminal}
 
     \begin{infobox}
@@ -185,11 +239,11 @@
     \item Analysez les résultats des commandes suivantes :
 
     \begin{terminal}
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f1- | \shcmd{sort}
+    \prompt\ \shcmd{cut} -d';' -f1- employes2.csv | \shcmd{sort}
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f1- | \shcmd{sort} -n
+    \prompt\ \shcmd{cut} -d';' -f1- employes2.csv | \shcmd{sort} -n
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f1- | \shcmd{sort} -nr
+    \prompt\ \shcmd{cut} -d';' -f1- employes2.csv | \shcmd{sort} -nr
     \end{terminal}
 
     \begin{infobox}
@@ -203,13 +257,13 @@
     \item Analysez les résultats des commandes suivantes :
 
     \begin{terminal}
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f3- | \shcmd{sort} -t';' 
+    \prompt\ \shcmd{cut} -d';' -f3- employes2.csv | \shcmd{sort} -t';' 
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f3- | \shcmd{sort} -t';' -k1
+    \prompt\ \shcmd{cut} -d';' -f3- employes2.csv | \shcmd{sort} -t';' -k1
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f3- | \shcmd{sort} -t';' -k2
+    \prompt\ \shcmd{cut} -d';' -f3- employes2.csv | \shcmd{sort} -t';' -k2
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f3- | \shcmd{sort} -t';' -k3
+    \prompt\ \shcmd{cut} -d';' -f3- employes2.csv | \shcmd{sort} -t';' -k3
     \end{terminal}
 
     \begin{infobox}
@@ -224,15 +278,15 @@
     \item Analysez le résultat des commandes suivantes :
 
     \begin{terminal}
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f4
+    \prompt\ \shcmd{cut} -d';' -f4 employes2.csv
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f4 | \shcmd{uniq}
+    \prompt\ \shcmd{cut} -d';' -f4 employes2.csv | \shcmd{uniq}
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f4 | \shcmd{sort} | \shcmd{uniq}
+    \prompt\ \shcmd{cut} -d';' -f4 employes2.csv | \shcmd{sort} | \shcmd{uniq}
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f4 | \shcmd{uniq} -c
+    \prompt\ \shcmd{cut} -d';' -f4 employes2.csv | \shcmd{uniq} -c
 
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f4 | \shcmd{sort} | \shcmd{uniq} -c
+    \prompt\ \shcmd{cut} -d';' -f4 employes2.csv | \shcmd{sort} | \shcmd{uniq} -c
     \end{terminal}
 
     \begin{infobox}
@@ -247,11 +301,46 @@
 
     % ---
 
-    \item Combinez les commandes vues précédemment afin d'afficher les villes de l'entreprise,
-    triées par nombre d'employés décroissant.
+    \item Combinez les commandes étudiées précédemment avec \texttt{>} afin de rediriger les résultats 
+    et générer les fichiers suivants :
+    \begin{itemize}
+        \item \texttt{employes\_id.csv} : fichier contenant les données triées par numéro d'identité ;
+        \item \texttt{employes\_nom.csv} : fichier contenant les données triées par nom ;
+        \item \texttt{employes\_ville.csv} : fichier contenant les données triées par nom de ville.
+    \end{itemize}
+    Les résultats doivent être séparés par un espace, et non par ``\texttt{;}''.
 
     \begin{terminal}
-    \prompt\ \shcmd{grep} -v '\^{}id' employes.csv | \shcmd{cut} -d';' -f6 | \shcmd{sort} | \shcmd{uniq} -c | \shcmd{sort} -nr
+        \prompt\ \shcmd{cut} -d';' -f1- employes2.csv {-}{-}output-delimiter=' ' \textbackslash
+
+        \prompt\ \hspace{0.5cm} | \shcmd{sort} -nt' ' -k1 > employes\_id.csv
+
+        \prompt
+
+        \prompt\ \shcmd{cut} -d';' -f1- employes2.csv {-}{-}output-delimiter=' ' \textbackslash
+
+        \prompt\ \hspace{0.5cm} | \shcmd{sort} -t' ' -k3 > employes\_nom.csv
+
+        \prompt
+
+        \prompt\ \shcmd{cut} -d';' -f1- employes2.csv {-}{-}output-delimiter=' ' \textbackslash
+
+        \prompt\ \hspace{0.5cm} | \shcmd{sort} -t' ' -k6 > employes\_ville.csv
+    \end{terminal}
+
+    \begin{infobox}
+        Le caractère \texttt{\textbackslash} à la fin d'une ligne permet d'indiquer au shell que 
+        la commande se poursuit sur la ligne suivante. Cela améliore la lisibilité des commandes 
+        longues ou complexes en les divisant en plusieurs lignes.
+    \end{infobox}
+
+    % ---
+
+    \item Combinez les commandes vues précédemment afin d'afficher les villes de l'entreprise,
+          triées par nombre d'employés décroissant.
+
+    \begin{terminal}
+    \prompt\ \shcmd{cut} -d';' -f6 employes2.csv | \shcmd{sort} | \shcmd{uniq} -c | \shcmd{sort} -nr
     \end{terminal}
 
 \end{enumerate}
@@ -259,10 +348,6 @@
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
-% TODO
-% sed pour transformer
-% > pour sauvegarder
-% head/tail pour exploiter
 
 
 
