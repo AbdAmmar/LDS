@@ -6,6 +6,9 @@
 
 \usepackage{../../ldsstyle}
 
+\usepackage{dirtree}
+
+
 \geometry{margin=2.5cm}
 
 \title{TD4 -- Langages de script}
@@ -495,7 +498,7 @@
     % ---
 
     \item Créez un fichier nommé \texttt{moyenne.sh} et ouvrez-le avec votre éditeur de texte préféré.
-    Ajoutez le \textit{shebang}, puis insérez une ligne de code pour afficher le message suivant :
+    Ajoutez le \textit{Shebang}, puis insérez une ligne de code pour afficher le message suivant :
     ``\texttt{Ceci est un script qui calcule la moyenne.}''
     Enfin, rendez le script exécutable et testez-le avec la commande \texttt{./moyenne.sh}.
 
@@ -652,7 +655,7 @@ la valeur d'une résistance à partir de ses trois bandes de couleur, évitant a
     Placez-vous ensuite dans le répertoire \texttt{Q3}.
 
     Créez un fichier nommé \texttt{calc\_resistance.sh} et ouvrez-le avec votre éditeur de texte préféré.
-    Ajoutez le \textit{shebang}, puis insérez une ligne de code pour afficher le message suivant :
+    Ajoutez le \textit{Shebang}, puis insérez une ligne de code pour afficher le message suivant :
     \texttt{Ceci est un script qui calcule la valeur d'une résistance électrique.}
     Rendez le script exécutable et testez-le avec la commande \texttt{./calc\_resistance.sh}.
 
@@ -732,12 +735,21 @@ obt_val_coul() {
 
 
 
-\section{Projet a rendre}
+\section{Projet}
 
-Placez-vous dans le répertoire \texttt{TD4} et créez le sous-répertoire \texttt{Q4}.
-Placez-vous ensuite dans le répertoire \texttt{Q4}.
-Dans ce répertoire, vouls allez creer XXX scripts a deposer sur arche.
-Tous les scripts devraient etre executables avec le bon \textit{shebang}.
+Les exercices suivants constituent le projet de ce TD. Vous devez vous placer dans le 
+répertoire \texttt{TD4} et créer un sous-répertoire nommé \texttt{Q4} pour y effectuer 
+votre travail.
+
+Dans ce répertoire, vous allez concevoir trois scripts Bash. Tous les scripts déposés 
+sur Arche doivent respecter les deux conditions suivantes :
+\begin{itemize}
+    \item Commencer par le \textit{Shebang} approprié.
+
+    \item Posséder les droits d'exécution.
+\end{itemize}
+
+Les modalités de dépôt et de nommage de l'archive sont détaillées dans la dernière section de ce document.
 
 % ---
 
@@ -774,10 +786,183 @@ Le script doit respecter les contraintes suivantes :
 
 % ---
 
+\subsection{Restructuration du Système d'Archivage RH}
 
+Une entreprise centralise ses documents RH dans un dossier de réception. Actuellement, 
+ce dossier est un véritable chaos numérique. Votre mission consiste à automatiser le 
+tri de ces fichiers à l'aide de scripts Bash et de la puissance du \texttt{globbing}.
+
+Vous devez effectuer ces actions exclusivement avec la commande \texttt{mv} et
+les métacaractères (\texttt{*}, \texttt{?}, \texttt{[]}, \texttt{\{\}}, etc.).
+
+\begin{itemize}
+    \item Avant de traiter les données, créez l'arborescence cible dans votre 
+     répertoire \texttt{Q4}. Elle doit scrupuleusement respecter la structure suivante :
+    \begin{center}
+    \begin{minipage}{0.8\textwidth}
+    \dirtree{%
+    .1 org\_rh/.
+    .2 Archives/.
+    .2 Old\_Formats/.
+    .2 Production/.
+    .3 Direction/.
+    .3 Erreurs/.
+    .3 Paye/.
+    }
+    \end{minipage}
+    \end{center}
+
+    % ---
+
+    \item Le dossier de réception contient plus de 300 fichiers ; le tri manuel est donc 
+    strictement proscrit. Récupérez et extrayez l'archive via \texttt{curl} et \texttt{tar} :
+
+    \begin{terminal}
+    \prompt\ UrlGit="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
+
+    \prompt\ Rep="TD/TD4/data/vrac\_rh.tar.gz"
+
+    \prompt\ \shcmd{curl} -LO "\$\{UrlGit\}/\$\{Rep\}"
+
+    \prompt
+
+    \prompt\ \tcomment{Extraction de l'archive tarball}
+
+    \prompt\ \shcmd{tar} -xzvf vrac\_rh.tar.gz
+
+    \prompt
+
+    \prompt\ \tcomment{Vérification de fichiers}
+
+    \prompt\ \shcmd{ls} vrac\_rh
+    \end{terminal}
+
+    % ---
+
+    \item Testez toujours votre sélection avec \texttt{ls pattern} avant de valider le déplacement avec \texttt{mv}.
+    Les fichiers valides respectent le format suivant : \\
+    \texttt{ANNÉE(4)MOIS(2)\_NOM\_SERVICE\_TYPE.extension} \\
+    \textit{Exemple : \texttt{202510\_DUBOIS\_SALES\_FDP.pdf}}
+
+    \begin{enumerate}
+        \item Déplacez la totalité des fichiers de l'année 2024 (quels que soient le mois ou le type) vers : \\
+        \texttt{org\_rh/Archives/}.
+
+        % ---
+
+        \item Identifiez les documents contenant le mot-clé \texttt{DIR} et 
+        transférez-les vers : \\
+        \texttt{org\_rh/Production/Direction/}.
+
+        % ---
+
+        \item Déplacez toutes les fiches de paie (\texttt{FDP}) de l'année 2025 vers : \\
+        \texttt{org\_rh/Production/Paye/}.
+
+        % ---
+
+        \item Les formats Word sont désormais proscrits. Déplacez tous les fichiers 
+        \texttt{.doc} ou \texttt{.docx} vers :\\
+        \texttt{org\_rh/Old\_Formats/}.
+
+        % ---
+
+        \item Déplacez tous les fichiers restants (images, fichiers temporaires, 
+        erreurs de nommage) vers le dossier : \\
+        \texttt{org\_rh/Production/Erreurs/}.
+    \end{enumerate}
+
+    % ---
+
+    \item Une fois le dossier \texttt{vrac\_rh} vidé et le tri validé, supprimez le répertoire vide et exportez 
+    vos commandes réussies vers un fichier nommé \texttt{solution\_rh.sh}.
+    
+    Vous pouvez utiliser la commande \texttt{history} pour retrouver vos instructions. Le script final devra 
+    être exécutable, commencer par le \textit{Shebang} adéquat et inclure des commentaires clairs pour chaque 
+    étape de tri.
+\end{itemize}
+
+% ---
+
+\subsection{La Conjecture de Syracuse}
+
+La conjecture de Syracuse (ou suite de Collatz) est une suite mathématique définie 
+ainsi : 
+\begin{itemize}
+    \item On part d'un nombre entier $N > 0$.
+    \item S'il est pair, on le divise par 2 ; 
+    \item s'il est impair, on le multiplie par 3 et on ajoute 1. 
+    \item On recommence ce processus jusqu'à atteindre la valeur 1.
+\end{itemize}
+
+Votre mission est de créer un script nommé \texttt{syracuse.sh} dans votre répertoire \texttt{Q4} 
+en respectant les consignes suivantes :
+\begin{itemize}
+    \item Le nombre de départ $N$ doit être récupéré via le premier argument du script.
+    \begin{itemize}
+        \item Si le script ne reçoit pas exactement un argument, il affiche une erreur 
+        et s'interrompt avec le code de retour \texttt{1}.
+
+        \item Si l'argument n'est pas un nombre entier valide (présence de lettres ou de symboles), 
+        il affiche une erreur et sort avec le code \texttt{2}.
+
+        \item Si l'argument est un entier inférieur à 1 ($N < 1$), il affiche une 
+        erreur et sort avec le code \texttt{3}.
+    \end{itemize}
+
+    \item Utilisez une boucle pour calculer les termes successifs jusqu'à atteindre 1. 
+    À chaque étape, affichez la valeur actuelle de $N$ et comptabilisez le nombre d'itérations effectuées dans une variable dédiée.
+
+    Voici un exemple de la \textbf{sortie} attendue :
+    \begin{terminal}
+    \prompt\ ./syracuse.sh 6
+
+    \prompt\ Décollage avec le nombre 6
+
+    \prompt\ 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> Atterrissage à 1 !
+
+    \prompt\ Nombre d'étapes : 8
+    \end{terminal}
+\end{itemize}
+
+% ---
+
+\subsection{Modalités de dépôt}
+
+Une fois votre travail terminé et testé, replacez-vous dans le répertoire 
+parent \texttt{TD4} pour préparer votre archive.
+
+\begin{enumerate}
+    \item Utilisez la commande \texttt{tar} pour compresser votre dossier \texttt{Q4} :
+    \begin{terminal}
+    \prompt\ \shcmd{tar} -czvf Q4\_Prenom\_NOM.tar.gz Q4/
+    \end{terminal}
+
+    % ---
+
+    \item Le nom de l'archive est strictement défini :
+    \begin{itemize}
+        \item Prénom : Première lettre en majuscule, le reste en minuscule (ex: \texttt{Alice}).
+        \item NOM : Entièrement en majuscules (ex: \texttt{DUPONT}).
+        \item Le nom du fichier ne doit pas contenir d'accents, d'espaces ou de caractères spéciaux. 
+        \item Le non-respect de cette nomenclature entraînera une déduction de points.
+    \end{itemize}
+
+    \item Si vous travaillez sous WSL, copiez l'archive vers votre bureau Windows 
+    pour faciliter le dépôt :
+    \begin{terminal}
+    \prompt\ \shcmd{cp} Q4\_Prenom\_NOM.tar.gz /mnt/c/Users/VotreNomUtilisateur/Desktop/
+    \end{terminal}
+
+    \item Déposez uniquement le fichier \texttt{Q4\_Prenom\_NOM.tar.gz} sur la 
+    plateforme Arche avant la date limite.
+\end{enumerate}
 
 
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
 
 \end{document}
