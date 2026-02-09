@@ -347,6 +347,8 @@
 
 
 
+
+
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
@@ -394,11 +396,15 @@
     \prompt\ \shcmd{echo} "scale = 2; 1 / 3" | \shcmd{bc}
 
     \prompt\ \shcmd{echo} "scale = 3; 1 / 3" | \shcmd{bc}
+
+    \prompt\ \shcmd{echo} "scale = 5; 1.25 + 1.50" | \shcmd{bc}
     \end{terminal}
 
     \begin{infobox}
-    L'option \texttt{scale} dans \texttt{bc} permet de définir le nombre de décimales après la 
-    virgule dans le résultat.
+    L'option \texttt{scale} définit la précision des opérations
+    produisant des décimales (division, fonctions mathématiques comme
+    \texttt{sin}, \texttt{cos}, etc.).
+    Elle n'affecte pas l'affichage des additions, soustractions ou multiplications.
     Par défaut, \texttt{scale=0}.
     \end{infobox}
 
@@ -434,7 +440,7 @@
     \begin{terminal}
     \prompt\ \tcomment{Définition de la constante pi}
 
-    \prompt\ pi=3.1415926535897932
+    \prompt\ pi=3.14159265358979323846264
 
     \prompt\
 
@@ -490,20 +496,20 @@
 
     \item Créez un fichier nommé \texttt{moyenne.sh} et ouvrez-le avec votre éditeur de texte préféré.
     Ajoutez le \textit{shebang}, puis insérez une ligne de code pour afficher le message suivant :
-    ``\texttt{Ceci est un programme qui calcule la moyenne.}''
+    ``\texttt{Ceci est un script qui calcule la moyenne.}''
     Enfin, rendez le script exécutable et testez-le avec la commande \texttt{./moyenne.sh}.
 
     % ---
 
     \item Le script \texttt{moyenne.sh} doit calculer la moyenne des paramètres passés en arguments.
-    Modifiez le code pour qu'il retourne un code d'erreur 1 et affiche une message d'erreur si aucun paramètre 
+    Modifiez le script pour qu'il retourne un code d'erreur 1 et affiche une message d'erreur si aucun paramètre 
     n'est fourni.
 
     % ---
 
     \item Dans un premier temps, le script doit prendre deux arguments, calculer leur somme avec une précision de 2 décimales 
     en utilisant \texttt{bc}, stocker le résultat dans une variable, puis calculer et afficher la moyenne.
-    Testez votre code avec \texttt{./moyenne.sh 5.45 3.35}.
+    Testez votre script avec \texttt{./moyenne.sh 5.45 3.35}.
 
 \begin{minted}{bash}
 SOMME=$(echo "scale = 2; ${1} + ${2}" | bc)
@@ -526,14 +532,14 @@ echo "La moyenne est : ${MOYENNE}"
     \end{itemize}
     Si l'un des paramètres ne respecte pas ce format, le script doit s'arrêter avec 
     un code d'erreur 2 et afficher un message d'erreur explicite.
-    Testez votre code avec
+    Testez votre script avec
     \begin{itemize}
         \item \texttt{./moyenne.sh 5.45 3.3}.
         \item \texttt{./moyenne.sh 5.4 3.35}.
         \item \texttt{./moyenne.sh 5.45 3.35}.
     \end{itemize}
 
-    Voici un exemple de code pour réaliser cette vérification :
+    Voici un exemple de script pour réaliser cette vérification :
 
 \begin{minted}{bash}
 if ! [[ "${1}" =~ ^[0-9]+[\.][0-9]{2}$ ]]; then
@@ -577,6 +583,18 @@ done
 
     \item Modifiez votre script pour qu'il calcule la somme de tous les arguments, quel que soit leur nombre.
 
+    % ---
+
+    \item Modifiez votre script pour qu'il calcule la somme de tous les arguments, quel que soit leur nombre.
+
+    % ---
+
+    \item En français, la convention typographique impose d'utiliser la virgule~\texttt{,} comme séparateur décimal 
+    dans les nombres, tandis que le point~\texttt{.} sert de séparateur de milliers. Modifiez votre script afin que 
+    les arguments soient saisis sous la forme \texttt{A,BC}. Assurez-vous de convertir correctement ces arguments 
+    au format \texttt{A.BC} (par exemple, en utilisant la commande \texttt{tr}) avant d'effectuer le calcul de la moyenne.
+    Le résultat affiché doit également respecter la convention française.
+
 \end{enumerate}
 
 
@@ -585,5 +603,181 @@ done
 
 
 
+
+
+\section{Décodage du code couleur des résistances}
+
+Les résistances électriques sont trop petites pour y imprimer directement leur valeur. 
+Pour résoudre ce problème, les fabricants utilisent un code couleur standardisé composé 
+de bandes colorées. Chaque couleur correspond à un chiffre ou à un multiplicateur précis.
+
+\noindent
+Le tableau ci-dessous présente la correspondance entre les couleurs et les chiffres :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Noir} & \textbf{Marron} & \textbf{Rouge} & \textbf{Orange} & \textbf{Jaune} & \textbf{Vert} & \textbf{Bleu} & \textbf{Violet} & \textbf{Gris} & \textbf{Blanc} \\
+    \hline
+    0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+    \hline
+\end{tabular}
+\end{center}
+
+\noindent
+Le principe de lecture est le suivant :
+\begin{itemize}
+    \item Les deux premières bandes forment la valeur principale (un nombre à deux chiffres).
+    \item La troisième bande indique le nombre de zéros à ajouter à cette valeur principale.
+\end{itemize}
+
+\noindent
+La valeur de la résistance, exprimée en \texttt{ohms}, est obtenue en multipliant la valeur 
+principale par $10^n$, où $n$ est le nombre de zéros indiqué par la troisième bande.
+
+\medskip
+\noindent
+\textbf{Exemples} :
+\begin{itemize}
+    \item Marron-orange-noir : valeur principale = 13, nombre de zéros = 0 $\Rightarrow$ $13 \times 10^0 = 13$ ohms.
+    \item Marron-orange-rouge : valeur principale = 13, nombre de zéros = 2 $\Rightarrow$ $13 \times 10^2 = 1300$ ohms.
+    \item Marron-orange-jaune : valeur principale = 13, nombre de zéros = 4 $\Rightarrow$ $13 \times 10^4 = 130000$ ohms.
+\end{itemize}
+
+Dans cet exercice, vous allez concevoir un script qui permet de décoder automatiquement 
+la valeur d'une résistance à partir de ses trois bandes de couleur, évitant ainsi d'avoir 
+à mémoriser ce code.
+\begin{enumerate}
+
+    \item Rendez-vous dans le répertoire \texttt{TD4} et créez le sous-répertoire \texttt{Q3}.
+    Placez-vous ensuite dans le répertoire \texttt{Q3}.
+
+    Créez un fichier nommé \texttt{calc\_resistance.sh} et ouvrez-le avec votre éditeur de texte préféré.
+    Ajoutez le \textit{shebang}, puis insérez une ligne de code pour afficher le message suivant :
+    \texttt{Ceci est un script qui calcule la valeur d'une résistance électrique.}
+    Rendez le script exécutable et testez-le avec la commande \texttt{./calc\_resistance.sh}.
+
+    % ---
+
+    \item Créez une fonction \texttt{obt\_val\_coul} qui prend en argument une couleur et retourne la
+    valeur numérique correspondante. Si l'argument fourni ne correspond à aucune couleur valide, le 
+    script doit afficher le message d'erreur suivant :
+    \texttt{Couleur invalide.}
+
+\begin{minted}{bash}
+obt_val_coul() {
+    case ${1} in
+        "noir")
+            echo "0";;
+        "marron")
+            echo "1";;
+        "rouge")
+            echo "2";;
+        "orange")
+            echo "3";;
+        "jaune")
+            echo "4";;
+        "vert")
+            echo "5";;
+        "bleu")
+            echo "6";;
+        "violet")
+            echo "7";;
+        "gris")
+            echo "8";;
+        "blanc")
+            echo "9";;
+        *)
+            echo "Couleur invalide."
+    esac
+}
+\end{minted}
+
+    \begin{infobox}
+    La structure \texttt{case} permet de comparer une variable à plusieurs motifs :
+    \begin{itemize}
+        \item Chaque motif se termine par \texttt{;;}.
+        \item Le bloc se termine par \texttt{esac}.
+        \item On utilise \texttt{*)} pour un cas par défaut.
+    \end{itemize}
+    \end{infobox}
+
+    % ---
+
+    \item Modifiez le script afin qu'il vérifie que le nombre d'arguments fournis 
+    est exactement égal à 3.
+    Si ce n'est pas le cas, le script doit s'arrêter avec un code de retour égal à 1 et afficher 
+    le message d'erreur suivant :
+    \texttt{Erreur : le nombre de couleurs spécifié est invalide.}
+
+    % ---
+
+    \item Modifiez le code pour qu'il affiche la valeur de la résistance en utilisant 
+    la fonction \texttt{obt\_val\_coul}.
+    Testez votre script avec \texttt{calc\_resistance.sh "marron" "noir" "orange"}.
+
+    \begin{infobox}
+    La fonction \texttt{obt\_val\_coul} retourne sa valeur via \texttt{echo}.
+    Cela signifie que le résultat est affiché directement dans la sortie standard.
+    Pour récupérer cette valeur dans une variable, utilisez la substitution de commande :
+    \texttt{valeur=\$(obt\_val\_coul "couleur")}. 
+    \end{infobox}
+
+\end{enumerate}
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Projet a rendre}
+
+Placez-vous dans le répertoire \texttt{TD4} et créez le sous-répertoire \texttt{Q4}.
+Placez-vous ensuite dans le répertoire \texttt{Q4}.
+Dans ce répertoire, vouls allez creer XXX scripts a deposer sur arche.
+Tous les scripts devraient etre executables avec le bon \textit{shebang}.
+
+% ---
+
+\subsection{Scrabble}
+
+Le Scrabble est un jeu de lettres où les joueurs placent des lettres sur un plateau afin 
+de former des mots. Chaque lettre possède une valeur numérique, et le score d'un mot 
+correspond à la somme des valeurs de ses lettres.
+
+Votre tâche consiste à créer un script nommé \texttt{scrabble.sh} qui calcule le score d'un 
+mot passé en argument, en additionnant les valeurs de ses lettres.
+
+Voici les valeurs associées à chaque lettre :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Lettres} & A, E, I, O, U, L, N, R, S, T & D, G & B, C, M, P & F, H, V, W, Y & K & J, X & Q, Z \\
+    \hline
+    \textbf{Valeur}  & 1 & 2 & 3 & 4 & 5 & 8 & 10 \\
+    \hline
+\end{tabular}
+\end{center}
+
+Le script doit respecter les contraintes suivantes :
+\begin{itemize}
+    \item Vérifier que le nombre de paramètres est exactement égal à un. 
+    Si ce n'est pas le cas, afficher un message d'erreur et quitter le 
+    script avec un code de retour égal à 1.
+
+    \item Vérifier que l'argument fourni ne contient que des lettres 
+    (majuscules ou minuscules). Si ce n'est pas le cas, afficher un 
+    message d'erreur et quitter le script avec un code de retour égal à 2.
+\end{itemize}
+
+% ---
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 \end{document}
