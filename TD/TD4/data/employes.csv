@@ -1,4 +1,4 @@
-id;prenom;nom;departement;poste;ville
+id;prenom;nom;service;poste;ville
 1;Alice;Martin;RH;Assistante;Paris
 2;Bob;Durand;IT;Developpeur;Lyon
 3;Claire;Dupont;RH;Chargee_recrutement;Paris

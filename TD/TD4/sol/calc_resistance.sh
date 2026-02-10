@@ -4,39 +4,56 @@ echo "Ceci est un script qui calcule la resistance electrique."
 
 obt_val_coul() {
     case ${1} in
-        "noir")
+        # Utilisation de [Nn] pour accepter "Noir" et "noir"
+        [Nn]oir)
             echo "0";;
-        "marron")
+        [Mm]arron)
             echo "1";;
-        "rouge")
+        [Rr]ouge)
             echo "2";;
-        "orange")
+        [Oo]range)
             echo "3";;
-        "jaune")
+        [Jj]aune)
             echo "4";;
-        "vert")
+        [Vv]ert)
             echo "5";;
-        "bleu")
+        [Bb]leu)
             echo "6";;
-        "violet")
+        [Vv]iolet)
             echo "7";;
-        "gris")
+        [Gg]ris)
             echo "8";;
-        "blanc")
+        [Bb]lanc)
             echo "9";;
         *)
-            echo "Couleur invalide."
+            # Cas par défaut si aucune couleur ne correspond
+            echo "Couleur invalide"
     esac
 }
 
+# Vérification du nombre d'arguments
 if [[ $# -ne 3 ]]; then
-    echo "Erreur : le nombre de couleurs spécifié est invalide."
+    echo "Erreur : le nombre de couleurs spécifié est invalide"
     exit 1
 fi
 
+# On parcourt tous les arguments passés au script ("$@")
+for couleur in "$@"; do
+    test_val=$(obt_val_coul "$couleur")
+
+    # Si la fonction retourne le message d'erreur
+    if [[ "$test_val" == "Couleur invalide" ]]; then
+        echo "Erreur : La couleur '$couleur' n'est pas reconnue."
+        exit 2
+    fi
+done
+
+# Récupération des valeurs numériques
 VAL1=$(obt_val_coul "${1}")
 VAL2=$(obt_val_coul "${2}")
 VAL3=$(obt_val_coul "${3}")
+
+# Calcul de la résistance
 RES=$((${VAL1}${VAL2} * 10**${VAL3}))
 
 echo "La valeur de la resistance est ${RES} Ohms"
