@@ -7,7 +7,7 @@ TD_DIRS = TD0 TD1 TD2 TD3 TD4 TD5
 # ========================
 # Cible par défaut
 # ========================
-all: $(TD_DIRS) arche
+all: $(TD_DIRS)
 
 # ========================
 # Règle générique pour chaque TD

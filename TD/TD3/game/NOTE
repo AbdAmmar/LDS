@@ -1,31 +1,47 @@
 AHMED           Nomane         5.0
-ALBERT          Yohann         4.5
+ALBERT          Yohann         4.5    # Shebang manquant
 ARUL            Swathi         5.0
 BARROIS         Johan          5.0
 BAUDOT-TATON    Lana           5.0
+BAYUBAHE        Eliane                # tar empty
+BERKACHE        Nina           5.0
+BONCI           Iann                  # tar empty
 BOULOUFA        Sarah          5.0
+BROTONNE        Mathys         5.0
+CAPPELLINA      Gabriel        4.5    # compteur incorrecte
 CARTON          Mathis         5.0
+CLAUDEL         Noah           5.0
 CLAVERIE        Nicolas        5.0
-
+COCCO           Isabella       5.0
 DELAGREE        Gabrielle      5.0
 DESBROSSES      Romain         5.0
 DURAND          Louane         5.0
 EYMANN          Martin         5.0
 GASSER-HOFFER   Matheo         5.0
 GOTTARDINI      Oscar          5.0
-GROULT          Yohan          2.0
-HANI            Sofian         4.0
-LATH            Nestor         4.5
-LAURENCOT       Elea           4.0
+GROULT          Yohan          2.0    # !!!
+HAMAISSIA       Emmanuel       5.0
+HANI            Sofian         4.5    # compteur incorrecte
+LAKHAL          Amine          5.0
+LATH            Nestor         4.5    # SHEBANG: #!/opt/homebrew/bin/bash
+LAURENCOT       Elea           5.0    # compteur incorrecte (corrigé)
 MAHMOUD         Belkacem       5.0
 MALARD          Ethan          5.0
 MARCHAL         Nolan          5.0
 MAURIN          Alexandre      5.0
-NICOLAS         Claverie       5.0
-PETER           Julien         4.0
+MEZITI          Maxim          5.0
+MOUNY           Ambre          5.0
+OLSZAK          Maxime         5.0
+PETER           Julien         4.5    # compteur incorrecte
+POUILLEUX       Sacha          5.0
+RAMOVIC         Laila          5.0
+SABEUR          Sofia          5.0
 SACKREUTER      Hector         5.0
 SCHUTZ          Hugo           5.0
-SENE            Ibrahima       1.0
-STEGNER         Joris          4.5
+SENE            Ibrahima       1.0    # !!!
+SENGLER         Titouan        5.0    # TROP IA
+STEGNER         Joris          4.5    # COUNT/COUN
+THENOT          Lisa           5.0
+THIRION         Maelynn        4.5    # compteur incorrecte
 WIRTH           Pernelle       5.0
-YOUDOM-TCHOUPE  Simon-Uriel    5.0
+YOUDOM-TCHOUPE  Simon-Uriel    5.0    # TROP IA
