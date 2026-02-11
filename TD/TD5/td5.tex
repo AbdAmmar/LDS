@@ -20,26 +20,25 @@
 
 % https://exercism.org/tracks/bash/exercises/hamming
 % https://exercism.org/tracks/bash/exercises/rna-transcription
+% https://exercism.org/tracks/bash/exercises/protein-translation
+
+% https://exercism.org/tracks/bash/exercises/crypto-square
+% https://exercism.org/tracks/bash/exercises/affine-cipher
+% https://exercism.org/tracks/bash/exercises/simple-cipher
+% https://exercism.org/tracks/bash/exercises/atbash-cipher
+% https://exercism.org/tracks/bash/exercises/rotational-cipher
 
 % https://exercism.org/tracks/bash/exercises/roman-numerals
-% https://exercism.org/tracks/bash/exercises/crypto-square
 % https://exercism.org/tracks/bash/exercises/robot-simulator
-% https://exercism.org/tracks/bash/exercises/affine-cipher
 % https://exercism.org/tracks/bash/exercises/spiral-matrix
-% https://exercism.org/tracks/bash/exercises/palindrome-products
-% https://exercism.org/tracks/bash/exercises/nth-prime
-% https://exercism.org/tracks/bash/exercises/simple-cipher
 % https://exercism.org/tracks/bash/exercises/run-length-encoding
 % https://exercism.org/tracks/bash/exercises/diffie-hellman
-% https://exercism.org/tracks/bash/exercises/atbash-cipher
 % https://exercism.org/tracks/bash/exercises/isbn-verifier
-% https://exercism.org/tracks/bash/exercises/rotational-cipher
-% https://exercism.org/tracks/bash/exercises/protein-translation
 % https://exercism.org/tracks/bash/exercises/phone-number
 % https://exercism.org/tracks/bash/exercises/nucleotide-count
-% https://exercism.org/tracks/bash/exercises/collatz-conjecture
 
 
+% https://exercism.org/tracks/bash/exercises/nth-prime
 
 
 
@@ -89,6 +88,11 @@ Par exemple :
     un entier positif. Si ce n'est pas le cas, affichez un message d'erreur 
     et quittez avec un code de retour égal à 2.
 
+    \begin{hintbox}
+    Vous pouvez utiliser une expression régulière dans un test conditionnel étendu : \\
+    \texttt{"\$VAR" =\textasciitilde \, \^{}[0-9]+\$}
+    \end{hintbox}
+
     % ---
 
     \item Écrivez une boucle qui parcourt chaque chiffre (caractère) de 
@@ -115,9 +119,90 @@ Par exemple :
     \end{itemize}
 
 \end{enumerate}
+
+
+
+
+
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
+
+
+
+
+\section{Le Palindrome}
+
+Un palindrome est une chaîne de caractères (mot, phrase ou nombre) qui se lit de la même 
+manière de gauche à droite et de droite à gauche. 
+Dans cet exercice, nous ne tiendrons pas compte de la casse (majuscules/minuscules).
+
+Par exemple :
+\begin{itemize}
+    \item \texttt{KAYAK} est un palindrome.
+    \item \texttt{KAyak} sera considéré comme un palindrome (après conversion).
+    \item \texttt{12321} est un palindrome.
+    \item \texttt{BASH} n'est pas un palindrome (à l'envers, cela donne \texttt{HSAB}).
+\end{itemize}
+
+\begin{enumerate}
+
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q2}.
+    Placez-vous ensuite dans ce répertoire.
+
+    % ---
+
+    \item Créez le fichier \texttt{palindrome.sh}, ajoutez le \textit{Shebang} et 
+    rendez le fichier exécutable.
+
+    % ---
+
+    \item Vérifiez que l'utilisateur a fourni exactement un argument. 
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code 1.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que l'argument est composé uniquement de 
+    lettres (minuscules ou majuscules) et de chiffres. 
+    Si l'argument contient d'autres caractères (ponctuation, symboles, etc.), affichez 
+    une erreur et quittez avec le code 2.
+
+    \begin{hintbox}
+    Vous pouvez utiliser une expression régulière dans un test conditionnel étendu : \\
+    \texttt{"\$VAR" =\textasciitilde \, \^{}[a-zA-Z0-9]+\$}
+    \end{hintbox}
+
+    % ---
+
+    \item Avant de commencer l'inversion, convertissez l'argument en lettres minuscules 
+    pour uniformiser le traitement (pour que "KAyak" devienne "kayak").
+
+    \begin{hintbox}
+    Vous pouvez utiliser la commande \texttt{tr '[:upper:]' '[:lower:]'}.
+    \end{hintbox}
+
+    % ---
+
+    \item Créez une boucle qui parcourt les caractères de la chaîne normalisée (en minuscules) 
+    pour construire une nouvelle variable contenant la chaîne inversée.
+
+    % ---
+
+    \item Comparez la chaîne normalisée avec la chaîne inversée.
+    \begin{itemize}
+        \item Si elles sont identiques, affichez : \texttt{X est un palindrome}.
+        \item Sinon, affichez : \texttt{X n'est pas un palindrome}.
+    \end{itemize}
+
+\end{enumerate}
+
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
 \end{document}
