@@ -18,27 +18,7 @@
 
 
 
-% https://exercism.org/tracks/bash/exercises/hamming
-% https://exercism.org/tracks/bash/exercises/rna-transcription
-% https://exercism.org/tracks/bash/exercises/protein-translation
-
-% https://exercism.org/tracks/bash/exercises/crypto-square
-% https://exercism.org/tracks/bash/exercises/affine-cipher
-% https://exercism.org/tracks/bash/exercises/simple-cipher
-% https://exercism.org/tracks/bash/exercises/atbash-cipher
-% https://exercism.org/tracks/bash/exercises/rotational-cipher
-
-% https://exercism.org/tracks/bash/exercises/roman-numerals
-% https://exercism.org/tracks/bash/exercises/robot-simulator
-% https://exercism.org/tracks/bash/exercises/spiral-matrix
-% https://exercism.org/tracks/bash/exercises/run-length-encoding
-% https://exercism.org/tracks/bash/exercises/diffie-hellman
-% https://exercism.org/tracks/bash/exercises/isbn-verifier
 % https://exercism.org/tracks/bash/exercises/phone-number
-% https://exercism.org/tracks/bash/exercises/nucleotide-count
-
-
-% https://exercism.org/tracks/bash/exercises/nth-prime
 
 
 
@@ -340,6 +320,324 @@ echo "Exécutables : $NB_EXE"
 
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+\section{Approximation de $\pi$}
+
+Dans cet exercice, nous allons calculer une approximation du nombre $\pi$ en utilisant 
+la formule de la série de Leibniz. 
+
+Cette formule est une série infinie alternée :
+
+$$
+\pi = 4 \times \left( 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \dots \right) = 4 \times \sum_{n=0}^{N} \frac{(-1)^n}{2n+1}
+$$
+
+Puisque Bash ne gère nativement que les nombres entiers, cet exercice nécessite l'utilisation de la 
+commande \texttt{bc} pour effectuer des opérations à virgule flottante.
+
+\begin{enumerate}
+
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q4}.
+    Créez le fichier \texttt{pi.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que le script reçoit exactement deux arguments. 
+    Ces arguments représentent le nombre d'itérations $N$ et la précision \texttt{scale}.
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 1.
+
+    % ---
+
+    \item Ajoutez ensuite un test pour vérifier que $N$ et \texttt{scale} sont bien des entiers positifs. 
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 2.
+
+    % ---
+
+    \item Initialisez une variable \texttt{SOMME} à 0.
+    Écrivez une boucle \texttt{for} allant de $i=0$ à $N$.
+    À chaque itération :
+    \begin{itemize}
+        \item Calculez le terme actuel de la suite : $T = \frac{(-1)^{i}}{2 i + 1}$.
+        \item Mettez à jour la variable \texttt{SOMME} en ajoutant le terme $T$.
+    \end{itemize}
+
+    % ---
+
+    \item Une fois la boucle terminée, multipliez la \texttt{SOMME} finale par 4 pour 
+    obtenir la valeur de $\pi$. 
+    Affichez le résultat.
+
+    % ---
+
+    \item Testez votre script avec différentes valeurs de $N$ (10, 100, 1000, 10000) et une 
+    précision fixée (ex: \texttt{scale=15}). Observez comment la précision s'améliore 
+    (ou comment le temps de calcul augmente !).
+
+    % ---
+
+    \item Téléchargez le code source \texttt{C} équivalent, compilez-le pour générer le
+    binaire \texttt{pi}, puis lancez-le.
+
+    \begin{terminal}
+    \prompt\ \tcomment{Téléchargement du fichier source}
+
+    \prompt\ BASE="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
+
+    \prompt\ FILE="TD/TD5/sol/pi.c"
+
+    \prompt\ \shcmd{curl} -LO "\$\{BASE\}/\$\{FILE\}"
+
+    \prompt\ \tcomment{Compilation}
+
+    \prompt\ \shcmd{gcc} -o pi pi.c -lm
+
+    \prompt\ \tcomment{Exécution avec N=10000}
+    
+    \prompt\ ./pi 10000
+    \end{terminal}
+    
+    Comparez les performances avec votre script \texttt{pi.sh} en utilisant la commande
+    \texttt{time}.
+    \begin{terminal}
+    \prompt\ \tcomment{Temps du script Bash (avec scale=15)}
+    
+    \prompt\ \shcmd{time} ./pi.sh 10000 15
+    
+    \prompt\ \tcomment{Temps du programme C}
+
+    \prompt\ \shcmd{time} ./pi 10000
+    \end{terminal}
+
+\end{enumerate}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+
+\section{Test de Primalité}
+
+Un nombre entier positif est dit ``premier'' s'il admet exactement deux diviseurs 
+distincts : 1 et lui-même.
+
+Par exemple :
+\begin{itemize}
+    \item $2, 3, 5, 7, 11$ sont des nombres premiers.
+    \item $4$ n'est pas premier (divisible par 2).
+    \item $0$ et $1$ ne sont pas des nombres premiers (par définition).
+\end{itemize}
+
+L'objectif est d'écrire un script qui détermine si un nombre fourni en argument est premier ou non.
+
+\begin{enumerate}
+
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q5}.
+    Créez le fichier \texttt{premier.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que le script reçoit exactement un argument. 
+    Si ce n'est pas le cas, affichez un message d'usage et quittez avec le code de retour 1.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que cet argument est bien un 
+    entier positif (composé uniquement de chiffres).
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 2.
+
+    % ---
+
+    \item Traitez les cas particuliers : si le nombre est inférieur à 2 
+    (c'est-à-dire 0 ou 1), affichez qu'il n'est pas premier et quittez le script.
+
+    % ---
+
+    \item Implémentez l'algorithme naïf :
+    \begin{enumerate}
+        \item Initialisez une variable pour dire que le nombre est premier par défaut (ex: \texttt{IS\_PRIME=1}).
+        \item Créez une boucle \texttt{for} qui parcourt tous les entiers $i$ de $2$ jusqu'à $N-1$.
+        \item À chaque itération, testez si $N$ est divisible par $i$ (en utilisant le modulo \texttt{\%}).
+        \item Si le reste de la division est nul ($N \% i == 0$), cela signifie que $N$ n'est pas premier. Dans ce cas :
+        \begin{itemize}
+            \item Passez votre variable \texttt{IS\_PRIME} à 0.
+            \item Interrompez immédiatement la boucle (\texttt{break}) pour ne pas continuer inutilement.
+        \end{itemize}
+    \end{enumerate}
+
+    % ---
+
+    \item À la sortie de la boucle, testez la valeur de votre variable \texttt{IS\_PRIME}.
+    \begin{itemize}
+        \item Si elle vaut 1, affichez : \texttt{X est un nombre premier}.
+        \item Sinon, affichez : \texttt{X n'est pas un nombre premier}.
+    \end{itemize}
+
+    % ---
+
+    \item Tester tous les nombres jusqu'à $N-1$ peut être très long si $N$ est grand.
+    Mathématiquement, si un nombre $N$ a un diviseur, il en a forcément un qui est 
+    inférieur ou égal à sa racine carrée ($\sqrt{N}$).
+
+    Modifiez la condition d'arrêt de votre boucle \texttt{for} pour ne tester les diviseurs 
+    que tant que $i \times i \le N$.
+
+\end{enumerate}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+\section{Calcul de la Factorielle}
+
+La factorielle d'un entier naturel $n$, notée $n!$, est le produit des nombres entiers 
+strictement positifs inférieurs ou égaux à $n$.
+Par convention, $0! = 1$.
+
+$$
+n! = 1 \times 2 \times 3 \times \dots \times n
+$$
+
+L'objectif est d'écrire un script qui calcule la factorielle d'un nombre passé en argument.
+
+\begin{enumerate}
+
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q6}.
+    Créez le fichier \texttt{factorielle.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que le script reçoit exactement un argument. 
+    Si ce n'est pas le cas, affichez un message d'usage et quittez avec le code de retour 1.
+
+    % ---
+
+    \item Vérifiez ensuite que cet argument est bien un entier positif.
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 2.
+
+    % ---
+
+    \item Initialisez une variable \texttt{FACT} à 1.
+    Écrivez une boucle (par exemple une boucle \texttt{for}) allant de 1 jusqu'à $N$ (le nombre passé en argument).
+    À chaque itération, multipliez la variable \texttt{FACT} par l'indice de la boucle.
+
+    % ---
+
+    \item Affichez le résultat final sous la forme : \texttt{Factorielle de N vaut X}.
+    Testez votre script avec des valeurs croissantes de $N$ (par exemple 5, 10, 20).
+    Enfin, essayez avec $N=21$ et $N=22$.
+
+    \begin{infobox}
+    En Bash standard (avec \texttt{\$((...))}), les entiers sont signés sur 64 bits.
+    Cela signifie que vous ne pourrez pas calculer de factorielles au-delà de 
+    $20!$ (qui vaut environ $2,4 \times 10^{18}$). Au-delà, vous aurez un dépassement de capacité (overflow).
+    \end{infobox}
+
+\end{enumerate}
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+\section{Distance de Hamming}
+
+La distance de Hamming entre deux chaînes de caractères de même longueur est 
+le nombre de positions où les symboles sont différents.
+C'est une mesure très utilisée en informatique et en biologie (analyse d'ADN).
+
+Par exemple :
+$$
+\left\lbrace
+\begin{array}{l}
+\texttt{{\color{red}G} {\color{blue}A} {\color{red}G} {\color{blue}C} {\color{red} C} {\color{blue}TA}} \\
+\texttt{{\color{red}C} {\color{blue}A} {\color{red}T} {\color{blue}C} {\color{red} G} {\color{blue}TA}}
+\end{array}
+\right.
+\Rightarrow \texttt{{\color{red}3} différences (distance = 3)}
+$$
+
+L'objectif est d'écrire un script qui calcule cette distance entre deux brins d'ADN passés en arguments.
+
+\begin{enumerate}
+
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q7}.
+    Créez le fichier \texttt{hamming.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que le script reçoit exactement deux arguments. 
+    Si ce n'est pas le cas, affichez un message d'usage et quittez avec le code 1.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que les chaînes passées en arguments 
+    ne contiennent que les lettres : A, C, G ou T. 
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code 2.
+
+    % ---
+
+    \item Vérifiez que les deux chaînes ont la même longueur.
+    La distance de Hamming n'est définie que pour des séquences de longueur égale.
+    Si les longueurs diffèrent, affichez un message d'erreur et quittez avec le code 3.
+
+    % ---
+
+    \item Initialisez une variable \texttt{DISTANCE} à 0.
+    Écrivez une boucle qui parcourt les chaînes caractère par caractère (de l'index 0 à la fin).
+
+    À chaque itération :
+    \begin{enumerate}
+        \item Extrayez le caractère de la première chaîne (\texttt{BRIN1}) 
+        à la position $i$.
+
+        \item Extrayez le caractère de la seconde chaîne (\texttt{BRIN2}) 
+        à la même position $i$.
+
+        \item Comparez les deux caractères. S'ils sont différents, incrémentez 
+        la variable \texttt{DISTANCE}.
+    \end{enumerate}
+
+    % ---
+
+    \item Affichez le résultat final : \texttt{Distance de Hamming : X}.
+    Testez votre script avec les cas suivants :
+    \begin{itemize}
+        \item \texttt{./hamming.sh GAGCCTACTAACGGGAT CATCGTAATGACGGCCT} (Distance attendue : 7)
+        \item \texttt{./hamming.sh AAAAA GGGGG} (Distance attendue : 5)
+        \item \texttt{./hamming.sh GGACTGA AACTGA} (Erreur : Longueurs différentes)
+    \end{itemize}
+
+\end{enumerate}
+
+
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
 
 
 

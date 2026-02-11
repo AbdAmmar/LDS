@@ -377,17 +377,17 @@ Globbing vs Regex
     \begin{terminal}
     \prompt \tcomment{Je définis l'URL du dépôt GitHub}
 
-    \prompt\ UrlGit="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
+    \prompt\ BASE="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
 
     \prompt \tcomment{Chemin du fichier à télécharger}
 
-    \prompt\ Rep="TD/TD2/data/regex/donnees.txt"
+    \prompt\ FILE="TD/TD2/data/regex/donnees.txt"
 
     \prompt\
 
     \prompt \tcomment{Téléchargement du fichier}
     
-    \prompt\ \shcmd{curl} -LO "\$\{UrlGit\}/\$\{Rep\}"
+    \prompt\ \shcmd{curl} -LO "\$\{BASE\}/\$\{FILE\}"
 
     \prompt\
 

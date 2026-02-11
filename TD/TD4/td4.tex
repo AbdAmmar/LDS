@@ -53,15 +53,15 @@
     \begin{terminal}
     \prompt\ \tcomment{URL du fichier à télécharger}
 
-    \prompt\ UrlGit="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
+    \prompt\ BASE="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
 
-    \prompt\ Rep="TD/TD4/data/employes.csv"
+    \prompt\ FILE="TD/TD4/data/employes.csv"
 
     \prompt\
 
     \prompt\ \tcomment{Téléchargement du fichier}
 
-    \prompt\ \shcmd{curl} -LO "\$\{UrlGit\}/\$\{Rep\}"
+    \prompt\ \shcmd{curl} -LO "\$\{BASE\}/\$\{FILE\}"
     
     \prompt\
 
@@ -218,7 +218,7 @@
     \begin{infobox}
     L'opérateur \texttt{>} permet de rediriger la sortie standard d'une commande 
     vers un fichier. Si le fichier cible existe déjà, son contenu sera écrasé. 
-    Pour ajouter le résultat à la fin du fichier sans l'écraser, utilisez l'opérateur \texttt{>>}.
+    Pour ajouter le résultat à la fin du fichier sans l'écraser, utilisez l'opérateur \verb|>>|.
     \end{infobox}
 
     % ---
@@ -374,8 +374,9 @@
     \end{terminal}
  
     \begin{infobox}
-    La commande \texttt{bc} est un outil en ligne de commande permettant d'effectuer des calculs 
-    avec des nombres décimaux. Bash ne gère nativement que les entiers.
+    La commande \texttt{bc} (\textit{Basic Calculator}) est un outil en ligne de 
+    commande permettant d'effectuer des calculs avec des nombres décimaux. 
+    Bash ne gère nativement que les entiers.
     \end{infobox}
 
     % ---
@@ -857,11 +858,11 @@ les métacaractères (\texttt{*}, \texttt{?}, \texttt{[]}, \texttt{\{\}}, etc.).
     strictement proscrit. Récupérez et extrayez l'archive via \texttt{curl} et \texttt{tar} :
 
     \begin{terminal}
-    \prompt\ UrlGit="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
+    \prompt\ BASE="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
 
-    \prompt\ Rep="TD/TD4/data/vrac\_rh.tar.gz"
+    \prompt\ FILE="TD/TD4/data/vrac\_rh.tar.gz"
 
-    \prompt\ \shcmd{curl} -LO "\$\{UrlGit\}/\$\{Rep\}"
+    \prompt\ \shcmd{curl} -LO "\$\{BASE\}/\$\{FILE\}"
 
     \prompt
 

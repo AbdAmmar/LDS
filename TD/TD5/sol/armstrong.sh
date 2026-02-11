@@ -26,7 +26,7 @@ fi
 LEN=${#NUM}
 
 # Initialisation de la variable accumulateur à 0
-SOM=0
+SOMME=0
 
 # Boucle de calcul
 for ((i=0; i<LEN; i++)); do
@@ -35,15 +35,15 @@ for ((i=0; i<LEN; i++)); do
     X=${NUM:$i:1}
 
     # Calcul arithmétique : Somme = Somme + (Chiffre ^ Longueur)
-    SOM=$((SOM + X**LEN))
+    SOMME=$((SOMME + X**LEN))
 
 done
 
 # Affichage intermédiaire
-echo "Somme calculée = $SOM"
+echo "Somme calculée = $SOMME"
 
 # Comparaison numérique (-eq) entre la somme calculée et le nombre original
-if [[ $SOM -eq $NUM ]]; then
+if [[ $SOMME -eq $NUM ]]; then
     echo "${NUM} est un nombre d'Armstrong"
 else
     echo "${NUM} n'est pas un nombre d'Armstrong"
