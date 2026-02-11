@@ -149,10 +149,7 @@ Par exemple :
 
     \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q2}.
     Placez-vous ensuite dans ce répertoire.
-
-    % ---
-
-    \item Créez le fichier \texttt{palindrome.sh}, ajoutez le \textit{Shebang} et 
+    Créez le fichier \texttt{palindrome.sh}, ajoutez le \textit{Shebang} et 
     rendez le fichier exécutable.
 
     % ---
@@ -203,6 +200,148 @@ Par exemple :
 
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+
+
+
+\section{Exploration Récursive}
+
+L'objectif de cet exercice est de créer un script capable d'analyser une arborescence complète
+ (un dossier et tous ses sous-dossiers) pour compter le nombre total de répertoires, de fichiers 
+et d'exécutables.
+
+Pour cela, nous allons utiliser une fonction récursive.
+
+\begin{enumerate}
+
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q3} et placez-vous dedans.
+    Créez le fichier \texttt{recursive\_stats.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
+
+    % ---
+
+    \item Ajoutez un test pour vérifier que le script a reçu exactement un argument. 
+    Si ce n'est pas le cas, affichez un message d'usage et quittez le script avec un code de retour standard (1).
+
+    % ---
+
+    \item Vérifiez si le chemin passé en argument existe dans le système de fichiers.
+    Si le fichier ou le dossier n'existe pas, affichez un message d'erreur explicite 
+    et quittez avec le code de retour 2.
+
+    \begin{infobox}
+    Rappel des tests sur les fichiers :
+    \begin{itemize}
+        \item \texttt{[[ -e "\$VAR" ]]} : le fichier ou dossier existe-t-il ?
+        \item \texttt{[[ -d "\$VAR" ]]} : est-ce un répertoire ?
+        \item \texttt{[[ -f "\$VAR" ]]} : est-ce un fichier standard ?
+        \item \texttt{[[ -x "\$VAR" ]]} : a-t-on le droit d'exécution ?
+    \end{itemize}
+    \end{infobox}
+
+    % ---
+
+    \item Si le chemin existe, vérifiez qu'il correspond bien à un répertoire. 
+    Si l'argument pointe vers un fichier standard (ou autre chose qu'un dossier), affichez 
+    un message d'erreur et quittez avec le code de retour 3.
+
+    % ---
+
+    \item Déclarez une fonction nommée \texttt{GET\_DIR\_FIL\_EXE}.
+    Au début de cette fonction :
+    \begin{enumerate}
+        \item Récupérez l'argument passé à la fonction (le dossier à analyser).
+        \item Initialisez trois variables locales à 0 : 
+        \texttt{NB\_DIR}, \texttt{NB\_FIL}, \texttt{NB\_EXE}.
+    \end{enumerate}
+
+    \begin{infobox}
+    Attention à la portée des variables !
+    Dans une fonction récursive, il est impératif d'utiliser le mot-clé \texttt{local} pour déclarer vos variables (ex: \texttt{local NB\_DIR=0}).
+    Sans cela, les appels récursifs modifieront les variables de l'appelant, faussant le calcul.
+    \end{infobox}
+
+    \begin{infobox}
+    Dans une fonction Bash, il est recommandé de toujours déclarer les variables 
+    internes avec le mot-clé \texttt{local} (ex: \texttt{local COMPTEUR=0}). Cela garantit 
+    que la variable n'existe que dans la fonction et n'interfère pas avec le reste du script.
+    Si les variables ne sont pas déclarées locales, elles sont globales par défaut.
+    \end{infobox}
+
+    % ---
+
+    \item Écrivez la boucle \texttt{for} qui parcourt le contenu du dossier passé en argument.
+    Pour chaque élément trouvé :
+    \begin{itemize}
+        \item Si c'est un dossier (\texttt{-d}), incrémentez \texttt{NB\_DIR}.
+        \item Si c'est un fichier (\texttt{-f}), incrémentez \texttt{NB\_FIL}.
+        \item Si c'est un fichier et qu'il est exécutable (\texttt{-x}), incrémentez \texttt{NB\_EXE}.
+    \end{itemize}
+
+\begin{minted}{bash}
+# Pour parcourir le contenu d'un dossier DIR :
+for ITEM in "$DIR"/*; do
+    # La variable $ITEM contient le chemin complet
+    # (ex: mon_dossier/fichier.txt)
+    
+    # ... Votre logique ici ...
+done
+\end{minted}
+
+    % ---
+
+    \item À la fin de la fonction (après la boucle), affichez les trois compteurs 
+    sur une seule ligne.
+    Exemple : \texttt{echo "\$NB\_DIR \$NB\_FIL \$NB\_EXE"}
+
+    % ---
+
+    \item Dans le corps principal du script (après la définition de la fonction), 
+    appelez votre fonction avec le dossier passé en argument du script, récupérez 
+    le résultat et affichez-le proprement.
+
+\begin{minted}{bash}
+# Appel de la fonction et stockage de la sortie
+RES=$(GET_DIR_FIL_EXE "${DIR}")
+
+# Lecture des 3 valeurs dans 3 variables distinctes
+read -r NB_DIR NB_FIL NB_EXE <<< "${RES}"
+
+echo "Répertoires : $NB_DIR"
+echo "Fichiers    : $NB_FIL"
+echo "Exécutables : $NB_EXE"
+\end{minted}
+
+    \begin{infobox}
+    La commande ``\texttt{read -r A B C}'' lit l'entrée standard et découpe la ligne 
+    selon les espaces. Le premier mot va dans \texttt{A}, le second dans \texttt{B}, etc. 
+    L'option \texttt{-r} empêche l'interprétation des antislashes (sécurité).
+
+    La syntaxe \verb|<<<| \texttt{"\$\{RES\}"} permet de passer le contenu d'une variable 
+    comme entrée standard à une commande.
+    \end{infobox}
+
+    % ---
+
+    \item Pour l'instant, votre script ne compte que le contenu du dossier immédiat. 
+    Modifiez la boucle de votre fonction pour qu'elle explore aussi les sous-dossiers.
+    
+    Dans le bloc \texttt{if [[ -d ... ]]}, ajoutez la logique suivante :
+    \begin{enumerate}
+        \item Appelez la fonction \texttt{GET\_DIR\_FIL\_EXE} sur ce sous-dossier.
+        \item Récupérez les résultats (via \texttt{read}, comme fait précédemment).
+        \item Additionnez ces résultats retournés à vos variables locales \texttt{NB\_DIR}, \texttt{NB\_FIL}, etc.
+    \end{enumerate}
+
+\end{enumerate}
+
+
+
+
+% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
 
 
 \end{document}
