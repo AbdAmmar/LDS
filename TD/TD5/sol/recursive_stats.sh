@@ -14,9 +14,12 @@ GET_DIR_FIL_EXE() {
     # Boucle sur le contenu du répertoire
     for ITEM in "${DIR}"/*; do
 
-        # Sécurité : 
-        # On vérifie que l'élément existe vraiment avant de continuer.
-        [[ -e "${ITEM}" ]] || continue
+        # Si le motif ne correspond a rien (cas du dossier vide),
+        # le fichier "$ITEM" n'existe pas réellement.
+        if [[ ! -e "$ITEM" ]]; then
+            continue  # On passe directement à l'itération suivante
+        fi
+
 
         if [[ -d "${ITEM}" ]]; then
             # C'est un répertoire

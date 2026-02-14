@@ -19,7 +19,7 @@ DURAND          Louane         5.0
 EYMANN          Martin         5.0
 GASSER-HOFFER   Matheo         5.0
 GOTTARDINI      Oscar          5.0
-GROULT          Yohan          2.0    # !!!
+GROULT          Yohan          5.0
 HAMAISSIA       Emmanuel       5.0
 HANI            Sofian         4.5    # compteur incorrecte
 LAKHAL          Amine          5.0
@@ -45,3 +45,14 @@ THENOT          Lisa           5.0
 THIRION         Maelynn        4.5    # compteur incorrecte
 WIRTH           Pernelle       5.0
 YOUDOM-TCHOUPE  Simon-Uriel    5.0    # TROP IA
+
+
+ALFONSI         Antoine        2.5    # VAR_RAND n'est pas définie correctement + problème système
+BARADEL         Leo            5.0
+BELARBI         Yamina         5.0
+JEBALI          Zeineb         5.0
+KOUAKOU         Prince         5.0
+MATEOS          Noemie         5.0
+QABICE          Ahmed          5.0
+RAAB            Rachel
+SHIEKH ELSOUK   Cham

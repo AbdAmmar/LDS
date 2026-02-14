@@ -18,7 +18,6 @@
 
 
 
-% https://exercism.org/tracks/bash/exercises/phone-number
 
 
 
@@ -30,73 +29,101 @@
 
 
 
-\section{Nombres d'Armstrong}
 
-Un nombre d'Armstrong (ou nombre narcissique) est un nombre entier égal à la somme de 
-ses propres chiffres, chacun élevé à la puissance du nombre total de ses chiffres.
 
-Par exemple :
-\begin{itemize}
-    \item $9$ est un nombre d'Armstrong car $9 = 9^1 = 9$
-    \item $10$ n'est pas un nombre d'Armstrong car $10 \neq 1^2 + 0^2 = 1$
-    \item $153$ est un nombre d'Armstrong car $153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153$
-    \item $154$ n'est pas un nombre d'Armstrong car $154 \neq 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190$
-\end{itemize}
+\section{Approximation de $\pi$}
+
+Dans cet exercice, nous allons calculer une approximation du nombre $\pi$ en utilisant 
+la formule de la série de Leibniz. 
+
+Cette formule est une série infinie alternée :
+
+$$
+\pi = 4 \times \left( 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \dots \right) = 4 \times \sum_{n=0}^{N} \frac{(-1)^n}{2n+1}
+$$
+
+Puisque Bash ne gère nativement que les nombres entiers, cet exercice nécessite l'utilisation de la 
+commande \texttt{bc} pour effectuer des opérations à virgule flottante.
 
 \begin{enumerate}
 
-    \item Créez le répertoire \texttt{TD5} dans votre répertoire 
-    personnel (\texttt{\$HOME}), puis le sous-répertoire \texttt{Q1} à 
-    l'intérieur de \texttt{TD5}. 
-    Placez-vous ensuite dans ce répertoire \texttt{Q1}.
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q1}.
+    Créez le fichier \texttt{pi.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
 
     % ---
 
-    \item Créez le fichier \texttt{armstrong.sh}. Ajoutez-y 
-    le \textit{Shebang} approprié et rendez le fichier exécutable.
+    \item Ajoutez un test pour vérifier que le script reçoit exactement deux arguments. 
+    Ces arguments représentent le nombre d'itérations $N$ et la précision \texttt{scale}.
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 1.
 
     % ---
 
-    \item Ajoutez une vérification au début du script pour vous assurer 
-    qu'il reçoit exactement un argument. Si ce n'est pas le cas, affichez 
-    un message d'erreur explicite et quittez le programme avec un code 
-    de retour égal à 1.
-
-    % ---
-
-    \item Ajoutez un test pour vérifier que l'argument fourni est bien 
-    un entier positif. Si ce n'est pas le cas, affichez un message d'erreur 
-    et quittez avec un code de retour égal à 2.
+    \item Ajoutez ensuite un test pour vérifier que $N$ et \texttt{scale} sont bien des entiers positifs. 
+    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 2.
 
     \begin{hintbox}
     Vous pouvez utiliser une expression régulière dans un test conditionnel étendu : \\
-    \texttt{"\$VAR" =\textasciitilde \, \^{}[0-9]+\$}
+    \texttt{[[ "\$VAR" =\textasciitilde{} \^{}[0-9]+\$ ]]}
     \end{hintbox}
 
     % ---
 
-    \item Écrivez une boucle qui parcourt chaque chiffre (caractère) de 
-    l'argument pour calculer la somme des chiffres élevés à la puissance 
-    $n$ (où $n$ est la longueur du nombre). Affichez le résultat du calcul 
-    pour vérifier.
-
-    \begin{hintbox}
+    \item Initialisez une variable \texttt{SOMME} à 0.
+    Écrivez une boucle \texttt{for} allant de $i=0$ à $N$.
+    À chaque itération :
     \begin{itemize}
-        \item Pour obtenir le nombre de caractères (la longueur) d'une 
-        variable \texttt{VAR}, vous pouvez utiliser \texttt{\$\{\#VAR\}}.
-
-        \item Pour extraire un caractère spécifique, vous pouvez utiliser 
-        la syntaxe de sous-chaîne \texttt{\$\{VAR:start:length\}}.
+        \item Calculez le terme courant de la suite : $\frac{(-1)^{i}}{2 i + 1}$.
+        \item Mettez à jour la variable \texttt{SOMME} en ajoutant le terme courant.
     \end{itemize}
-    \end{hintbox}
 
     % ---
 
-    \item Complétez le script en comparant la somme calculée avec le nombre passé en argument. 
-    \begin{itemize}
-        \item Si les valeurs sont égales, affichez : \texttt{X est un nombre d'Armstrong}.
-        \item Sinon, affichez : \texttt{X n'est pas un nombre d'Armstrong}.
-    \end{itemize}
+    \item Une fois la boucle terminée, multipliez la \texttt{SOMME} finale par 4 pour 
+    obtenir la valeur de $\pi$. 
+    Affichez le résultat.
+
+    % ---
+
+    \item Testez votre script avec différentes valeurs de $N$ (10, 100, 1000, 10000) et une 
+    précision fixée (ex: \texttt{scale=15}).
+    Observez comment la précision s'améliore et comment le temps d'exécution augmente.
+
+    % ---
+
+    \item Téléchargez le code source \texttt{C} équivalent, compilez-le pour générer le
+    binaire \texttt{pi}, puis lancez-le.
+
+    \begin{terminal}
+    \prompt\ \tcomment{Téléchargement du fichier source}
+
+    \prompt\ BASE="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
+
+    \prompt\ FILE="TD/TD5/sol/pi.c"
+
+    \prompt\ \shcmd{curl} -LO "\$\{BASE\}/\$\{FILE\}"
+
+    \prompt\ \tcomment{Compilation}
+
+    \prompt\ \shcmd{gcc} -o pi pi.c -lm
+
+    \prompt\ \tcomment{Exécution avec N=10000}
+    
+    \prompt\ ./pi 10000
+    \end{terminal}
+
+    % ---
+    
+    \item Comparez les performances avec votre script \texttt{pi.sh} en utilisant la commande
+    \texttt{time}.
+    \begin{terminal}
+    \prompt\ \tcomment{Temps du script Bash (avec scale=15)}
+    
+    \prompt\ \shcmd{time} ./pi.sh 10000 15
+    
+    \prompt\ \tcomment{Temps du programme C}
+
+    \prompt\ \shcmd{time} ./pi 10000
+    \end{terminal}
 
 \end{enumerate}
 
@@ -105,82 +132,6 @@ Par exemple :
 
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
-
-
-
-
-
-\section{Le Palindrome}
-
-Un palindrome est une chaîne de caractères (mot, phrase ou nombre) qui se lit de la même 
-manière de gauche à droite et de droite à gauche. 
-Dans cet exercice, nous ne tiendrons pas compte de la casse (majuscules/minuscules).
-
-Par exemple :
-\begin{itemize}
-    \item \texttt{KAYAK} est un palindrome.
-    \item \texttt{KAyak} sera considéré comme un palindrome (après conversion).
-    \item \texttt{12321} est un palindrome.
-    \item \texttt{BASH} n'est pas un palindrome (à l'envers, cela donne \texttt{HSAB}).
-\end{itemize}
-
-\begin{enumerate}
-
-    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q2}.
-    Placez-vous ensuite dans ce répertoire.
-    Créez le fichier \texttt{palindrome.sh}, ajoutez le \textit{Shebang} et 
-    rendez le fichier exécutable.
-
-    % ---
-
-    \item Vérifiez que l'utilisateur a fourni exactement un argument. 
-    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code 1.
-
-    % ---
-
-    \item Ajoutez un test pour vérifier que l'argument est composé uniquement de 
-    lettres (minuscules ou majuscules) et de chiffres. 
-    Si l'argument contient d'autres caractères (ponctuation, symboles, etc.), affichez 
-    une erreur et quittez avec le code 2.
-
-    \begin{hintbox}
-    Vous pouvez utiliser une expression régulière dans un test conditionnel étendu : \\
-    \texttt{"\$VAR" =\textasciitilde \, \^{}[a-zA-Z0-9]+\$}
-    \end{hintbox}
-
-    % ---
-
-    \item Avant de commencer l'inversion, convertissez l'argument en lettres minuscules 
-    pour uniformiser le traitement (pour que "KAyak" devienne "kayak").
-
-    \begin{hintbox}
-    Vous pouvez utiliser la commande \texttt{tr '[:upper:]' '[:lower:]'}.
-    \end{hintbox}
-
-    % ---
-
-    \item Créez une boucle qui parcourt les caractères de la chaîne normalisée (en minuscules) 
-    pour construire une nouvelle variable contenant la chaîne inversée.
-
-    % ---
-
-    \item Comparez la chaîne normalisée avec la chaîne inversée.
-    \begin{itemize}
-        \item Si elles sont identiques, affichez : \texttt{X est un palindrome}.
-        \item Sinon, affichez : \texttt{X n'est pas un palindrome}.
-    \end{itemize}
-
-\end{enumerate}
-
-
-
-
-
-
-
-% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
 
 
 
@@ -192,11 +143,22 @@ L'objectif de cet exercice est de créer un script capable d'analyser une arbore
  (un dossier et tous ses sous-dossiers) pour compter le nombre total de répertoires, de fichiers 
 et d'exécutables.
 
+\begin{infobox}
+Rappel des tests sur les fichiers :
+\begin{itemize}
+    \item \texttt{[[ -e "\$VAR" ]]} : le fichier ou dossier existe-t-il ?
+    \item \texttt{[[ -d "\$VAR" ]]} : est-ce un répertoire ?
+    \item \texttt{[[ -f "\$VAR" ]]} : est-ce un fichier standard ?
+    \item \texttt{[[ -x "\$VAR" ]]} : a-t-on le droit d'exécution ?
+\end{itemize}
+\end{infobox}
+
+
 Pour cela, nous allons utiliser une fonction récursive.
 
 \begin{enumerate}
 
-    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q3} et placez-vous dedans.
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q2} et placez-vous dedans.
     Créez le fichier \texttt{recursive\_stats.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
 
     % ---
@@ -210,16 +172,6 @@ Pour cela, nous allons utiliser une fonction récursive.
     Si le fichier ou le dossier n'existe pas, affichez un message d'erreur explicite 
     et quittez avec le code de retour 2.
 
-    \begin{infobox}
-    Rappel des tests sur les fichiers :
-    \begin{itemize}
-        \item \texttt{[[ -e "\$VAR" ]]} : le fichier ou dossier existe-t-il ?
-        \item \texttt{[[ -d "\$VAR" ]]} : est-ce un répertoire ?
-        \item \texttt{[[ -f "\$VAR" ]]} : est-ce un fichier standard ?
-        \item \texttt{[[ -x "\$VAR" ]]} : a-t-on le droit d'exécution ?
-    \end{itemize}
-    \end{infobox}
-
     % ---
 
     \item Si le chemin existe, vérifiez qu'il correspond bien à un répertoire. 
@@ -232,15 +184,8 @@ Pour cela, nous allons utiliser une fonction récursive.
     Au début de cette fonction :
     \begin{enumerate}
         \item Récupérez l'argument passé à la fonction (le dossier à analyser).
-        \item Initialisez trois variables locales à 0 : 
-        \texttt{NB\_DIR}, \texttt{NB\_FIL}, \texttt{NB\_EXE}.
+        \item Initialisez trois variables locales à 0 : \texttt{NB\_DIR}, \texttt{NB\_FIL}, \texttt{NB\_EXE}.
     \end{enumerate}
-
-    \begin{infobox}
-    Attention à la portée des variables !
-    Dans une fonction récursive, il est impératif d'utiliser le mot-clé \texttt{local} pour déclarer vos variables (ex: \texttt{local NB\_DIR=0}).
-    Sans cela, les appels récursifs modifieront les variables de l'appelant, faussant le calcul.
-    \end{infobox}
 
     \begin{infobox}
     Dans une fonction Bash, il est recommandé de toujours déclarer les variables 
@@ -252,19 +197,24 @@ Pour cela, nous allons utiliser une fonction récursive.
     % ---
 
     \item Écrivez la boucle \texttt{for} qui parcourt le contenu du dossier passé en argument.
-    Pour chaque élément trouvé :
+    À l'intérieur de la boucle, vérifiez d'abord que l'élément existe (pour gérer le cas des dossiers vides).
+    Ensuite :
     \begin{itemize}
         \item Si c'est un dossier (\texttt{-d}), incrémentez \texttt{NB\_DIR}.
-        \item Si c'est un fichier (\texttt{-f}), incrémentez \texttt{NB\_FIL}.
-        \item Si c'est un fichier et qu'il est exécutable (\texttt{-x}), incrémentez \texttt{NB\_EXE}.
+        \item Si c'est un fichier standard (\texttt{-f}), incrémentez \texttt{NB\_FIL}.
+        \item Si c'est un fichier standard \textbf{et} qu'il a les droits d'exécution (\texttt{-x}), incrémentez \texttt{NB\_EXE}.
     \end{itemize}
 
 \begin{minted}{bash}
 # Pour parcourir le contenu d'un dossier DIR :
 for ITEM in "$DIR"/*; do
-    # La variable $ITEM contient le chemin complet
-    # (ex: mon_dossier/fichier.txt)
-    
+
+    # Si le motif ne correspond a rien (cas du dossier vide),
+    # le fichier "$ITEM" n'existe pas réellement.
+    if [[ ! -e "$ITEM" ]]; then
+        continue  # On passe directement à l'itération suivante
+    fi
+
     # ... Votre logique ici ...
 done
 \end{minted}
@@ -304,114 +254,16 @@ echo "Exécutables : $NB_EXE"
 
     % ---
 
-    \item Pour l'instant, votre script ne compte que le contenu du dossier immédiat. 
+    \item Pour l'instant, votre script ne compte que le contenu du dossier immédiat.
     Modifiez la boucle de votre fonction pour qu'elle explore aussi les sous-dossiers.
-    
-    Dans le bloc \texttt{if [[ -d ... ]]}, ajoutez la logique suivante :
+
+    Dans le bloc \texttt{if [[ -d ... ]]} (cas d'un dossier), ajoutez la logique suivante :
     \begin{enumerate}
-        \item Appelez la fonction \texttt{GET\_DIR\_FIL\_EXE} sur ce sous-dossier.
+        \item Appelez la fonction \texttt{GET\_DIR\_FIL\_EXE} sur ce sous-dossier (appel récursif).
         \item Récupérez les résultats (via \texttt{read}, comme fait précédemment).
-        \item Additionnez ces résultats retournés à vos variables locales \texttt{NB\_DIR}, \texttt{NB\_FIL}, etc.
+        \item Ajoutez ces valeurs retournées à vos variables locales respectives (cumul des résultats).
     \end{enumerate}
-
-\end{enumerate}
-
-
-
-
-% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
-
-
-
-
-\section{Approximation de $\pi$}
-
-Dans cet exercice, nous allons calculer une approximation du nombre $\pi$ en utilisant 
-la formule de la série de Leibniz. 
-
-Cette formule est une série infinie alternée :
-
-$$
-\pi = 4 \times \left( 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \dots \right) = 4 \times \sum_{n=0}^{N} \frac{(-1)^n}{2n+1}
-$$
-
-Puisque Bash ne gère nativement que les nombres entiers, cet exercice nécessite l'utilisation de la 
-commande \texttt{bc} pour effectuer des opérations à virgule flottante.
-
-\begin{enumerate}
-
-    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q4}.
-    Créez le fichier \texttt{pi.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
-
-    % ---
-
-    \item Ajoutez un test pour vérifier que le script reçoit exactement deux arguments. 
-    Ces arguments représentent le nombre d'itérations $N$ et la précision \texttt{scale}.
-    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 1.
-
-    % ---
-
-    \item Ajoutez ensuite un test pour vérifier que $N$ et \texttt{scale} sont bien des entiers positifs. 
-    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 2.
-
-    % ---
-
-    \item Initialisez une variable \texttt{SOMME} à 0.
-    Écrivez une boucle \texttt{for} allant de $i=0$ à $N$.
-    À chaque itération :
-    \begin{itemize}
-        \item Calculez le terme actuel de la suite : $T = \frac{(-1)^{i}}{2 i + 1}$.
-        \item Mettez à jour la variable \texttt{SOMME} en ajoutant le terme $T$.
-    \end{itemize}
-
-    % ---
-
-    \item Une fois la boucle terminée, multipliez la \texttt{SOMME} finale par 4 pour 
-    obtenir la valeur de $\pi$. 
-    Affichez le résultat.
-
-    % ---
-
-    \item Testez votre script avec différentes valeurs de $N$ (10, 100, 1000, 10000) et une 
-    précision fixée (ex: \texttt{scale=15}). Observez comment la précision s'améliore 
-    (ou comment le temps de calcul augmente !).
-
-    % ---
-
-    \item Téléchargez le code source \texttt{C} équivalent, compilez-le pour générer le
-    binaire \texttt{pi}, puis lancez-le.
-
-    \begin{terminal}
-    \prompt\ \tcomment{Téléchargement du fichier source}
-
-    \prompt\ BASE="https://raw.githubusercontent.com/AbdAmmar/LDS/main"
-
-    \prompt\ FILE="TD/TD5/sol/pi.c"
-
-    \prompt\ \shcmd{curl} -LO "\$\{BASE\}/\$\{FILE\}"
-
-    \prompt\ \tcomment{Compilation}
-
-    \prompt\ \shcmd{gcc} -o pi pi.c -lm
-
-    \prompt\ \tcomment{Exécution avec N=10000}
     
-    \prompt\ ./pi 10000
-    \end{terminal}
-    
-    Comparez les performances avec votre script \texttt{pi.sh} en utilisant la commande
-    \texttt{time}.
-    \begin{terminal}
-    \prompt\ \tcomment{Temps du script Bash (avec scale=15)}
-    
-    \prompt\ \shcmd{time} ./pi.sh 10000 15
-    
-    \prompt\ \tcomment{Temps du programme C}
-
-    \prompt\ \shcmd{time} ./pi 10000
-    \end{terminal}
-
 \end{enumerate}
 
 
@@ -420,85 +272,6 @@ commande \texttt{bc} pour effectuer des opérations à virgule flottante.
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-
-
-
-
-
-
-\section{Test de Primalité}
-
-Un nombre entier positif est dit ``premier'' s'il admet exactement deux diviseurs 
-distincts : 1 et lui-même.
-
-Par exemple :
-\begin{itemize}
-    \item $2, 3, 5, 7, 11$ sont des nombres premiers.
-    \item $4$ n'est pas premier (divisible par 2).
-    \item $0$ et $1$ ne sont pas des nombres premiers (par définition).
-\end{itemize}
-
-L'objectif est d'écrire un script qui détermine si un nombre fourni en argument est premier ou non.
-
-\begin{enumerate}
-
-    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q5}.
-    Créez le fichier \texttt{premier.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
-
-    % ---
-
-    \item Ajoutez un test pour vérifier que le script reçoit exactement un argument. 
-    Si ce n'est pas le cas, affichez un message d'usage et quittez avec le code de retour 1.
-
-    % ---
-
-    \item Ajoutez un test pour vérifier que cet argument est bien un 
-    entier positif (composé uniquement de chiffres).
-    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 2.
-
-    % ---
-
-    \item Traitez les cas particuliers : si le nombre est inférieur à 2 
-    (c'est-à-dire 0 ou 1), affichez qu'il n'est pas premier et quittez le script.
-
-    % ---
-
-    \item Implémentez l'algorithme naïf :
-    \begin{enumerate}
-        \item Initialisez une variable pour dire que le nombre est premier par défaut (ex: \texttt{IS\_PRIME=1}).
-        \item Créez une boucle \texttt{for} qui parcourt tous les entiers $i$ de $2$ jusqu'à $N-1$.
-        \item À chaque itération, testez si $N$ est divisible par $i$ (en utilisant le modulo \texttt{\%}).
-        \item Si le reste de la division est nul ($N \% i == 0$), cela signifie que $N$ n'est pas premier. Dans ce cas :
-        \begin{itemize}
-            \item Passez votre variable \texttt{IS\_PRIME} à 0.
-            \item Interrompez immédiatement la boucle (\texttt{break}) pour ne pas continuer inutilement.
-        \end{itemize}
-    \end{enumerate}
-
-    % ---
-
-    \item À la sortie de la boucle, testez la valeur de votre variable \texttt{IS\_PRIME}.
-    \begin{itemize}
-        \item Si elle vaut 1, affichez : \texttt{X est un nombre premier}.
-        \item Sinon, affichez : \texttt{X n'est pas un nombre premier}.
-    \end{itemize}
-
-    % ---
-
-    \item Tester tous les nombres jusqu'à $N-1$ peut être très long si $N$ est grand.
-    Mathématiquement, si un nombre $N$ a un diviseur, il en a forcément un qui est 
-    inférieur ou égal à sa racine carrée ($\sqrt{N}$).
-
-    Modifiez la condition d'arrêt de votre boucle \texttt{for} pour ne tester les diviseurs 
-    que tant que $i \times i \le N$.
-
-\end{enumerate}
-
-
-
-
-
-% --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
 
@@ -517,7 +290,7 @@ L'objectif est d'écrire un script qui calcule la factorielle d'un nombre passé
 
 \begin{enumerate}
 
-    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q6}.
+    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q3}.
     Créez le fichier \texttt{factorielle.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
 
     % ---
@@ -527,7 +300,7 @@ L'objectif est d'écrire un script qui calcule la factorielle d'un nombre passé
 
     % ---
 
-    \item Vérifiez ensuite que cet argument est bien un entier positif.
+    \item Vérifiez ensuite que cet argument est bien un entier positif ou nul.
     Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code de retour 2.
 
     % ---
@@ -559,7 +332,108 @@ L'objectif est d'écrire un script qui calcule la factorielle d'un nombre passé
 
 
 
-\section{Distance de Hamming}
+\section{Projet}
+
+Les exercices suivants constituent le projet de ce TD. Vous devez vous placer dans le 
+répertoire \texttt{TD5} et créer un sous-répertoire nommé \texttt{Q4} pour y effectuer 
+votre travail.
+
+Dans ce répertoire, vous allez concevoir quatre scripts Bash. Tous les scripts déposés 
+sur Arche doivent respecter les deux conditions suivantes :
+\begin{itemize}
+    \item Commencer par le \textit{Shebang} approprié.
+
+    \item Posséder les droits d'exécution.
+\end{itemize}
+
+Les modalités de dépôt et de nommage de l'archive sont détaillées dans la dernière section de ce document.
+
+% ---
+
+\subsection{Nombres d'Armstrong}
+
+Un nombre d'Armstrong (ou nombre narcissique) est un nombre entier égal à la somme de 
+ses propres chiffres, chacun élevé à la puissance du nombre total de ses chiffres.
+Par exemple :
+\begin{itemize}
+    \item $9$ est un nombre d'Armstrong car $9 = 9^1 = 9$
+    \item $10$ n'est pas un nombre d'Armstrong car $10 \neq 1^2 + 0^2 = 1$
+    \item $153$ est un nombre d'Armstrong car $153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153$
+    \item $154$ n'est pas un nombre d'Armstrong car $154 \neq 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190$
+\end{itemize}
+
+Créez le fichier \texttt{armstrong.sh} qui prend un entier comme argument et affiche 
+si ce nombre est un nombre d'Armstrong ou non.
+Votre script doit respecter les consignes suivantes :
+\begin{itemize}
+    \item Vérifier au début du script qu'il reçoit exactement un argument. 
+    Si ce n'est pas le cas, afficher un message d'erreur explicite et quitter le programme 
+    avec un code de retour égal à 1.
+
+    \item Vérifier que l'argument fourni est bien un entier positif. 
+    Si ce n'est pas le cas, afficher un message d'erreur et quitter avec un code de retour égal à 2.
+\end{itemize}
+
+% ---
+
+\subsection{Le Palindrome}
+
+Un palindrome est une chaîne de caractères (mot, phrase ou nombre) qui se lit de la même 
+manière de gauche à droite et de droite à gauche. 
+Dans cet exercice, nous ne tiendrons pas compte de la casse (majuscules/minuscules).
+Par exemple :
+\begin{itemize}
+    \item \texttt{KAYAK} est un palindrome.
+    \item \texttt{KAyak} sera considéré comme un palindrome (après conversion).
+    \item \texttt{12321} est un palindrome.
+    \item \texttt{BASH} n'est pas un palindrome (à l'envers, cela donne \texttt{HSAB}).
+\end{itemize}
+
+Créez le script \texttt{palindrome.sh} qui prend un argument et vérifie si cet
+argument est un palindrome ou non. Le script doit respecter les points suivants :
+\begin{itemize}
+    \item Vérifier que l'utilisateur a fourni exactement un argument. 
+    Si ce n'est pas le cas, afficher un message d'erreur et quitter avec le code 1.
+
+    \item Vérifier que l'argument est composé uniquement de lettres (minuscules ou majuscules) 
+    et de chiffres (alphanumérique). 
+    Si l'argument contient d'autres caractères (ponctuation, symboles, etc.), afficher
+    une erreur et quitter avec le code 2.
+\end{itemize}
+
+% ---
+
+\subsection{Test de Primalité}
+
+Un nombre entier positif est dit ``premier'' s'il admet exactement deux diviseurs 
+distincts : 1 et lui-même.
+Par exemple :
+\begin{itemize}
+    \item $2, 3, 5, 7, 11$ sont des nombres premiers.
+    \item $4$ n'est pas premier (divisible par 2).
+    \item $0$ et $1$ ne sont pas des nombres premiers (par définition).
+\end{itemize}
+
+L'objectif est d'écrire le script \texttt{premier.sh} qui détermine si un nombre fourni 
+en argument est premier ou non.
+Le script doit respecter les points suivants :
+\begin{itemize}
+    \item Vérifier que le script reçoit exactement un argument. 
+    Si ce n'est pas le cas, afficher un message d'usage et quitter avec le code de retour 1.
+
+    \item Vérifier que cet argument est bien un entier positif (composé uniquement de chiffres).
+    Si ce n'est pas le cas, afficher un message d'erreur et quitter avec le code de retour 2.
+
+    \item Optimisation : Mathématiquement, si un nombre $N$ a un diviseur, il en a forcément un qui est 
+    inférieur ou égal à sa racine carrée ($\sqrt{N}$). Votre boucle ne doit donc pas tester les nombres
+    au-delà de cette limite.
+
+    \textit{Astuce : Plutôt que de calculer la racine, arrêtez la boucle quand $i \times i > N$.}
+\end{itemize}
+
+% ---
+
+\subsection{Distance de Hamming}
 
 La distance de Hamming entre deux chaînes de caractères de même longueur est 
 le nombre de positions où les symboles sont différents.
@@ -576,62 +450,62 @@ $$
 \Rightarrow \texttt{{\color{red}3} différences (distance = 3)}
 $$
 
-L'objectif est d'écrire un script qui calcule cette distance entre deux brins d'ADN passés en arguments.
+L'objectif est d'écrire le script \texttt{hamming.sh} qui calcule cette distance entre 
+deux brins d'ADN passés en arguments.
+Le script doit respecter les points suivants :
+\begin{itemize}
+    \item Vérifier que le script reçoit exactement deux arguments. 
+    Si ce n'est pas le cas, afficher un message d'usage et quitter avec le code 1.
 
+    \item Vérifier que les chaînes passées en arguments ne contiennent que les bases : A, C, G et T. 
+    Si ce n'est pas le cas, afficher un message d'erreur et quitter avec le code 2.
+
+    \item La distance de Hamming n'est définie que pour des séquences de longueur égale.
+    Si les longueurs diffèrent, afficher un message d'erreur et quitter avec le code 3.
+\end{itemize}
+
+% ---
+
+\subsection{Modalités de dépôt}
+
+Une fois votre travail terminé et testé, replacez-vous dans le répertoire
+parent \texttt{TD5} pour préparer votre archive.
 \begin{enumerate}
+    \item Utilisez la commande \texttt{tar} pour compresser votre dossier \texttt{Q4}.
 
-    \item Dans votre répertoire \texttt{TD5}, créez le sous-répertoire \texttt{Q7}.
-    Créez le fichier \texttt{hamming.sh}, ajoutez le \textit{Shebang} et rendez-le exécutable.
+    Si vous travaillez seul :
+    \begin{terminal}
+    \prompt\ \shcmd{tar} -czvf Q4\_Prenom\_NOM.tar.gz Q4/
+    \end{terminal}
 
-    % ---
+    Si vous travaillez en groupe de deux personnes :
+    \begin{terminal}
+    \prompt\ \shcmd{tar} -czvf Q4\_Prenom1\_NOM1\_Prenom2\_NOM2.tar.gz Q4/
+    \end{terminal}
 
-    \item Ajoutez un test pour vérifier que le script reçoit exactement deux arguments. 
-    Si ce n'est pas le cas, affichez un message d'usage et quittez avec le code 1.
-
-    % ---
-
-    \item Ajoutez un test pour vérifier que les chaînes passées en arguments 
-    ne contiennent que les lettres : A, C, G ou T. 
-    Si ce n'est pas le cas, affichez un message d'erreur et quittez avec le code 2.
-
-    % ---
-
-    \item Vérifiez que les deux chaînes ont la même longueur.
-    La distance de Hamming n'est définie que pour des séquences de longueur égale.
-    Si les longueurs diffèrent, affichez un message d'erreur et quittez avec le code 3.
+    Si vous travaillez en groupe de trois personnes :
+    \begin{terminal}
+    \prompt\ \shcmd{tar} -czvf Q4\_Prenom1\_NOM1\_Prenom2\_NOM2\_Prenom3\_NOM3.tar.gz Q4/
+    \end{terminal}
 
     % ---
 
-    \item Initialisez une variable \texttt{DISTANCE} à 0.
-    Écrivez une boucle qui parcourt les chaînes caractère par caractère (de l'index 0 à la fin).
-
-    À chaque itération :
-    \begin{enumerate}
-        \item Extrayez le caractère de la première chaîne (\texttt{BRIN1}) 
-        à la position $i$.
-
-        \item Extrayez le caractère de la seconde chaîne (\texttt{BRIN2}) 
-        à la même position $i$.
-
-        \item Comparez les deux caractères. S'ils sont différents, incrémentez 
-        la variable \texttt{DISTANCE}.
-    \end{enumerate}
-
-    % ---
-
-    \item Affichez le résultat final : \texttt{Distance de Hamming : X}.
-    Testez votre script avec les cas suivants :
+    \item Le nom de l'archive est strictement défini :
     \begin{itemize}
-        \item \texttt{./hamming.sh GAGCCTACTAACGGGAT CATCGTAATGACGGCCT} (Distance attendue : 7)
-        \item \texttt{./hamming.sh AAAAA GGGGG} (Distance attendue : 5)
-        \item \texttt{./hamming.sh GGACTGA AACTGA} (Erreur : Longueurs différentes)
+        \item Prénom : Première lettre en majuscule, le reste en minuscule (ex: \texttt{Alice}).
+        \item NOM : Entièrement en majuscules (ex: \texttt{DUPONT}).
+        \item Le nom du fichier ne doit pas contenir d'accents, d'espaces ou de caractères spéciaux.
+        \item Le non-respect de cette nomenclature entraînera une déduction de points.
     \end{itemize}
 
+    \item Si vous travaillez sous WSL, copiez l'archive vers votre bureau Windows
+    pour faciliter le dépôt sur Arche :
+    \begin{terminal}
+    \prompt\ \shcmd{cp} Q4\_Prenom\_NOM.tar.gz /mnt/c/Users/VotreNomUtilisateur/Desktop/
+    \end{terminal}
+
+    \item Déposez uniquement le fichier \texttt{.tar.gz} généré.
 \end{enumerate}
-
-
-
-
 
 
 % --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
